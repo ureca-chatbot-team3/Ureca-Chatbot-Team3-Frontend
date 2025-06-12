@@ -24,6 +24,41 @@
   --color-gold-metallic: #b49759;
 }
 
+@layer utilities {
+  .heading-1 {
+    font-size: 33px;
+    font-weight: 500;
+  }
+  .heading-2 {
+    font-size: 26px;
+    line-height: 35px;
+  }
+  .heading-3 {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .heading-4 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  .heading-5 {
+    font-size: 18px;
+    line-height: 27px;
+  }
+  .body-large {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .body-medium {
+    font-size: 16px;
+  }
+  .body-small {
+    font-size: 13px;
+    line-height: 20px;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
