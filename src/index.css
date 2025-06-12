@@ -1,6 +1,5 @@
-@import 'tailwindcss';
-
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@200&display=swap');
+@import 'tailwindcss';
 
 @theme {
   --font-noto-sans-kr: 'Noto Sans KR', sans-serif;
