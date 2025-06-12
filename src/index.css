@@ -1,9 +1,34 @@
 @import 'tailwindcss';
 
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@200&display=swap');
+
+@theme {
+  --font-noto-sans-kr: 'Noto Sans KR', sans-serif;
+
+  --color-pink: #e6007e;
+  --color-gray: #6b6b6b;
+  --color-light-gray: #d9dadb;
+  --color-blush-pink: #ffcece;
+  --color-light-pink: #ffe4fa;
+  --color-baby-pink: #fffafe;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-red: #a50034;
+  --color-teal: #0096aa;
+  --color-orange: #e97300;
+  --color-purple: #7c37d5;
+  --color-light-teal: #3cd5af;
+  --color-yellow: #ffda27;
+  --color-light-purple: #b150c5;
+  --color-silver-metallic: #8a8c8f;
+  --color-gold-metallic: #b49759;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: var(--font-noto-sans-kr);
 }
 
 html,
