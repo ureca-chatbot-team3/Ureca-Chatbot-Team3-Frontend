@@ -4,23 +4,31 @@
 @theme {
   --font-noto-sans-kr: 'Noto Sans KR', sans-serif;
 
-  --color-pink: #e6007e;
-  --color-gray: #6b6b6b;
-  --color-light-gray: #d9dadb;
-  --color-blush-pink: #ffcece;
-  --color-light-pink: #ffe4fa;
-  --color-baby-pink: #fffafe;
-  --color-black: #000000;
+  --color-black: #333333;
   --color-white: #ffffff;
-  --color-red: #a50034;
-  --color-teal: #0096aa;
-  --color-orange: #e97300;
-  --color-purple: #7c37d5;
-  --color-light-teal: #3cd5af;
-  --color-yellow: #ffda27;
-  --color-light-purple: #b150c5;
-  --color-silver-metallic: #8a8c8f;
-  --color-gold-metallic: #b49759;
+
+  --color-pink-700: #e6007e;
+  --color-pink-500: #ffadb5;
+  --color-pink-400: #ffcece;
+  --color-pink-300: #ffe3ec;
+  --color-pink-200: #fffafe;
+
+  --color-gray-700: #6b6b6b;
+  --color-gray-500: #d9dadb;
+  --color-gray-400: #e9e8e8;
+  --color-gray-200: #f8f8f8;
+
+  --color-peach-400: #ffd3b6;
+  --color-peach-300: #fff1e6;
+  --color-peach-200: #f9f7f5;
+
+  --color-mint-700: #54ddca;
+  --color-mint-400: #a8e6cf;
+  --color-mint-200: #f5fdef;
+
+  --color-purple-700: #a34eef;
+  --color-purple-400: #e0beff;
+  --color-purple-200: #f5edff;
 }
 
 @layer utilities {
