@@ -32,37 +32,71 @@
 }
 
 @layer utilities {
-  .heading-1 {
-    font-size: 33px;
+  /* 폰트 굵기 */
+  .font-300 {
+    font-weight: 300;
+  }
+  .font-500 {
     font-weight: 500;
   }
+  .font-700 {
+    font-weight: 700;
+  }
+
+  /* 데스크탑 폰트 크기 및 줄 간격 */
+  .heading-1 {
+    font-size: 36px;
+    line-height: 56px;
+  }
   .heading-2 {
-    font-size: 26px;
+    font-size: 24px;
     line-height: 35px;
   }
   .heading-3 {
     font-size: 20px;
     line-height: 26px;
   }
-  .heading-4 {
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 20px;
-  }
-  .heading-5 {
-    font-size: 18px;
-    line-height: 27px;
-  }
   .body-large {
     font-size: 16px;
-    font-weight: 700;
+    line-height: 20px;
   }
   .body-medium {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 16px;
   }
   .body-small {
+    font-size: 12px;
+    line-height: 8px;
+  }
+
+  /* 모바일 폰트 크기 및 줄 간격 */
+  .m-heading-1 {
+    font-size: 32px;
+    line-height: 38px;
+  }
+  .m-heading-2 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .m-heading-3 {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .m-body-large {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .m-body-medium {
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .m-body-small {
     font-size: 13px;
-    line-height: 20px;
+    line-height: 16px;
+  }
+  .m-body-add {
+    font-size: 11px;
+    line-height: 14px;
   }
 }
 
