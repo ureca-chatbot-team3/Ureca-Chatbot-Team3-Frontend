@@ -2,8 +2,10 @@
 @import 'tailwindcss';
 
 @theme {
+  /* 폰트체 */
   --font-noto-sans-kr: 'Noto Sans KR', sans-serif;
 
+  /* 색상 */
   --color-black: #333333;
   --color-white: #ffffff;
 
@@ -29,6 +31,14 @@
   --color-purple-700: #a34eef;
   --color-purple-400: #e0beff;
   --color-purple-200: #f5edff;
+
+  /* 스페이싱 */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-2xl: 64px;
 }
 
 @layer utilities {
@@ -101,8 +111,6 @@
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
   font-family: var(--font-noto-sans-kr);
 }
