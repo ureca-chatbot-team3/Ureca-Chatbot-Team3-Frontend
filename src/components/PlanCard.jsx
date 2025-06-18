@@ -3,6 +3,8 @@ import React from 'react';
 const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benefits = [] }) => {
   return (
     <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border">
+      <div className="h-[24px]" />
+
       {/* 이미지 */}
       <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden">
         <img
@@ -16,7 +18,7 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
       {/* 이름 */}
       <h2 className="heading-3 font-700 text-black">{name}</h2>
       <div className="h-[25px]" />
-      <div className="w-full border-t" style={{ borderColor: 'var(--color-gray-500)' }} />
+      <div className="w-full border-t border-gray-500" />
       <div className="h-[10px]" />
 
       {/* infos, plan_speed */}
@@ -33,7 +35,7 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
       </div>
 
       <div className="h-[10px]" />
-      <div className="w-full border-t" style={{ borderColor: 'var(--color-gray-500)' }} />
+      <div className="w-full border-t border-gray-500" />
       <div className="h-[10px]" />
 
       {/* benefits */}
@@ -45,6 +47,20 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
         ))}
       </div>
       <div className="h-[35px]" />
+
+      {/* 버튼 영역 */}
+      <div className="flex items-center justify-center gap-[17px]">
+        {/* 왼쪽 버튼 */}
+        <button className="w-[206px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700">
+          자세히 보기
+        </button>
+
+        {/* 오른쪽 버튼 */}
+        <button className="w-[45px] h-[38px] rounded-[5px] bg-gray-700 flex items-center justify-center">
+          <img src="/src/assets/svg/cart2Icon.svg" alt="장바구니" className="w-[20px] h-auto" />
+        </button>
+      </div>
+      <div className="h-[24px]" />
     </div>
   );
 };

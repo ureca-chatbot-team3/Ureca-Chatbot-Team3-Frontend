@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 w-full h-[112px] bg-white z-50">
+    <header className="bg-white">
       {/* 윗섹션 */}
       <div className="h-[56px] flex items-center justify-between max-w-[1440px] mx-auto">
         {/* 왼쪽 로고 */}
@@ -40,10 +40,7 @@ const Header = () => {
             </Link>
 
             {/* 동그라미 표시 */}
-            <div
-              className="absolute -top-[-5px] -right-[9px] w-[5px] h-[5px] rounded-full z-50"
-              style={{ backgroundColor: 'var(--color-pink-700)' }}
-            />
+            <div className="absolute -top-[-5px] -right-[9px] w-[5px] h-[5px] rounded-full z-50 bg-pink-700" />
 
             {/* 말풍선 */}
             <div
