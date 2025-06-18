@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from 'react';
-import { diagnosisApi } from '../apis/api';
+import { diagnosisApi } from '../apis/diagnosisApi';
 
 // 초기 상태
 const initialState = {

@@ -1,4 +1,4 @@
-// API 기본 설정
+// 진단 관련 API
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 // HTTP 클라이언트 설정
@@ -49,6 +49,10 @@ class ApiClient {
     return this.request(endpoint, { ...options, method: 'PUT', body });
   }
 
+  patch(endpoint, body, options = {}) {
+    return this.request(endpoint, { ...options, method: 'PATCH', body });
+  }
+
   delete(endpoint, options = {}) {
     return this.request(endpoint, { ...options, method: 'DELETE' });
   }
@@ -80,14 +84,18 @@ export const diagnosisApi = {
   getHistory: (page = 1, limit = 10) => {
     return apiClient.get(`/diagnosis/history?page=${page}&limit=${limit}`);
   },
+
+  // 진단 통계 조회 (관리자용)
+  getStats: () => {
+    return apiClient.get('/diagnosis/stats');
+  },
 };
 
-// 일반 API
-export const generalApi = {
-  // 헬스체크
-  healthCheck: () => {
+// 헬스체크 API
+export const healthApi = {
+  check: () => {
     return apiClient.get('/health');
   },
 };
 
-export default apiClient;
+export default diagnosisApi;
