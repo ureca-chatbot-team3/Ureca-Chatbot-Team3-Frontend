@@ -5,6 +5,7 @@ import ChatbotToast from './components/ChatbotToast';
 import ChatbotNoticeBar from './components/ChatbotNoticeBar';
 import ChatbotInput from './components/ChatbotInput';
 import ChatMessages from './components/ChatMessage';
+import axios from 'axios';
 
 export default function ChatbotModal({ onClose }) {
   const [message, setMessage] = useState('');
@@ -15,6 +16,7 @@ export default function ChatbotModal({ onClose }) {
 
   useEffect(() => {
     setIsVisible(true);
+
     const toastTimer = setTimeout(() => setShowToast(true), 400);
     const hideToast = setTimeout(() => setShowToast(false), 3400);
 
@@ -37,17 +39,31 @@ export default function ChatbotModal({ onClose }) {
     setTimeout(() => onClose(), 300);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.trim()) return;
 
     const userMsg = { type: 'user', content: message.trim() };
-    const botReply = {
-      type: 'bot',
-      content: '요청하신 내용을 확인 중이에요!',
-    };
+    const loadingMsg = { type: 'bot', content: '요플밍이 생각 중이에요... 🤔', isLoading: true };
 
-    setMessages((prev) => [...prev, userMsg, botReply]);
+    setMessages((prev) => [...prev, userMsg, loadingMsg]);
     setMessage('');
+
+    try {
+      const res = await axios.post('/api/chat', { message });
+      const reply = res.data.reply;
+
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated.pop(); // 로딩 메시지 제거
+        return [...updated, { type: 'bot', content: reply }];
+      });
+    } catch (err) {
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated.pop(); // 로딩 메시지 제거
+        return [...updated, { type: 'bot', content: '죄송해요, 지금은 응답할 수 없어요 😢' }];
+      });
+    }
   };
 
   return (
@@ -74,9 +90,10 @@ export default function ChatbotModal({ onClose }) {
           <ChatbotHeader onClose={handleClose} onOpenMenu={() => setShowMenu(true)} />
           <ChatbotNoticeBar />
 
-          {/* 분리된 메시지 컴포넌트 사용 */}
+          {/* 메시지 영역 */}
           <ChatMessages messages={messages} />
 
+          {/* 입력창 */}
           <ChatbotInput
             message={message}
             setMessage={setMessage}
