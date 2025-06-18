@@ -1,4 +1,4 @@
-import flamingo from '../assets/chatbot.gif';
+import flamingo from '../assets/images/chatbot.gif';
 
 export default function ChatbotLauncher({ onClick }) {
   return (

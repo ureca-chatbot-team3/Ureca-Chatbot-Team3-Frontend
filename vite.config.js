@@ -1,14 +1,17 @@
+/* eslint-env node */
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
-import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      '@': path.resolve('./src'),
+      '@': resolve(__dirname, 'src'),
     },
   },
 });
