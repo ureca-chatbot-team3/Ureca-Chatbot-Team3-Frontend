@@ -117,7 +117,7 @@ const DiagnosisPage = () => {
       <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
-            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
+            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
               <div className="text-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg
@@ -160,7 +160,7 @@ const DiagnosisPage = () => {
       <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
-            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
+            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
               <div className="text-center">
                 <p className="body-large" style={{ color: 'var(--color-gray-700)' }}>
                   질문을 준비 중입니다...
@@ -177,14 +177,14 @@ const DiagnosisPage = () => {
     <main className="min-h-screen bg-gray-200">
       <div className="max-w-[1440px] mx-auto px-[40px]">
         <div className="flex justify-center">
-          <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px]">
+          <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px]">
             {/* 진행 표시바 */}
             <div className="px-[80px] pt-[80px] pb-[60px]">
-              <div className="flex items-center justify-between mb-[8px]">
-                <span className="body-medium font-500" style={{ color: 'var(--color-pink-700)' }}>
+              <div className="flex items-center justify-between mb-[16px]">
+                <span className="body-medium font-700" style={{ color: 'var(--color-black)' }}>
                   요금제 추천 질문
                 </span>
-                <span className="body-medium font-500" style={{ color: 'var(--color-black)' }}>
+                <span className="body-medium font-700" style={{ color: 'var(--color-black)' }}>
                   {currentQuestionNumber}/{totalQuestions}
                 </span>
               </div>
@@ -210,7 +210,7 @@ const DiagnosisPage = () => {
             </div>
 
             {/* 선택 옵션들 */}
-            <div className="px-[80px] pb-[80px]">
+            <div className="px-[80px] pb-[40px]">
               {(currentQuestion.type === 'single' || currentQuestion.type === 'multiple') && (
                 <div className="space-y-[16px]">
                   {/* 복수 선택 안내 메시지 */}
@@ -225,129 +225,35 @@ const DiagnosisPage = () => {
                     </div>
                   )}
 
-                  {currentQuestion.options && currentQuestion.options.length > 0
-                    ? currentQuestion.options.map((option, index) => {
-                        const isSelected =
-                          currentQuestion.type === 'multiple'
-                            ? Array.isArray(currentAnswer) && currentAnswer.includes(option)
-                            : currentAnswer === option;
+                  {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                    currentQuestion.options.map((option, index) => {
+                      const isSelected =
+                        currentQuestion.type === 'multiple'
+                          ? Array.isArray(currentAnswer) && currentAnswer.includes(option)
+                          : currentAnswer === option;
 
-                        return (
-                          <button
-                            key={index}
-                            onClick={() => handleAnswerSelect(option)}
-                            className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
-                              isSelected
-                                ? 'border-pink-700 bg-pink-200'
-                                : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full">
-                              <span
-                                className="body-large font-500"
-                                style={{
-                                  color: isSelected
-                                    ? 'var(--color-pink-700)'
-                                    : 'var(--color-black)',
-                                }}
-                              >
-                                {option}
-                              </span>
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswerSelect(option)}
+                          className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
+                            isSelected
+                              ? 'border-pink-700 bg-pink-200'
+                              : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between w-full">
+                            <span
+                              className="body-large font-500"
+                              style={{
+                                color: isSelected ? 'var(--color-pink-700)' : 'var(--color-black)',
+                              }}
+                            >
+                              {option}
+                            </span>
 
-                              {/* 단일 선택: 라디오 버튼 */}
-                              {currentQuestion.type === 'single' && (
-                                <svg
-                                  className="w-[24px] h-[24px]"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M9 12L11 14L15 10"
-                                    stroke={
-                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
-                                    }
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    opacity={isSelected ? 1 : 0}
-                                  />
-                                  <circle
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke={
-                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
-                                    }
-                                    strokeWidth="2"
-                                    fill="none"
-                                  />
-                                </svg>
-                              )}
-
-                              {/* 복수 선택: 체크박스 */}
-                              {currentQuestion.type === 'multiple' && (
-                                <svg
-                                  className="w-[24px] h-[24px]"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <rect
-                                    x="3"
-                                    y="3"
-                                    width="18"
-                                    height="18"
-                                    rx="3"
-                                    stroke={
-                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
-                                    }
-                                    strokeWidth="2"
-                                    fill={isSelected ? 'var(--color-pink-700)' : 'none'}
-                                  />
-                                  {isSelected && (
-                                    <path
-                                      d="M9 12L11 14L15 10"
-                                      stroke="white"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  )}
-                                </svg>
-                              )}
-                            </div>
-                          </button>
-                        );
-                      })
-                    : // 폴백 옵션 제공
-                      getDefaultOptions(currentQuestion.question).map((option, index) => {
-                        const isSelected =
-                          currentQuestion.type === 'multiple'
-                            ? Array.isArray(currentAnswer) && currentAnswer.includes(option)
-                            : currentAnswer === option;
-
-                        return (
-                          <button
-                            key={index}
-                            onClick={() => handleAnswerSelect(option)}
-                            className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
-                              isSelected
-                                ? 'border-pink-700 bg-pink-200'
-                                : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between w-full">
-                              <span
-                                className="body-large font-500"
-                                style={{
-                                  color: isSelected
-                                    ? 'var(--color-pink-700)'
-                                    : 'var(--color-black)',
-                                }}
-                              >
-                                {option}
-                              </span>
+                            {/* 단일 선택: 라디오 버튼 */}
+                            {currentQuestion.type === 'single' && (
                               <svg
                                 className="w-[24px] h-[24px]"
                                 viewBox="0 0 24 24"
@@ -375,10 +281,50 @@ const DiagnosisPage = () => {
                                   fill="none"
                                 />
                               </svg>
-                            </div>
-                          </button>
-                        );
-                      })}
+                            )}
+
+                            {/* 복수 선택: 체크박스 */}
+                            {currentQuestion.type === 'multiple' && (
+                              <svg
+                                className="w-[24px] h-[24px]"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <rect
+                                  x="3"
+                                  y="3"
+                                  width="18"
+                                  height="18"
+                                  rx="3"
+                                  stroke={
+                                    isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                  }
+                                  strokeWidth="2"
+                                  fill={isSelected ? 'var(--color-pink-700)' : 'none'}
+                                />
+                                {isSelected && (
+                                  <path
+                                    d="M9 12L11 14L15 10"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                )}
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="body-large" style={{ color: 'var(--color-gray-700)' }}>
+                        선택 가능한 옵션을 불러오는 중입니다...
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -394,7 +340,6 @@ const DiagnosisPage = () => {
                   />
                 </div>
               )}
-
               {currentQuestion.type === 'range' && (
                 <div>
                   <input
