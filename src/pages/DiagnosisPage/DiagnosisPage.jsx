@@ -38,10 +38,28 @@ const DiagnosisPage = () => {
     }
   }, [isComplete, navigate]);
 
-  // 현재 질문의 답변 처리
+  // 현재 질문의 답변 처리 (복수 선택 지원)
   const handleAnswerSelect = (answer) => {
     if (currentQuestion) {
-      setAnswer(currentQuestion._id, answer);
+      if (currentQuestion.type === 'multiple') {
+        // 복수 선택: 배열로 관리
+        const currentAnswers = Array.isArray(currentAnswer) ? currentAnswer : [];
+        const isSelected = currentAnswers.includes(answer);
+
+        let newAnswers;
+        if (isSelected) {
+          // 이미 선택된 경우 제거
+          newAnswers = currentAnswers.filter((item) => item !== answer);
+        } else {
+          // 선택되지 않은 경우 추가
+          newAnswers = [...currentAnswers, answer];
+        }
+
+        setAnswer(currentQuestion._id, newAnswers);
+      } else {
+        // 단일 선택: 기존 방식
+        setAnswer(currentQuestion._id, answer);
+      }
     }
   };
 
@@ -52,7 +70,13 @@ const DiagnosisPage = () => {
 
   // 다음 질문 또는 진단 완료
   const handleNextClick = async () => {
-    if (!currentAnswer) {
+    // 답변 검증
+    const hasAnswer =
+      currentQuestion.type === 'multiple'
+        ? Array.isArray(currentAnswer) && currentAnswer.length > 0
+        : currentAnswer;
+
+    if (!hasAnswer) {
       alert('답변을 선택해주세요.');
       return;
     }
@@ -72,7 +96,7 @@ const DiagnosisPage = () => {
   // 로딩 상태
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gray-200 pt-[112px]">
+      <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center items-center h-[500px]">
             <div className="text-center">
@@ -90,7 +114,7 @@ const DiagnosisPage = () => {
   // 에러 상태
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-200 pt-[112px]">
+      <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
@@ -133,7 +157,7 @@ const DiagnosisPage = () => {
   // 질문이 없는 경우
   if (!currentQuestion) {
     return (
-      <main className="min-h-screen bg-gray-200 pt-[112px]">
+      <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
@@ -150,7 +174,7 @@ const DiagnosisPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-200 pt-[112px]">
+    <main className="min-h-screen bg-gray-200">
       <div className="max-w-[1440px] mx-auto px-[40px]">
         <div className="flex justify-center">
           <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px]">
@@ -187,64 +211,174 @@ const DiagnosisPage = () => {
 
             {/* 선택 옵션들 */}
             <div className="px-[80px] pb-[80px]">
-              {currentQuestion.type === 'single' && (
+              {(currentQuestion.type === 'single' || currentQuestion.type === 'multiple') && (
                 <div className="space-y-[16px]">
-                  {currentQuestion.options.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleAnswerSelect(option)}
-                      className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
-                        currentAnswer === option
-                          ? 'border-pink-700 bg-pink-200'
-                          : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <span
-                          className="body-large font-500"
-                          style={{
-                            color:
-                              currentAnswer === option
-                                ? 'var(--color-pink-700)'
-                                : 'var(--color-black)',
-                          }}
-                        >
-                          {option}
-                        </span>
-                        <svg
-                          className="w-[24px] h-[24px]"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M9 12L11 14L15 10"
-                            stroke={
-                              currentAnswer === option
-                                ? 'var(--color-pink-700)'
-                                : 'var(--color-gray-500)'
-                            }
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            opacity={currentAnswer === option ? 1 : 0}
-                          />
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke={
-                              currentAnswer === option
-                                ? 'var(--color-pink-700)'
-                                : 'var(--color-gray-500)'
-                            }
-                            strokeWidth="2"
-                            fill="none"
-                          />
-                        </svg>
-                      </div>
-                    </button>
-                  ))}
+                  {/* 복수 선택 안내 메시지 */}
+                  {currentQuestion.type === 'multiple' && (
+                    <div className="mb-4 p-3 bg-pink-200 rounded-[8px]">
+                      <p
+                        className="body-medium font-500"
+                        style={{ color: 'var(--color-pink-700)' }}
+                      >
+                        📝 여러 개를 선택할 수 있습니다. 선택한 항목을 다시 누르면 선택 해제됩니다.
+                      </p>
+                    </div>
+                  )}
+
+                  {currentQuestion.options && currentQuestion.options.length > 0
+                    ? currentQuestion.options.map((option, index) => {
+                        const isSelected =
+                          currentQuestion.type === 'multiple'
+                            ? Array.isArray(currentAnswer) && currentAnswer.includes(option)
+                            : currentAnswer === option;
+
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => handleAnswerSelect(option)}
+                            className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
+                              isSelected
+                                ? 'border-pink-700 bg-pink-200'
+                                : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span
+                                className="body-large font-500"
+                                style={{
+                                  color: isSelected
+                                    ? 'var(--color-pink-700)'
+                                    : 'var(--color-black)',
+                                }}
+                              >
+                                {option}
+                              </span>
+
+                              {/* 단일 선택: 라디오 버튼 */}
+                              {currentQuestion.type === 'single' && (
+                                <svg
+                                  className="w-[24px] h-[24px]"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M9 12L11 14L15 10"
+                                    stroke={
+                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                    }
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    opacity={isSelected ? 1 : 0}
+                                  />
+                                  <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke={
+                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                    }
+                                    strokeWidth="2"
+                                    fill="none"
+                                  />
+                                </svg>
+                              )}
+
+                              {/* 복수 선택: 체크박스 */}
+                              {currentQuestion.type === 'multiple' && (
+                                <svg
+                                  className="w-[24px] h-[24px]"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <rect
+                                    x="3"
+                                    y="3"
+                                    width="18"
+                                    height="18"
+                                    rx="3"
+                                    stroke={
+                                      isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                    }
+                                    strokeWidth="2"
+                                    fill={isSelected ? 'var(--color-pink-700)' : 'none'}
+                                  />
+                                  {isSelected && (
+                                    <path
+                                      d="M9 12L11 14L15 10"
+                                      stroke="white"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  )}
+                                </svg>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })
+                    : // 폴백 옵션 제공
+                      getDefaultOptions(currentQuestion.question).map((option, index) => {
+                        const isSelected =
+                          currentQuestion.type === 'multiple'
+                            ? Array.isArray(currentAnswer) && currentAnswer.includes(option)
+                            : currentAnswer === option;
+
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => handleAnswerSelect(option)}
+                            className={`w-full h-[64px] border-[2px] rounded-[12px] flex items-center px-[24px] transition-all duration-200 ${
+                              isSelected
+                                ? 'border-pink-700 bg-pink-200'
+                                : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span
+                                className="body-large font-500"
+                                style={{
+                                  color: isSelected
+                                    ? 'var(--color-pink-700)'
+                                    : 'var(--color-black)',
+                                }}
+                              >
+                                {option}
+                              </span>
+                              <svg
+                                className="w-[24px] h-[24px]"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M9 12L11 14L15 10"
+                                  stroke={
+                                    isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                  }
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  opacity={isSelected ? 1 : 0}
+                                />
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke={
+                                    isSelected ? 'var(--color-pink-700)' : 'var(--color-gray-500)'
+                                  }
+                                  strokeWidth="2"
+                                  fill="none"
+                                />
+                              </svg>
+                            </div>
+                          </button>
+                        );
+                      })}
                 </div>
               )}
 
@@ -305,12 +439,22 @@ const DiagnosisPage = () => {
                 </button>
                 <button
                   onClick={handleNextClick}
-                  disabled={!currentAnswer}
-                  className={`flex-1 h-[56px] rounded-[12px] body-large font-500 transition-all duration-200 ${
-                    currentAnswer
+                  disabled={
+                    !(() => {
+                      return currentQuestion.type === 'multiple'
+                        ? Array.isArray(currentAnswer) && currentAnswer.length > 0
+                        : currentAnswer;
+                    })()
+                  }
+                  className={`flex-1 h-[56px] rounded-[12px] body-large font-500 transition-all duration-200 ${(() => {
+                    const hasAnswer =
+                      currentQuestion.type === 'multiple'
+                        ? Array.isArray(currentAnswer) && currentAnswer.length > 0
+                        : currentAnswer;
+                    return hasAnswer
                       ? 'bg-pink-700 text-white hover:opacity-90'
-                      : 'bg-gray-500 text-gray-700 cursor-not-allowed'
-                  }`}
+                      : 'bg-gray-500 text-gray-700 cursor-not-allowed';
+                  })()}`}
                 >
                   {canGoNext ? '다음 질문' : canSubmit ? '진단 완료' : '다음 질문'}
                 </button>
