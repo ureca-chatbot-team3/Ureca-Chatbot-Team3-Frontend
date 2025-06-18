@@ -40,7 +40,7 @@ const Header = () => {
             </Link>
 
             {/* 동그라미 표시 */}
-            <div className="absolute -top-[-5px] -right-[9px] w-[5px] h-[5px] rounded-full z-50 bg-pink-700" />
+            <div className="absolute top-[2px] right-[-9px] w-[5px] h-[5px] rounded-full z-50 bg-pink-700" />
 
             {/* 말풍선 */}
             <div
@@ -111,9 +111,15 @@ const Header = () => {
 
         {/* 오른쪽 아이콘 버튼 */}
         <div className="flex gap-[28px] items-center">
-          <img src="/src/assets/svg/searchIcon.svg" alt="검색" className="h-6 w-6" />
-          <img src="/src/assets/svg/cartIcon.svg" alt="장바구니" className="h-6 w-6" />
-          <img src="/src/assets/svg/userIcon.svg" alt="유저" className="h-6 w-6" />
+          <button className="cursor-pointer">
+            <img src="/src/assets/svg/searchIcon.svg" alt="검색" className="h-6 w-6" />
+          </button>
+          <button className="cursor-pointer">
+            <img src="/src/assets/svg/cartIcon.svg" alt="장바구니" className="h-6 w-6" />
+          </button>
+          <button className="cursor-pointer">
+            <img src="/src/assets/svg/userIcon.svg" alt="유저" className="h-6 w-6" />
+          </button>
         </div>
       </div>
 
