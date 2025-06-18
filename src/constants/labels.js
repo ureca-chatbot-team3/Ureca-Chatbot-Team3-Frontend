@@ -205,38 +205,6 @@ export const breakpoints = {
   '2xl': '1536px',
 };
 
-// 색상 (CSS 변수명)
-export const colors = {
-  primary: 'var(--color-pink-700)',
-  secondary: 'var(--color-gray-500)',
-  success: 'var(--color-mint-700)',
-  warning: 'var(--color-peach-400)',
-  error: '#ef4444',
-  black: 'var(--color-black)',
-  white: 'var(--color-white)',
-  gray: {
-    100: 'var(--color-gray-200)',
-    300: 'var(--color-gray-400)',
-    500: 'var(--color-gray-500)',
-    700: 'var(--color-gray-700)',
-  },
-  pink: {
-    100: 'var(--color-pink-200)',
-    300: 'var(--color-pink-300)',
-    400: 'var(--color-pink-400)',
-    500: 'var(--color-pink-500)',
-    700: 'var(--color-pink-700)',
-  },
-};
-
-// 레이아웃 상수
-export const layout = {
-  headerHeight: 112,
-  maxWidth: 1440,
-  sidebarWidth: 280,
-  containerPadding: 40,
-};
-
 export default {
   diagnosisLabels,
   commonLabels,
@@ -245,6 +213,4 @@ export default {
   diagnosisCategories,
   animationDurations,
   breakpoints,
-  colors,
-  layout,
 };
