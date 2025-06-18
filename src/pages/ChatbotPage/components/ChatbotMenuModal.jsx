@@ -41,7 +41,7 @@ export default function ChatbotMenuModal({ onClose }) {
         </div>
 
         {/* 메뉴 항목 */}
-        <ul className="absolute top-[110px] left-[25px] space-y-[22px] text-[20px] font-500 text-[var(--color-black)]">
+        <ul className="absolute top-[110px] left-[25px] space-y-[22px] heading-3 font-500 text-[var(--color-black)]">
           <li>사용법 안내 및 주의사항</li>
           <li>챗봇 상담 내역</li>
           <li>이전 질문에서 찾아보기</li>

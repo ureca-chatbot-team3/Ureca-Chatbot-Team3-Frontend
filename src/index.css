@@ -126,3 +126,23 @@ body,
   background-color: var(--color-gray-200);
   height: 100%;
 }
+
+@layer utilities {
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+
+  .animate-blink-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animate-blink-delay-400 {
+    animation-delay: 0.4s;
+  }
+}
+
