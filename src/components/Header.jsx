@@ -40,10 +40,7 @@ const Header = () => {
             </Link>
 
             {/* 동그라미 표시 */}
-            <div
-              className="absolute -top-[-5px] -right-[9px] w-[5px] h-[5px] rounded-full z-50"
-              style={{ backgroundColor: 'var(--color-pink-700)' }}
-            />
+            <div className="absolute -top-[-5px] -right-[9px] w-[5px] h-[5px] rounded-full z-50 bg-pink-700" />
 
             {/* 말풍선 */}
             <div
