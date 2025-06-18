@@ -108,6 +108,11 @@
     font-size: 11px;
     line-height: 14px;
   }
+
+  /* 그림자 */
+  .shadow-soft-black {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  }
 }
 
 * {
