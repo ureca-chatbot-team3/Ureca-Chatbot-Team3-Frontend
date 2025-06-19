@@ -87,7 +87,6 @@ const DiagnosisPage = () => {
       try {
         await submitDiagnosis();
       } catch (error) {
-        console.error('진단 제출 실패:', error);
         alert('진단 제출에 실패했습니다. 다시 시도해주세요.');
       }
     }
@@ -179,7 +178,7 @@ const DiagnosisPage = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px]">
             {/* 진행 표시바 */}
-            <div className="px-[80px] pt-[60px] pb-[40px]">
+            <div className="px-[80px] pt-[40px] pb-[40px]">
               <div className="flex items-center justify-between mb-[16px]">
                 <span className="body-medium font-700" style={{ color: 'var(--color-black)' }}>
                   요금제 추천 질문
@@ -369,7 +368,7 @@ const DiagnosisPage = () => {
             </div>
 
             {/* 하단 버튼들 */}
-            <div className="px-[80px] pb-[80px]">
+            <div className="px-[80px] pb-[40px]">
               <div className="flex gap-[16px]">
                 <button
                   onClick={handlePreviousClick}

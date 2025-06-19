@@ -3,6 +3,7 @@ import DefaultLayout from '../layout/DefaultLayout';
 import MainPage from '../pages/MainPage/MainPage';
 import DiagnosisPage from '../pages/DiagnosisPage/DiagnosisPage';
 import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
+import ComparePage from '../pages/ComparePage/ComparePage';
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: 'diagnosis/result/:sessionId',
         element: <DiagnosisResultPage />,
+      },
+      {
+        path: 'compare',
+        element: <ComparePage />,
       },
     ],
   },
