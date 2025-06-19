@@ -133,6 +133,18 @@ const DiagnosisResultPage = () => {
   // 상위 3개 요금제만 추출
   const topThreePlans = result.recommendedPlans?.slice(0, 3) || [];
 
+  // 디버깅용 로그 추가
+  console.log('진단 결과 데이터:', result);
+  console.log('추천 요금제들:', topThreePlans);
+  if (topThreePlans.length > 0) {
+    console.log(
+      '첫 번째 요금제 이미지 경로:',
+      topThreePlans[0]?.planId?.imagePath ||
+        topThreePlans[0]?.plan?.imagePath ||
+        topThreePlans[0]?.imagePath
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gray-200 relative overflow-hidden">
       {/* 폭죽 효과 */}

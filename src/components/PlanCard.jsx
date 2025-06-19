@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { formatter } from '../utils/formatter';
+import { getImageUrl } from '../utils/imageUtils';
 
 const PlanCard = ({
   imagePath,
@@ -11,6 +13,8 @@ const PlanCard = ({
   sale_price_value,
   benefits = [],
 }) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
   // benefits가 객체인 경우 배열로 변환
   const benefitsList = React.useMemo(() => {
     if (Array.isArray(benefits)) {
@@ -24,16 +28,52 @@ const PlanCard = ({
 
   // infos가 배열인 경우 문자열로 변환
   const infosText = Array.isArray(infos) ? infos.join(', ') : infos;
+
+  // 이미지 URL 처리
+  const imageUrl = getImageUrl(imagePath);
+  console.log('이미지 URL:', imageUrl, '원본 경로:', imagePath);
+
   return (
     <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border shadow-soft-black">
       <div className="h-[24px]" />
 
       {/* 이미지 */}
-      <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden">
+      <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center">
+        {imageLoading && !imageError && (
+          <div className="text-gray-400">
+            <svg className="w-8 h-8 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </div>
+        )}
         <img
-          src={imagePath || '/noImageImg.png'}
+          src={imageUrl}
           alt={name}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover transition-opacity duration-200 ${
+            imageLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+          onLoad={() => {
+            setImageLoading(false);
+            setImageError(false);
+          }}
+          onError={(e) => {
+            console.log('이미지 로드 실패:', imageUrl);
+            setImageLoading(false);
+            setImageError(true);
+            e.target.src = '/noImageImg.svg';
+          }}
         />
       </div>
       <div className="h-[22px]" />
@@ -47,16 +87,23 @@ const PlanCard = ({
       {/* infos, plan_speed */}
       <div className="flex flex-col items-start w-full px-1">
         <span className="heading-3 font-500 text-black">{infosText}</span>
-        {plan_speed && (
-          <span className="heading-3 font-500 text-black">{plan_speed}</span>
-        )}
+        {plan_speed && <span className="heading-3 font-500 text-black">{plan_speed}</span>}
       </div>
       <div className="h-[20px]" />
 
       {/* price, sale_price */}
-      <div className="flex flex-col items-start w-full px-1">
-        <span className="body-large font-500 text-pink-700 mb-1">{price}</span>
-        <span className="body-large font-500 text-black">{sale_price}</span>
+      <div className="flex flex-col w-full space-y-2 px-1">
+        <div className="flex justify-between items-center w-full">
+          <span className="body-large font-500 text-gray-600">월정액</span>
+          <span className="body-large font-500 text-pink-600">{formatter.price(price_value)}</span>
+        </div>
+
+        <div className="flex justify-between items-center w-full">
+          <span className="body-large font-500 text-gray-600">약정할인가</span>
+          <span className="body-large font-500 text-gray-800">
+            {formatter.price(sale_price_value)}
+          </span>
+        </div>
       </div>
 
       <div className="h-[10px]" />
@@ -64,14 +111,14 @@ const PlanCard = ({
       <div className="h-[10px]" />
 
       {/* benefits */}
-      <div className="flex flex-col items-start w-full px-1 mt-2 space-y-[4px]">
+      <div className="flex flex-col items-start w-full space-y-[5px]">
         {benefitsList.map((benefit, index) => (
-          <span key={index} className="body-small font-300 text-black">
+          <span key={index} className="body-small font-400 text-black">
             {benefit}
           </span>
         ))}
       </div>
-      <div className="h-[35px]" />
+      <div className="h-[25px]" />
 
       {/* 버튼 영역 */}
       <div className="flex items-center justify-center gap-[17px]">

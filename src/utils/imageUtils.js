@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
  * @param {string} fallbackImage - 기본 이미지 경로
  * @returns {string} 처리된 이미지 URL
  */
-export const getImageUrl = (imagePath, fallbackImage = '/noImageImg.png') => {
+export const getImageUrl = (imagePath, fallbackImage = '/noImageImg.svg') => {
   if (!imagePath) {
     return fallbackImage;
   }

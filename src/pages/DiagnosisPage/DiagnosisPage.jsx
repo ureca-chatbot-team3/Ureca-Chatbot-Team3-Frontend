@@ -96,7 +96,7 @@ const DiagnosisPage = () => {
   // 로딩 상태
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className="bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center items-center h-[500px]">
             <div className="text-center">
@@ -114,7 +114,7 @@ const DiagnosisPage = () => {
   // 에러 상태
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className=" bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
@@ -157,7 +157,7 @@ const DiagnosisPage = () => {
   // 질문이 없는 경우
   if (!currentQuestion) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className=" bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
@@ -174,7 +174,7 @@ const DiagnosisPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-200">
+    <main className="bg-gray-200">
       <div className="max-w-[1440px] mx-auto px-[40px]">
         <div className="flex justify-center">
           <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px]">
