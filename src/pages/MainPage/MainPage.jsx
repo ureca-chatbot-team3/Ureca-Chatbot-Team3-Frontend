@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import BackgroundWrapper from './components/BackgroundWrapper';
-import FirstSection from './components/FirstSection';
+import MainIntro from './components/MainIntro';
 import SecondSection from './components/SecondSection';
 import ThirdSection from './components/ThirdSection';
 import { useAutoScrollToSection } from '@/hooks/useAutoScroll';
@@ -12,7 +12,7 @@ const MainPage = () => {
 
   return (
     <main>
-      <FirstSection />
+      <MainIntro />
       <BackgroundWrapper>
         <div ref={secondRef}>
           <SecondSection />
