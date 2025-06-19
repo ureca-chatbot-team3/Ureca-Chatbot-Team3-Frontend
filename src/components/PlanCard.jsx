@@ -1,6 +1,29 @@
 import React from 'react';
 
-const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benefits = [] }) => {
+const PlanCard = ({
+  imagePath,
+  name,
+  infos,
+  plan_speed,
+  price,
+  sale_price,
+  price_value,
+  sale_price_value,
+  benefits = [],
+}) => {
+  // benefits가 객체인 경우 배열로 변환
+  const benefitsList = React.useMemo(() => {
+    if (Array.isArray(benefits)) {
+      return benefits;
+    }
+    if (typeof benefits === 'object' && benefits !== null) {
+      return Object.entries(benefits).map(([key, value]) => `${key}: ${value}`);
+    }
+    return [];
+  }, [benefits]);
+
+  // infos가 배열인 경우 문자열로 변환
+  const infosText = Array.isArray(infos) ? infos.join(', ') : infos;
   return (
     <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border shadow-soft-black">
       <div className="h-[24px]" />
@@ -23,8 +46,10 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
 
       {/* infos, plan_speed */}
       <div className="flex flex-col items-start w-full px-1">
-        <span className="heading-3 font-500 text-black">{infos}</span>
-        <span className="heading-3 font-500 text-black">{plan_speed}</span>
+        <span className="heading-3 font-500 text-black">{infosText}</span>
+        {plan_speed && (
+          <span className="heading-3 font-500 text-black">{plan_speed}</span>
+        )}
       </div>
       <div className="h-[20px]" />
 
@@ -40,7 +65,7 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
 
       {/* benefits */}
       <div className="flex flex-col items-start w-full px-1 mt-2 space-y-[4px]">
-        {benefits.map((benefit, index) => (
+        {benefitsList.map((benefit, index) => (
           <span key={index} className="body-small font-300 text-black">
             {benefit}
           </span>

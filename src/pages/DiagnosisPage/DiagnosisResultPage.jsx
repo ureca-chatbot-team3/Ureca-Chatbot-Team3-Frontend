@@ -1,20 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDiagnosis } from '../../store/DiagnosisContext';
+import PlanCard from '../../components/PlanCard';
 
 const DiagnosisResultPage = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const { result, isLoading, error, getResult, resetDiagnosis } = useDiagnosis();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     if (sessionId) {
       getResult(sessionId);
     } else if (!result) {
-      // 결과가 없고 sessionId도 없으면 진단 페이지로 리다이렉트
       navigate('/diagnosis');
     }
   }, [sessionId, result, getResult, navigate]);
+
+  useEffect(() => {
+    if (result && result.recommendedPlans && result.recommendedPlans.length > 0) {
+      setShowConfetti(true);
+    }
+  }, [result]);
 
   const handleRetryDiagnosis = () => {
     resetDiagnosis();
@@ -49,7 +56,7 @@ const DiagnosisResultPage = () => {
       <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
-            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
+            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
               <div className="text-center">
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg
@@ -101,7 +108,7 @@ const DiagnosisResultPage = () => {
       <main className="min-h-screen bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
-            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px] p-[80px]">
+            <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
               <div className="text-center">
                 <h2 className="heading-3 font-700 mb-4" style={{ color: 'var(--color-black)' }}>
                   진단 결과가 없습니다
@@ -123,187 +130,202 @@ const DiagnosisResultPage = () => {
     );
   }
 
+  // 상위 3개 요금제만 추출
+  const topThreePlans = result.recommendedPlans?.slice(0, 3) || [];
+
   return (
-    <main className="min-h-screen bg-gray-200">
-      <div className="max-w-[1440px] mx-auto px-[40px]">
-        <div className="flex justify-center">
-          <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[80px] mb-[80px]">
-            {/* 헤더 */}
-            <div className="px-[80px] pt-[80px] pb-[40px] text-center">
-              <div className="w-16 h-16 bg-pink-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  className="w-8 h-8"
-                  style={{ color: 'var(--color-pink-700)' }}
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h1 className="heading-2 font-700 mb-2" style={{ color: 'var(--color-black)' }}>
-                진단이 완료되었습니다!
-              </h1>
-              <p className="body-large" style={{ color: 'var(--color-gray-700)' }}>
-                고객님께 맞는 요금제를 추천해드립니다.
-              </p>
-            </div>
+    <main className="min-h-screen bg-gray-200 relative overflow-hidden">
+      {/* 폭죽 효과 */}
+      {showConfetti && (
+        <div className="confetti-container">
+          {[...Array(80)].map((_, i) => {
+            return (
+              <div
+                key={i}
+                className="confetti"
+                style={{
+                  '--confetti-color': ['#FF0080', '#FF6EC7', '#FFD93D', '#6EC7FF', '#72FA93'][
+                    i % 5
+                  ],
+                  '--confetti-delay': `${Math.random() * 2}s`,
+                  '--confetti-duration': `${2 + Math.random() * 1}s`,
+                  '--confetti-x': `${Math.random() * 100}vw`,
+                  '--confetti-drift': Math.random() * 50 - 25,
+                  '--confetti-rotate': `${Math.random() * 180}deg`,
+                }}
+              />
+            );
+          })}
+        </div>
+      )}
 
-            {/* 분석 결과 */}
-            {result.analysisResult && (
-              <div className="px-[80px] pb-[40px]">
-                <h2 className="heading-3 font-700 mb-4" style={{ color: 'var(--color-black)' }}>
-                  분석 결과
-                </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {result.analysisResult.budget && (
-                    <div className="bg-gray-200 rounded-[12px] p-4">
-                      <p
-                        className="body-medium font-500 mb-1"
-                        style={{ color: 'var(--color-gray-700)' }}
-                      >
-                        예산
-                      </p>
-                      <p className="body-large font-700" style={{ color: 'var(--color-black)' }}>
-                        {result.analysisResult.budget.toLocaleString()}원
-                      </p>
+      <div className="max-w-[1440px] mx-auto px-[40px] py-[40px]">
+        {/* 헤더 섹션 */}
+        <div className="text-center mb-[60px]">
+          <h1 className="heading-1 font-500 mb-4" style={{ color: 'var(--color-pink-700)' }}>
+            진단 결과
+          </h1>
+          <p className="heading-3 font-500" style={{ color: 'var(--color-black)' }}>
+            다음과 같은 요금제를 추천드립니다!
+          </p>
+        </div>
+
+        {/* 추천 요금제 카드 섹션 */}
+        <div className="flex justify-center gap-[30px] mb-[60px] flex-wrap">
+          {topThreePlans.map((recommendation, index) => {
+            // 데이터 구조 확인 및 처리
+            const plan = recommendation.planId || recommendation.plan || recommendation;
+            const isWinner = index === 0;
+
+            return (
+              <div key={plan._id || index} className="relative">
+                {/* 순위 메달 */}
+                {isWinner && (
+                  <div className="absolute -top-[30px] left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="w-[60px] h-[60px] bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white text-2xl font-bold">1</span>
                     </div>
-                  )}
-                  {result.analysisResult.dataUsage && (
-                    <div className="bg-gray-200 rounded-[12px] p-4">
-                      <p
-                        className="body-medium font-500 mb-1"
-                        style={{ color: 'var(--color-gray-700)' }}
-                      >
-                        예상 데이터 사용량
-                      </p>
-                      <p className="body-large font-700" style={{ color: 'var(--color-black)' }}>
-                        {result.analysisResult.dataUsage}GB
-                      </p>
+                  </div>
+                )}
+                {index === 1 && (
+                  <div className="absolute -top-[25px] left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="w-[50px] h-[50px] bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white text-xl font-bold">2</span>
                     </div>
-                  )}
-                  {result.analysisResult.age && (
-                    <div className="bg-gray-200 rounded-[12px] p-4">
-                      <p
-                        className="body-medium font-500 mb-1"
-                        style={{ color: 'var(--color-gray-700)' }}
-                      >
-                        연령대
-                      </p>
-                      <p className="body-large font-700" style={{ color: 'var(--color-black)' }}>
-                        {result.analysisResult.age}세
-                      </p>
+                  </div>
+                )}
+                {index === 2 && (
+                  <div className="absolute -top-[25px] left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="w-[50px] h-[50px] bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white text-xl font-bold">3</span>
                     </div>
-                  )}
-                  {result.totalScore && (
-                    <div className="bg-gray-200 rounded-[12px] p-4">
-                      <p
-                        className="body-medium font-500 mb-1"
-                        style={{ color: 'var(--color-gray-700)' }}
-                      >
-                        매칭 점수
-                      </p>
-                      <p className="body-large font-700" style={{ color: 'var(--color-pink-700)' }}>
-                        {result.totalScore}점
-                      </p>
-                    </div>
-                  )}
+                  </div>
+                )}
+
+                {/* 1등 카드 강조 효과 */}
+                <div
+                  className={`${isWinner ? 'transform scale-105 ring-4 ring-pink-400 ring-opacity-50 rounded-[20px]' : ''}`}
+                >
+                  <PlanCard
+                    imagePath={plan?.imagePath}
+                    name={plan?.name || `추천 요금제 ${index + 1}`}
+                    infos={plan?.infos || ['데이터 정보 없음']}
+                    plan_speed={plan?.plan_speed || ''}
+                    price={plan?.price || null}
+                    sale_price={plan?.sale_price || null}
+                    price_value={plan?.price_value || null}
+                    sale_price_value={plan?.sale_price_value || null}
+                    benefits={plan?.benefits}
+                    rank={index + 1}
+                  />
                 </div>
               </div>
-            )}
+            );
+          })}
+        </div>
 
-            {/* 추천 요금제 */}
-            <div className="px-[80px] pb-[80px]">
-              <h2 className="heading-3 font-700 mb-4" style={{ color: 'var(--color-black)' }}>
-                추천 요금제
-              </h2>
-
-              {result.recommendedPlans && result.recommendedPlans.length > 0 ? (
-                <div className="space-y-4">
-                  {result.recommendedPlans.map((recommendation, index) => (
-                    <div
-                      key={index}
-                      className="border-[2px] border-gray-500 rounded-[12px] p-6 hover:border-pink-700 transition-colors"
-                    >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3
-                            className="heading-3 font-700 mb-1"
-                            style={{ color: 'var(--color-black)' }}
-                          >
-                            {recommendation.plan?.name || `추천 요금제 ${index + 1}`}
-                          </h3>
-                          {recommendation.plan?.price && (
-                            <p
-                              className="body-large font-700"
-                              style={{ color: 'var(--color-pink-700)' }}
-                            >
-                              월 {recommendation.plan.price.toLocaleString()}원
-                            </p>
-                          )}
-                        </div>
-                        <div className="text-right">
-                          <div className="bg-pink-200 rounded-[8px] px-3 py-1">
-                            <span
-                              className="body-small font-700"
-                              style={{ color: 'var(--color-pink-700)' }}
-                            >
-                              매칭률 {recommendation.matchScore}%
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {recommendation.reasons && recommendation.reasons.length > 0 && (
-                        <div>
-                          <p
-                            className="body-medium font-500 mb-2"
-                            style={{ color: 'var(--color-gray-700)' }}
-                          >
-                            추천 이유:
-                          </p>
-                          <ul className="space-y-1">
-                            {recommendation.reasons.map((reason, reasonIndex) => (
-                              <li key={reasonIndex} className="body-medium flex items-start">
-                                <span className="w-1 h-1 bg-gray-700 rounded-full mt-2 mr-2 flex-shrink-0"></span>
-                                <span style={{ color: 'var(--color-black)' }}>{reason}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <p className="body-large" style={{ color: 'var(--color-gray-700)' }}>
-                    조건에 맞는 요금제를 찾을 수 없습니다.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* 하단 버튼들 */}
-            <div className="px-[80px] pb-[80px]">
-              <div className="flex gap-[16px]">
-                <button
-                  onClick={handleRetryDiagnosis}
-                  className="flex-1 h-[56px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 transition-all duration-200 hover:border-pink-700 hover:bg-pink-200"
-                  style={{ color: 'var(--color-black)' }}
-                >
-                  다시 진단하기
-                </button>
-                <button
-                  onClick={handleGoHome}
-                  className="flex-1 h-[56px] bg-pink-700 text-white rounded-[12px] body-large font-500 hover:opacity-90 transition-opacity"
-                >
-                  홈으로 가기
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* 하단 버튼 */}
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={handleRetryDiagnosis}
+            className="h-[56px] px-[40px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 hover:border-pink-700 hover:bg-pink-200 transition-all"
+            style={{ color: 'var(--color-black)' }}
+          >
+            다시 진단하기
+          </button>
+          <button
+            onClick={handleGoHome}
+            className="h-[56px] px-[40px] bg-pink-700 text-white rounded-[12px] body-large font-500 hover:opacity-90 transition-opacity"
+          >
+            홈으로 가기
+          </button>
         </div>
       </div>
+
+      <style jsx>{`
+        .confetti-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .confetti {
+          position: absolute;
+          top: 130px;
+          left: var(--confetti-x);
+          width: 8px;
+          height: 8px;
+          background-color: var(--confetti-color);
+          animation: confetti-rain var(--confetti-duration) linear var(--confetti-delay) infinite;
+          transform-origin: center;
+        }
+
+        @keyframes confetti-rain {
+          0% {
+            transform: translateY(-20px) translateX(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
+              rotate(var(--confetti-rotate));
+            opacity: 0;
+          }
+        }
+
+        .confetti:nth-child(odd) {
+          width: 6px;
+          height: 12px;
+          animation-name: confetti-rain-odd;
+        }
+
+        @keyframes confetti-rain-odd {
+          0% {
+            transform: translateY(-20px) translateX(0) rotate(0deg) scale(0.8);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
+              rotate(calc(var(--confetti-rotate) * 0.5)) scale(0.6);
+            opacity: 0;
+          }
+        }
+
+        .confetti:nth-child(3n) {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          animation-duration: calc(var(--confetti-duration) * 1.1);
+        }
+
+        .confetti:nth-child(4n) {
+          width: 10px;
+          height: 3px;
+          animation-timing-function: ease-in;
+        }
+
+        .confetti:nth-child(5n) {
+          width: 7px;
+          height: 7px;
+          transform: rotate(45deg);
+          animation-name: confetti-rain-rotate;
+        }
+
+        @keyframes confetti-rain-rotate {
+          0% {
+            transform: translateY(-20px) translateX(0) rotate(45deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
+              rotate(calc(var(--confetti-rotate) + 225deg));
+            opacity: 0;
+          }
+        }
+      `}</style>
     </main>
   );
 };
