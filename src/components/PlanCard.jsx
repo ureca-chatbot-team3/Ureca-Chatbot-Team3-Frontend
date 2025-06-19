@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benefits = [] }) => {
   return (
     <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border shadow-soft-black">

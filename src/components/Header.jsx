@@ -10,9 +10,11 @@ const Header = () => {
           <img src="/src/assets/images/Logo.png" alt="요플랜 로고" />
         </Link>
         {/* 오른쪽 로그인 버튼 */}
-        <button className="heading-3 font-300 text-black bg-transparent p-0 m-0 border-none cursor-pointer">
-          로그인
-        </button>
+        <Link to="/login">
+          <button className="heading-3 font-300 text-black bg-transparent p-0 m-0 border-none cursor-pointer">
+            로그인
+          </button>
+        </Link>
       </div>
 
       {/* 윗섹션 하단 선 */}

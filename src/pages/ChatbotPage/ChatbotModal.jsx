@@ -77,11 +77,7 @@ export default function ChatbotModal({ onClose }) {
           {/* 분리된 메시지 컴포넌트 사용 */}
           <ChatMessages messages={messages} />
 
-          <ChatbotInput
-            message={message}
-            setMessage={setMessage}
-            onSend={handleSend}
-          />
+          <ChatbotInput message={message} setMessage={setMessage} onSend={handleSend} />
         </div>
       </div>
     </div>
