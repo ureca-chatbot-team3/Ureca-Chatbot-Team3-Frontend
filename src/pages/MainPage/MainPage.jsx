@@ -1,6 +1,7 @@
 import PlanCard from '@/components/PlanCard';
 
 const mockData = {
+  id: 'mock-plan-1', // 목 데이터용 ID 추가
   imagePath: null,
   name: '요금제 A',
   infos: '20GB + 100분',
@@ -17,6 +18,7 @@ const MainPage = () => {
     <main className="bg-black text-white min-h-screen p-10">
       <div className="flex justify-center">
         <PlanCard
+          id={mockData.id}
           imagePath={mockData.imagePath}
           name={mockData.name}
           infos={mockData.infos}

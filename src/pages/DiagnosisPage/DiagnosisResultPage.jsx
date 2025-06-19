@@ -155,10 +155,6 @@ const DiagnosisResultPage = () => {
     navigate('/diagnosis');
   };
 
-  const handleGoHome = () => {
-    navigate('/');
-  };
-
   // 로딩 상태
   if (isLoading) {
     return (
@@ -206,19 +202,12 @@ const DiagnosisResultPage = () => {
                 <p className="body-large mb-6" style={{ color: 'var(--color-gray-700)' }}>
                   {error}
                 </p>
-                <div className="flex gap-4 justify-center">
+                <div className="flex justify-center">
                   <button
                     onClick={handleRetryDiagnosis}
                     className="h-[56px] px-[32px] bg-pink-700 text-white rounded-[12px] body-large font-500 hover:opacity-90 transition-opacity"
                   >
                     새로 진단하기
-                  </button>
-                  <button
-                    onClick={handleGoHome}
-                    className="h-[56px] px-[32px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 hover:border-pink-700 hover:bg-pink-200 transition-all"
-                    style={{ color: 'var(--color-black)' }}
-                  >
-                    홈으로
                   </button>
                 </div>
               </div>
@@ -260,23 +249,19 @@ const DiagnosisResultPage = () => {
   // 상위 3개 요금제만 추출
   const topThreePlans = result.recommendedPlans?.slice(0, 3) || [];
 
-  // 디버깅용 로그 추가
-  console.log('진단 결과 데이터:', result);
-  console.log('추천 요금제들:', topThreePlans);
-  if (topThreePlans.length > 0) {
-    console.log(
-      '첫 번째 요금제 이미지 경로:',
-      topThreePlans[0]?.planId?.imagePath ||
-        topThreePlans[0]?.plan?.imagePath ||
-        topThreePlans[0]?.imagePath
-    );
-  }
-
   return (
     <main className="bg-gray-200 relative overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-[40px] py-[40px]">
         {/* 헤더 섹션 */}
-        <div className="text-center mb-[60px]">
+        <div className="text-center mb-[60px] relative">
+          {/* 다시 진단하기 버튼 - 오른쪽 상단 고정 */}
+          <button
+            onClick={handleRetryDiagnosis}
+            className="absolute top-0 right-0 h-[48px] px-[24px] border-[2px] border-gray-500 bg-white rounded-[12px] body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
+          >
+            다시 진단하기
+          </button>
+
           <h1 className="heading-1 font-500 mb-4" style={{ color: 'var(--color-pink-700)' }}>
             진단 결과
           </h1>
@@ -286,10 +271,16 @@ const DiagnosisResultPage = () => {
         </div>
 
         {/* 추천 요금제 카드 섹션 */}
-        <div className="flex justify-center items-end gap-[30px] mb-[60px] flex-wrap">
-          {/* 순서 재배치: 데스크탑(2등-1등-3등), 모바일(1등-2등-3등) */}
+        <div className="flex justify-center items-end gap-[60px] flex-wrap">
           {topThreePlans.map((recommendation, index) => {
             const plan = recommendation.planId || recommendation.plan || recommendation;
+            const planId =
+              plan?._id ||
+              plan?.id ||
+              recommendation?._id ||
+              recommendation?.id ||
+              recommendation?.planId?._id ||
+              recommendation?.planId?.id;
             const rank = index + 1;
             const isWinner = index === 0;
             const isSecond = index === 1;
@@ -361,6 +352,7 @@ const DiagnosisResultPage = () => {
                   }}
                 >
                   <PlanCard
+                    id={planId}
                     imagePath={plan?.imagePath}
                     name={plan?.name || `추천 요금제 ${index + 1}`}
                     infos={plan?.infos || ['데이터 정보 없음']}
@@ -376,22 +368,6 @@ const DiagnosisResultPage = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* 하단 버튼 */}
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={handleRetryDiagnosis}
-            className="h-[56px] px-[40px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
-          >
-            다시 진단하기
-          </button>
-          <button
-            onClick={handleGoHome}
-            className="h-[56px] px-[40px] bg-pink-700 text-white rounded-[12px] body-large font-500 hover:opacity-90 transition-opacity"
-          >
-            홈으로 가기
-          </button>
         </div>
       </div>
     </main>
