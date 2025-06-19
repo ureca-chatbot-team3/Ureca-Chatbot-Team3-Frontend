@@ -14,7 +14,7 @@ const PlanCard = ({
   benefits = [],
 }) => {
   const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
+  const [imageLoading, setImageLoading] = useState(!!imagePath); // imagePath가 있을 때만 로딩 상태로 시작
   // benefits가 객체인 경우 배열로 변환
   const benefitsList = React.useMemo(() => {
     if (Array.isArray(benefits)) {
@@ -39,47 +39,62 @@ const PlanCard = ({
 
       {/* 이미지 */}
       <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
-        {imageLoading && !imageError && (
-          <div className="text-gray-400">
-            <svg className="w-8 h-8 animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
+        {!imagePath || imageError ? (
+          // 이미지 경로가 없거나 에러 상태일 때 대체 UI 표시
+          <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <div className="text-center text-gray-400">
+              <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+              </svg>
+              <p className="text-sm font-medium">이미지 없음</p>
+            </div>
           </div>
+        ) : (
+          <>
+            {imageLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+                <svg className="w-8 h-8 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
+            )}
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
+              style={{
+                opacity: imageLoading ? 0 : 1,
+                minWidth: '246px',
+                minHeight: '224px',
+                maxWidth: '246px',
+                maxHeight: '224px'
+              }}
+              onLoad={() => {
+                setImageLoading(false);
+                setImageError(false);
+              }}
+              onError={(e) => {
+                console.log('이미지 로드 실패:', imageUrl);
+                setImageLoading(false);
+                if (!imageError) { // 무한 루프 방지
+                  setImageError(true);
+                }
+              }}
+            />
+          </>
         )}
-        <img
-          src={imageUrl}
-          alt={name}
-          className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
-          style={{
-            opacity: imageLoading ? 0 : 1,
-            minWidth: '246px',
-            minHeight: '224px',
-            maxWidth: '246px',
-            maxHeight: '224px'
-          }}
-          onLoad={() => {
-            setImageLoading(false);
-            setImageError(false);
-          }}
-          onError={(e) => {
-            console.log('이미지 로드 실패:', imageUrl);
-            setImageLoading(false);
-            setImageError(true);
-            e.target.src = '/noImageImg.jpeg';
-          }}
-        />
       </div>
       <div className="h-[22px]" />
 

@@ -4,11 +4,127 @@ import { useDiagnosis } from '../../store/DiagnosisContext';
 import PlanCard from '../../components/PlanCard';
 import confetti from 'canvas-confetti';
 
+// 순위별 빛나는 테두리 효과를 위한 인라인 스타일
+const createAnimationStyles = () => {
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes goldGlow {
+      0%, 100% {
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6), 0 0 75px rgba(255, 215, 0, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(255, 215, 0, 1), 0 0 70px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.5);
+      }
+    }
+
+    @keyframes silverGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(192, 192, 192, 0.7), 0 0 40px rgba(192, 192, 192, 0.5), 0 0 60px rgba(192, 192, 192, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(192, 192, 192, 0.9), 0 0 60px rgba(192, 192, 192, 0.7), 0 0 90px rgba(192, 192, 192, 0.5);
+      }
+    }
+
+    @keyframes bronzeGlow {
+      0%, 100% {
+        box-shadow: 0 0 8px rgba(180, 83, 9, 0.3), 0 0 16px rgba(180, 83, 9, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 12px rgba(180, 83, 9, 0.4), 0 0 24px rgba(180, 83, 9, 0.3);
+      }
+    }
+  `;
+
+  // 기존 스타일이 있다면 제거하고 새로 추가
+  const existingStyle = document.getElementById('rank-animations');
+  if (existingStyle) {
+    existingStyle.remove();
+  }
+
+  style.id = 'rank-animations';
+  document.head.appendChild(style);
+};
+
+// 순위별 스타일 객체
+const getRankStyles = (rank) => {
+  const baseStyles = {
+    1: {
+      container: {
+        position: 'relative',
+        borderRadius: '20px',
+        animation: 'goldGlow 1.5s ease-in-out infinite', // 황금 후광만
+      },
+      inner: {
+        position: 'relative',
+        background: 'white',
+        borderRadius: '20px',
+        zIndex: 1,
+        overflow: 'hidden',
+      },
+    },
+    2: {
+      container: {
+        position: 'relative',
+        borderRadius: '20px',
+        animation: 'silverGlow 2s ease-in-out infinite', // 더 빠른 은색 후광
+      },
+      inner: {
+        position: 'relative',
+        background: 'white',
+        borderRadius: '20px',
+        zIndex: 1,
+        overflow: 'hidden',
+      },
+    },
+    3: {
+      container: {
+        position: 'relative',
+        borderRadius: '20px',
+        animation: 'bronzeGlow 3s ease-in-out infinite', // 동색 후광만
+      },
+      inner: {
+        position: 'relative',
+        background: 'white',
+        borderRadius: '20px',
+        zIndex: 1,
+        overflow: 'hidden',
+      },
+    },
+  };
+
+  return (
+    baseStyles[rank] || {
+      container: {
+        position: 'relative',
+        borderRadius: '20px',
+      },
+      inner: {
+        background: 'white',
+        borderRadius: '20px',
+      },
+    }
+  );
+};
+
 const DiagnosisResultPage = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const { result, isLoading, error, getResult, resetDiagnosis } = useDiagnosis();
   const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    // 애니메이션 스타일 생성
+    createAnimationStyles();
+
+    // 컴포넌트 언마운트 시 스타일 정리
+    return () => {
+      const existingStyle = document.getElementById('rank-animations');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (sessionId) {
@@ -174,26 +290,23 @@ const DiagnosisResultPage = () => {
           {/* 순서 재배치: 데스크탑(2등-1등-3등), 모바일(1등-2등-3등) */}
           {topThreePlans.map((recommendation, index) => {
             const plan = recommendation.planId || recommendation.plan || recommendation;
+            const rank = index + 1;
             const isWinner = index === 0;
             const isSecond = index === 1;
             const isThird = index === 2;
-
-            // 배치 순서 결정
-            let order = 0;
-            if (isSecond) order = -1; // 2등을 왼쪽으로
-            if (isWinner) order = 0; // 1등을 중앙으로
-            if (isThird) order = 1; // 3등을 오른쪽으로
+            const rankStyles = getRankStyles(rank);
 
             return (
               <div
                 key={plan._id || index}
-                className={`relative ${
+                className={`${
                   isWinner
                     ? 'order-1 md:order-2'
                     : isSecond
                       ? 'order-2 md:order-1'
                       : 'order-3 md:order-3'
                 }`}
+                style={rankStyles.container}
               >
                 {/* 순위 메달 */}
                 {isWinner && (
@@ -239,9 +352,13 @@ const DiagnosisResultPage = () => {
                   </div>
                 )}
 
-                {/* 1등 카드 강조 효과 */}
+                {/* 순위별 카드 래핑 */}
                 <div
-                  className={`${isWinner ? 'transform scale-105 ring-4 ring-pink-400 ring-opacity-50 rounded-[20px]' : ''}`}
+                  style={{
+                    ...rankStyles.inner,
+                    transform: isWinner ? 'scale(1.05)' : 'scale(1)',
+                    transition: 'transform 0.3s ease',
+                  }}
                 >
                   <PlanCard
                     imagePath={plan?.imagePath}
@@ -253,7 +370,7 @@ const DiagnosisResultPage = () => {
                     price_value={plan?.price_value || null}
                     sale_price_value={plan?.sale_price_value || null}
                     benefits={plan?.benefits}
-                    rank={index + 1}
+                    rank={rank}
                   />
                 </div>
               </div>
@@ -265,8 +382,7 @@ const DiagnosisResultPage = () => {
         <div className="flex justify-center gap-4">
           <button
             onClick={handleRetryDiagnosis}
-            className="h-[56px] px-[40px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 hover:border-pink-700 hover:bg-pink-200 transition-all"
-            style={{ color: 'var(--color-black)' }}
+            className="h-[56px] px-[40px] border-[2px] border-gray-500 bg-white rounded-[12px] body-large font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
           >
             다시 진단하기
           </button>

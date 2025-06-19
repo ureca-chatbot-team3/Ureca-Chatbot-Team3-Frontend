@@ -1,7 +1,7 @@
 import PlanCard from '@/components/PlanCard';
 
 const mockData = {
-  imagePath: '/sampleImage.jpg',
+  imagePath: null,
   name: '요금제 A',
   infos: '20GB + 100분',
   plan_speed: '5G 초고속',

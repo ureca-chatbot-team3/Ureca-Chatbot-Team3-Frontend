@@ -376,7 +376,7 @@ const DiagnosisPage = () => {
                   disabled={!canGoPrevious}
                   className={`flex-1 h-[56px] border-[2px] rounded-[12px] body-large font-500 transition-all duration-200 ${
                     canGoPrevious
-                      ? 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200 text-black'
+                      ? 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200 text-black hover:text-pink-700'
                       : 'border-gray-400 bg-gray-200 text-gray-500 cursor-not-allowed'
                   }`}
                 >
