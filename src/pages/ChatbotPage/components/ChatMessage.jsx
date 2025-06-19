@@ -13,10 +13,7 @@ export default function ChatMessages({ messages }) {
   }, [messages]);
 
   return (
-    <div
-      ref={scrollRef}
-      className="p-4 pb-[66px] overflow-y-auto h-[calc(100%-66px-45px-66px)]"
-    >
+    <div ref={scrollRef} className="p-4 pb-[66px] overflow-y-auto h-[calc(100%-66px-45px-66px)]">
       {messages.map((msg, idx) =>
         msg.type === 'bot' ? (
           <div key={idx} className="mb-3">
