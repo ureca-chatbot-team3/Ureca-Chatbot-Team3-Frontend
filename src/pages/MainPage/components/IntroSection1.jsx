@@ -2,9 +2,9 @@ import PhoneImage from '@/assets/images/Phone.png';
 import LaptopImage from '@/assets/images/Laptop.png';
 import { motion } from 'motion/react';
 
-const IntroSection1 = () => {
+const IntroSection1 = ({ isActive }) => {
   return (
-    <section className="text-center w-full flex flex-col justify-between">
+    <section className="text-center w-full flex flex-col gap-3">
       <h1 className="heading-1 font-500">
         통신 요금제, <br />
         <span className="text-pink-700">AI 챗봇</span>이 똑똑하게 추천합니다
@@ -12,10 +12,21 @@ const IntroSection1 = () => {
       <div className="flex justify-evenly gap-5 flex-1 overflow-hidden">
         <motion.div
           className="flex flex-col justify-center gap-5"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={
+            isActive
+              ? {
+                  opacity: 1,
+                  scale: 1,
+                  transition: { duration: 0.6, delay: 0.4, ease: 'easeOut' },
+                }
+              : {
+                  opacity: 0,
+                  scale: 0.95,
+                  transition: { delay: 0, ease: 'easeOut' },
+                }
+          }
           viewport={{ once: false }}
-          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
         >
           <div className="relative h-full aspect-square max-h-[334px] mx-auto">
             <img
@@ -31,8 +42,20 @@ const IntroSection1 = () => {
 
         <motion.div
           className="flex flex-col justify-center gap-3"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0 }}
+          animate={
+            isActive
+              ? {
+                  opacity: 1,
+                  scale: 1,
+                  transition: { duration: 0.6, delay: 1, ease: 'easeOut' },
+                }
+              : {
+                  opacity: 0,
+                  scale: 0.95,
+                  transition: { delay: 0, ease: 'easeOut' },
+                }
+          }
           viewport={{ once: false }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
         >
