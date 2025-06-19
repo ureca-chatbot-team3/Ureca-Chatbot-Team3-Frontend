@@ -6,8 +6,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import IntroSection1 from './IntroSection1';
+import { IntroSection2 } from './IntroSection2';
+import { useState } from 'react';
 
 const MainIntro = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <section className="px-[40px] bg-linear-[to_bottom,var(--color-pink-300),var(--color-white)] h-[calc(100vh-var(--header-height))]">
       <div className="content-max-width mx-auto flex flex-col items-center h-full gap-3 relative">
@@ -23,14 +27,21 @@ const MainIntro = () => {
           }}
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
+          onSlideChange={(swiper) => {
+            console.log(swiper.activeIndex);
+            setActiveIndex(swiper.activeIndex);
+          }}
           className="w-full h-full mb-[100px]"
         >
           <SwiperSlide>
-            <IntroSection1 />
+            <IntroSection1 isActive={activeIndex === 0} />
           </SwiperSlide>
-          <SwiperSlide>Slide 2</SwiperSlide>
+          <SwiperSlide>
+            <IntroSection2 isActive={activeIndex === 1} />
+          </SwiperSlide>
           <SwiperSlide>Slide 3</SwiperSlide>
         </Swiper>
+
         {/* 임시 화살표 */}
         <motion.div
           className="absolute bottom-0"

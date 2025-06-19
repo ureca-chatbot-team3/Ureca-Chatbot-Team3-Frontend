@@ -132,7 +132,7 @@ body,
 
 /* 스와이퍼 커스텀 */
 .swiper-slide {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xl);
   display: flex;
   justify-content: center;
 }
