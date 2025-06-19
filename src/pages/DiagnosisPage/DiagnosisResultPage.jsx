@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDiagnosis } from '../../store/DiagnosisContext';
 import PlanCard from '../../components/PlanCard';
+import confetti from 'canvas-confetti';
 
 const DiagnosisResultPage = () => {
   const navigate = useNavigate();
@@ -20,6 +21,16 @@ const DiagnosisResultPage = () => {
   useEffect(() => {
     if (result && result.recommendedPlans && result.recommendedPlans.length > 0) {
       setShowConfetti(true);
+
+      // 색종이 효과 1번만 실행
+      setTimeout(() => {
+        confetti({
+          particleCount: 150,
+          spread: 120,
+          origin: { y: 0.4, x: 0.5 },
+          colors: ['#FF0080', '#FF6EC7', '#FFD93D', '#6EC7FF', '#72FA93', '#FFA500', '#FF69B4'],
+        });
+      }, 500);
     }
   }, [result]);
 
@@ -35,7 +46,7 @@ const DiagnosisResultPage = () => {
   // 로딩 상태
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className="bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center items-center h-[500px]">
             <div className="text-center">
@@ -53,7 +64,7 @@ const DiagnosisResultPage = () => {
   // 에러 상태
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className="bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
@@ -105,7 +116,7 @@ const DiagnosisResultPage = () => {
   // 결과가 없는 경우
   if (!result) {
     return (
-      <main className="min-h-screen bg-gray-200">
+      <main className="bg-gray-200">
         <div className="max-w-[1440px] mx-auto px-[40px]">
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
@@ -146,31 +157,7 @@ const DiagnosisResultPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-200 relative overflow-hidden">
-      {/* 폭죽 효과 */}
-      {showConfetti && (
-        <div className="confetti-container">
-          {[...Array(80)].map((_, i) => {
-            return (
-              <div
-                key={i}
-                className="confetti"
-                style={{
-                  '--confetti-color': ['#FF0080', '#FF6EC7', '#FFD93D', '#6EC7FF', '#72FA93'][
-                    i % 5
-                  ],
-                  '--confetti-delay': `${Math.random() * 2}s`,
-                  '--confetti-duration': `${2 + Math.random() * 1}s`,
-                  '--confetti-x': `${Math.random() * 100}vw`,
-                  '--confetti-drift': Math.random() * 50 - 25,
-                  '--confetti-rotate': `${Math.random() * 180}deg`,
-                }}
-              />
-            );
-          })}
-        </div>
-      )}
-
+    <main className="bg-gray-200 relative overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-[40px] py-[40px]">
         {/* 헤더 섹션 */}
         <div className="text-center mb-[60px]">
@@ -183,34 +170,72 @@ const DiagnosisResultPage = () => {
         </div>
 
         {/* 추천 요금제 카드 섹션 */}
-        <div className="flex justify-center gap-[30px] mb-[60px] flex-wrap">
+        <div className="flex justify-center items-end gap-[30px] mb-[60px] flex-wrap">
+          {/* 순서 재배치: 데스크탑(2등-1등-3등), 모바일(1등-2등-3등) */}
           {topThreePlans.map((recommendation, index) => {
-            // 데이터 구조 확인 및 처리
             const plan = recommendation.planId || recommendation.plan || recommendation;
             const isWinner = index === 0;
+            const isSecond = index === 1;
+            const isThird = index === 2;
+
+            // 배치 순서 결정
+            let order = 0;
+            if (isSecond) order = -1; // 2등을 왼쪽으로
+            if (isWinner) order = 0; // 1등을 중앙으로
+            if (isThird) order = 1; // 3등을 오른쪽으로
 
             return (
-              <div key={plan._id || index} className="relative">
+              <div
+                key={plan._id || index}
+                className={`relative ${
+                  isWinner
+                    ? 'order-1 md:order-2'
+                    : isSecond
+                      ? 'order-2 md:order-1'
+                      : 'order-3 md:order-3'
+                }`}
+              >
                 {/* 순위 메달 */}
                 {isWinner && (
-                  <div className="absolute -top-[30px] left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="w-[60px] h-[60px] bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white text-2xl font-bold">1</span>
-                    </div>
+                  <div className="absolute -top-[20px] -left-[10px] z-10">
+                    <img
+                      src="/src/assets/svg/1-medal.svg"
+                      alt="1등 메달"
+                      className="w-[80px] h-[80px]"
+                      style={{
+                        imageRendering: 'crisp-edges',
+                        shapeRendering: 'crispEdges',
+                        WebkitFontSmoothing: 'antialiased',
+                      }}
+                    />
                   </div>
                 )}
-                {index === 1 && (
-                  <div className="absolute -top-[25px] left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="w-[50px] h-[50px] bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white text-xl font-bold">2</span>
-                    </div>
+                {isSecond && (
+                  <div className="absolute -top-[8px] -left-[8px] z-10">
+                    <img
+                      src="/src/assets/svg/2-medal.svg"
+                      alt="2등 메달"
+                      className="w-[80px] h-[70px]"
+                      style={{
+                        imageRendering: 'crisp-edges',
+                        shapeRendering: 'crispEdges',
+                        WebkitFontSmoothing: 'antialiased',
+                      }}
+                    />
                   </div>
                 )}
-                {index === 2 && (
-                  <div className="absolute -top-[25px] left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="w-[50px] h-[50px] bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white text-xl font-bold">3</span>
-                    </div>
+                {isThird && (
+                  <div className="absolute -top-[8px] -left-[8px] z-10">
+                    <img
+                      src="/src/assets/svg/3-medal.svg"
+                      alt="3등 메달"
+                      className="w-[80px] h-[70px]"
+                      style={{
+                        imageRendering: 'crisp-edges',
+                        shapeRendering: 'crispEdges',
+                        WebkitFontSmoothing: 'antialiased',
+                      }}
+                    />
                   </div>
                 )}
 
@@ -253,91 +278,6 @@ const DiagnosisResultPage = () => {
           </button>
         </div>
       </div>
-
-      <style jsx>{`
-        .confetti-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        .confetti {
-          position: absolute;
-          top: 130px;
-          left: var(--confetti-x);
-          width: 8px;
-          height: 8px;
-          background-color: var(--confetti-color);
-          animation: confetti-rain var(--confetti-duration) linear var(--confetti-delay) infinite;
-          transform-origin: center;
-        }
-
-        @keyframes confetti-rain {
-          0% {
-            transform: translateY(-20px) translateX(0) rotate(0deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
-              rotate(var(--confetti-rotate));
-            opacity: 0;
-          }
-        }
-
-        .confetti:nth-child(odd) {
-          width: 6px;
-          height: 12px;
-          animation-name: confetti-rain-odd;
-        }
-
-        @keyframes confetti-rain-odd {
-          0% {
-            transform: translateY(-20px) translateX(0) rotate(0deg) scale(0.8);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
-              rotate(calc(var(--confetti-rotate) * 0.5)) scale(0.6);
-            opacity: 0;
-          }
-        }
-
-        .confetti:nth-child(3n) {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          animation-duration: calc(var(--confetti-duration) * 1.1);
-        }
-
-        .confetti:nth-child(4n) {
-          width: 10px;
-          height: 3px;
-          animation-timing-function: ease-in;
-        }
-
-        .confetti:nth-child(5n) {
-          width: 7px;
-          height: 7px;
-          transform: rotate(45deg);
-          animation-name: confetti-rain-rotate;
-        }
-
-        @keyframes confetti-rain-rotate {
-          0% {
-            transform: translateY(-20px) translateX(0) rotate(45deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) translateX(calc(var(--confetti-drift) * 1px))
-              rotate(calc(var(--confetti-rotate) + 225deg));
-            opacity: 0;
-          }
-        }
-      `}</style>
     </main>
   );
 };

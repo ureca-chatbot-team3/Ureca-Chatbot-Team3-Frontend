@@ -179,7 +179,7 @@ const DiagnosisPage = () => {
         <div className="flex justify-center">
           <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px]">
             {/* 진행 표시바 */}
-            <div className="px-[80px] pt-[80px] pb-[60px]">
+            <div className="px-[80px] pt-[60px] pb-[40px]">
               <div className="flex items-center justify-between mb-[16px]">
                 <span className="body-medium font-700" style={{ color: 'var(--color-black)' }}>
                   요금제 추천 질문
@@ -200,7 +200,7 @@ const DiagnosisPage = () => {
             </div>
 
             {/* 질문 제목 */}
-            <div className="px-[80px] pb-[60px]">
+            <div className="px-[80px] pb-[40px]">
               <h1
                 className="heading-2 font-700 text-center"
                 style={{ color: 'var(--color-black)' }}

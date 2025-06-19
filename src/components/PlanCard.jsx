@@ -38,7 +38,7 @@ const PlanCard = ({
       <div className="h-[24px]" />
 
       {/* 이미지 */}
-      <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center">
+      <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
         {imageLoading && !imageError && (
           <div className="text-gray-400">
             <svg className="w-8 h-8 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -61,9 +61,14 @@ const PlanCard = ({
         <img
           src={imageUrl}
           alt={name}
-          className={`w-full h-full object-cover transition-opacity duration-200 ${
-            imageLoading ? 'opacity-0' : 'opacity-100'
-          }`}
+          className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
+          style={{
+            opacity: imageLoading ? 0 : 1,
+            minWidth: '246px',
+            minHeight: '224px',
+            maxWidth: '246px',
+            maxHeight: '224px'
+          }}
           onLoad={() => {
             setImageLoading(false);
             setImageError(false);
@@ -72,7 +77,7 @@ const PlanCard = ({
             console.log('이미지 로드 실패:', imageUrl);
             setImageLoading(false);
             setImageError(true);
-            e.target.src = '/noImageImg.svg';
+            e.target.src = '/noImageImg.jpeg';
           }}
         />
       </div>
@@ -111,12 +116,28 @@ const PlanCard = ({
       <div className="h-[10px]" />
 
       {/* benefits */}
-      <div className="flex flex-col items-start w-full space-y-[5px]">
-        {benefitsList.map((benefit, index) => (
-          <span key={index} className="body-small font-400 text-black">
-            {benefit}
-          </span>
+      <div className="flex flex-col items-start w-full px-1">
+        {benefitsList.slice(0, 3).map((benefit, index) => (
+          <div key={index} className="w-full py-[2px] mb-[2px] last:mb-0">
+            <span
+              className="body-small font-400 text-black"
+              style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {benefit}
+            </span>
+          </div>
         ))}
+        {benefitsList.length > 3 && (
+          <div className="py-[2px]">
+            <span className="body-small font-300 text-gray-500">...</span>
+          </div>
+        )}
       </div>
       <div className="h-[25px]" />
 
