@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { planApi } from '../../apis/planApi';
-import { useAuth } from '../../contexts/AuthContext';
 import { getImageUrl } from '../../utils/imageUtils';
 import toast from 'react-hot-toast';
 
 const ComparePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   // 최대 3개의 요금제를 비교할 수 있도록 설정
   const [selectedPlans, setSelectedPlans] = useState([null, null, null]);
   const [availablePlans, setAvailablePlans] = useState([]);
-  const [bookmarkedPlans, setBookmarkedPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
@@ -54,24 +51,6 @@ const ComparePage = () => {
 
     fetchPlans();
   }, []);
-
-  // 로그인 사용자의 보관함 요금제 가져오기
-  useEffect(() => {
-    const fetchBookmarkedPlans = async () => {
-      if (!user) return;
-
-      try {
-        const response = await planApi.getBookmarkedPlans();
-        if (response.success) {
-          setBookmarkedPlans(response.data.bookmarks.map((bookmark) => bookmark.plan));
-        }
-      } catch (err) {
-        console.error('보관함 요금제 조회 실패:', err);
-      }
-    };
-
-    fetchBookmarkedPlans();
-  }, [user]);
 
   // 특정 요금제 상세 정보 가져오기
   const fetchPlanDetail = async (planId, index) => {
@@ -225,30 +204,6 @@ const ComparePage = () => {
 
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-            {/* 보관함 요금제 */}
-            {user && bookmarkedPlans.length > 0 && (
-              <>
-                <div className="p-3 bg-gray-50 border-b border-gray-200">
-                  <span className="body-small font-700 text-gray-700">보관함 요금제</span>
-                </div>
-                {bookmarkedPlans.map((bookmarkedPlan) => (
-                  <div
-                    key={bookmarkedPlan._id}
-                    className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
-                    onClick={() => handlePlanSelect(bookmarkedPlan._id, index)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="body-medium font-700 text-black">{bookmarkedPlan.name}</span>
-                      <span className="bg-pink-100 text-pink-600 text-xs px-2 py-1 rounded-full">
-                        보관함
-                      </span>
-                    </div>
-                  </div>
-                ))}
-                <div className="border-t-2 border-gray-300"></div>
-              </>
-            )}
-
             {/* 전체 요금제 */}
             <div className="p-3 bg-gray-50 border-b border-gray-200">
               <span className="body-small font-700 text-gray-700">전체 요금제</span>
