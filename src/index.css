@@ -132,23 +132,23 @@ body,
 
 /* 스와이퍼 커스텀 */
 .swiper-slide {
+  padding: var(--spacing-lg);
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 .swiper-button-prev,
 .swiper-button-next {
   color: var(--color-gray-700);
   opacity: 70%;
-  width: 23px;
-  height: 50px;
+  width: var(--spacing-md);
+  height: var(--spacing-xl);
 }
 .swiper-pagination {
   text-align: left;
 }
 .swiper-pagination-bullet {
-  width: 16px;
-  height: 16px;
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
   background-color: transparent;
   border: 1px solid var(--color-pink-700);
   opacity: 1;
