@@ -39,6 +39,9 @@
   --spacing-lg: 32px;
   --spacing-xl: 48px;
   --spacing-2xl: 64px;
+
+  /* 헤더 높이 */
+  --header-height: 112px;
 }
 
 @layer utilities {
@@ -107,6 +110,11 @@
   .m-body-add {
     font-size: 11px;
     line-height: 14px;
+  }
+
+  /* 컨텐츠 최대 너비 */
+  .content-max-width {
+    max-width: 1440px;
   }
 }
 
