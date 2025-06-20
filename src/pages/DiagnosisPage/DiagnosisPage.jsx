@@ -131,9 +131,7 @@ const DiagnosisPage = () => {
             <h2 className="m-heading-3 font-700 mb-4 text-black md:heading-3">
               오류가 발생했습니다
             </h2>
-            <p className="m-body-large mb-6 text-gray-700 md:body-large">
-              {error}
-            </p>
+            <p className="m-body-large mb-6 text-gray-700 md:body-large">{error}</p>
             <button
               onClick={() => window.location.reload()}
               className="h-[56px] px-[32px] bg-pink-700 text-white rounded-[12px] m-body-large font-500 hover:opacity-90 transition-opacity md:body-large"
@@ -152,9 +150,7 @@ const DiagnosisPage = () => {
       <main className="flex justify-center">
         <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[80px]">
           <div className="text-center">
-            <p className="m-body-large text-gray-700 md:body-large">
-              질문을 준비 중입니다...
-            </p>
+            <p className="m-body-large text-gray-700 md:body-large">질문을 준비 중입니다...</p>
           </div>
         </div>
       </main>
@@ -162,9 +158,9 @@ const DiagnosisPage = () => {
   }
 
   return (
-    <main className="flex justify-center py-[40px]">
-      {/* 모바일: 360px 너비, 자동 높이 / 데스크탑: 720px 최대 크기 */}
-      <div className="w-[360px] bg-white rounded-[20px] shadow-sm md:w-full md:max-w-[720px] md:h-auto">
+    <main className="flex justify-center py-[40px] px-[20px] md:px-0">
+      {/* 모바일: 최대 430px 너비 제한, 자동 높이 / 데스크탑: 720px 최대 크기 */}
+      <div className="w-full max-w-[430px] bg-white rounded-[20px] shadow-sm md:max-w-[720px] md:h-auto">
         {/* 진행 표시바 */}
         <div className="px-[20px] pt-[20px] pb-[16px] md:px-[80px] md:pt-[40px] md:pb-[40px]">
           <div className="flex items-center justify-between mb-[8px] md:mb-[16px]">

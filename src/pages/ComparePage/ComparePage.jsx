@@ -164,7 +164,9 @@ const ComparePage = () => {
             <>
               {/* 텍스트와 화살표 그룹 */}
               <div className="flex items-center">
-                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500`}>
+                <span
+                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 ${index === 0 ? 'text-black' : 'text-pink-700'}`}
+                >
                   {plan.name}
                 </span>
                 {!isMobile && (
@@ -448,27 +450,25 @@ const ComparePage = () => {
   return (
     <div className="bg-gray-200 min-h-screen">
       {/* 모바일 레이아웃 */}
-      <div className="md:hidden">
-        <div className="py-[30px]">
-          {/* 모바일 제목 */}
-          <div className="mb-[20px]">
-            <h1 className="m-heading-2 font-700 text-black text-center">요금제를 비교해보세요</h1>
-          </div>
+      <div className="md:hidden px-[20px] py-[30px] max-w-[430px] mx-auto">
+        {/* 모바일 제목 */}
+        <div className="mb-[20px]">
+          <h1 className="m-heading-2 font-700 text-black text-center">요금제를 비교해보세요</h1>
+        </div>
 
-          {/* 모바일 2개 요금제 비교 */}
-          <div className="flex gap-[10px]">
-            {[0, 1].map((index) => (
-              <div key={index} className="flex-1">
-                <div className="bg-white rounded-[16px] p-[12px] shadow-soft-black">
-                  {/* 모바일 드롭다운 */}
-                  {renderDropdown(index, true)}
+        {/* 모바일 2개 요금제 비교 */}
+        <div className="flex gap-[10px]">
+          {[0, 1].map((index) => (
+            <div key={index} className="flex-1">
+              <div className="bg-white rounded-[16px] p-[12px] shadow-soft-black">
+                {/* 모바일 드롭다운 */}
+                {renderDropdown(index, true)}
 
-                  {/* 모바일 요금제 상세 정보 */}
-                  {renderPlanDetails(selectedPlans[index], index, true)}
-                </div>
+                {/* 모바일 요금제 상세 정보 */}
+                {renderPlanDetails(selectedPlans[index], index, true)}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 
