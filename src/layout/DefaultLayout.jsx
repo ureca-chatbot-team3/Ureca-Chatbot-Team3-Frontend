@@ -9,7 +9,7 @@ const HEADER_HEIGHT = 112;
 const DefaultLayout = () => {
   const location = useLocation();
   const isMainPage = location.pathname === '/';
-  
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -28,7 +28,10 @@ const DefaultLayout = () => {
           <Outlet />
         </div>
       ) : (
-        <div className="bg-gray-200 px-[20px] md:px-[40px] flex-1" style={{ paddingTop: HEADER_HEIGHT }}>
+        <div
+          className="bg-gray-200 px-[20px] md:px-[40px] flex-1"
+          style={{ paddingTop: HEADER_HEIGHT }}
+        >
           <div className="max-w-[1440px] mx-auto">
             <Outlet />
             <ChatbotLauncher onClick={() => setIsOpen(true)} />
