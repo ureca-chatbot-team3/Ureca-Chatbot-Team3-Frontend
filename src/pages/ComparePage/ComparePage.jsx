@@ -42,6 +42,7 @@ const ComparePage = () => {
           throw new Error(response.message);
         }
       } catch (err) {
+        console.log(err, '요금제 목록 불러오기 실패');
         setError('요금제 목록을 불러오는데 실패했습니다.');
         toast.error('요금제 목록을 불러오는데 실패했습니다.');
       } finally {
@@ -87,6 +88,7 @@ const ComparePage = () => {
         setSelectedPlans(newSelectedPlans);
       }
     } catch (err) {
+      console.log(err, '요금제 목록 불러오기 실패');
       toast.error('요금제 정보를 불러오는데 실패했습니다.');
     }
   };

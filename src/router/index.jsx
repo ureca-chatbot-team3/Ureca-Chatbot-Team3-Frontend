@@ -3,7 +3,6 @@ import DefaultLayout from '../layout/DefaultLayout';
 import MainPage from '@/pages/MainPage/MainPage';
 import LoginPage from '@/pages/AuthPage/LoginPage';
 import SignupPage from '@/pages/AuthPage/SignupPage';
-import MainPage from '../pages/MainPage/MainPage';
 import DiagnosisPage from '../pages/DiagnosisPage/DiagnosisPage';
 import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
 import ComparePage from '../pages/ComparePage/ComparePage';
