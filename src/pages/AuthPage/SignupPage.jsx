@@ -5,16 +5,16 @@ const SignupPage = () => {
     <div className="bg-white flex justify-center min-h-screen">
       <div className="w-[675px] flex flex-col min-h-screen">
         <AuthHeader title="회원가입" />
-        <div className="flex flex-col flex-1 px-4">
+        <div className="flex flex-col flex-1 px-5">
           {/* 안내 문구 */}
-          <p className="heading-2 font-500 text-black mt-[60px] mb-[60px] leading-relaxed">
+          <p className="heading-2 font-500 text-black mt-[40px] mb-[40px] leading-relaxed">
             회원 정보를
             <br />
             입력해 주세요.
           </p>
 
           {/* 회원가입 폼 */}
-          <form className="flex flex-col gap-9 mb-[100px]">
+          <form className="flex flex-col gap-6">
             <div className="flex gap-6">
               {/* 닉네임 */}
               <div className="flex flex-col gap-6 flex-1">
@@ -85,7 +85,7 @@ const SignupPage = () => {
           </form>
 
           {/* 하단 버튼 그룹 */}
-          <div className="mt-auto w-full px-4 pb-[56px]">
+          <div className="mt-auto w-full pb-[56px]">
             <div className="flex flex-col gap-[14px] w-full">
               {/* 기본 회원가입 버튼 */}
               <button className="w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 hover:brightness-110 transition">

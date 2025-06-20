@@ -109,6 +109,38 @@
     line-height: 14px;
   }
 
+  /* 반응형 폰트 크기 - md(768px) 이상에서 데스크탑 폰트 적용 */
+  @media (min-width: 768px) {
+    .md\:heading-1 {
+      font-size: 36px !important;
+      line-height: 44px !important;
+    }
+    .md\:heading-2 {
+      font-size: 24px !important;
+      line-height: 36px !important;
+    }
+    .md\:heading-3 {
+      font-size: 20px !important;
+      line-height: 26px !important;
+    }
+    .md\:body-large {
+      font-size: 16px !important;
+      line-height: 24px !important;
+    }
+    .md\:body-medium {
+      font-size: 14px !important;
+      line-height: 20px !important;
+    }
+    .md\:body-small {
+      font-size: 12px !important;
+      line-height: 18px !important;
+    }
+    .md\:body-add {
+      font-size: 11px !important;
+      line-height: 14px !important;
+    }
+  }
+
   /* 그림자 */
   .shadow-soft-black {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
@@ -129,8 +161,13 @@ body,
 
 @layer utilities {
   @keyframes blink {
-    0%, 100% { opacity: 0.2; }
-    50% { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
   .animate-blink {
@@ -145,4 +182,3 @@ body,
     animation-delay: 0.4s;
   }
 }
-
