@@ -17,6 +17,7 @@ export default function ChatbotModal({ onClose }) {
   const [showMenu, setShowMenu] = useState(false);
   const [messages, setMessages] = useState([]);
   const [faqList, setFaqList] = useState([]);
+
   const socketRef = useRef(null);
   const sessionIdRef = useRef(null);
   const tempMessageIdRef = useRef(null);
@@ -40,11 +41,33 @@ export default function ChatbotModal({ onClose }) {
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4).map((item) => item.question);
 
+      const greetingText = `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.
+데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.
+궁금한 걸 채팅창에 말씀해주세요! ✨`;
+
+      const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
+
+      // 👇 순차적으로 메시지 전송
+      await new Promise((res) => {
+        socketRef.current?.emit('stream-start', {
+          role: 'assistant',
+          content: greetingText,
+        });
+        socketRef.current?.emit('stream-end', {});
+        setTimeout(res, 300); // 300ms 지연
+      });
+
+      socketRef.current?.emit('stream-start', {
+        role: 'assistant',
+        content: quickText,
+      });
+      socketRef.current?.emit('stream-end', {});
+
+      // 👇 프론트 상태 업데이트
       const greetingMessage = {
         id: 'greeting',
         type: 'bot',
-        content:
-          '반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨',
+        content: greetingText,
         role: 'assistant',
       };
 
@@ -69,13 +92,15 @@ export default function ChatbotModal({ onClose }) {
     axios
       .get(`/api/conversations/${sessionId}`)
       .then((res) => {
-        const loadedMessages = (res.data.messages || []).map((msg) => ({
-          id: msg._id,
-          type: msg.role === 'user' ? 'user' : 'bot',
-          content: msg.content,
-          timestamp: msg.timestamp,
-          role: msg.role,
-        }));
+        const loadedMessages = (res.data.messages || [])
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 🔁 순서 보장
+          .map((msg) => ({
+            id: msg._id,
+            type: msg.role === 'user' ? 'user' : 'bot',
+            content: msg.content,
+            timestamp: msg.timestamp,
+            role: msg.role,
+          }));
 
         if (loadedMessages.length === 0) {
           initializeGreetingAndFAQ();
@@ -85,7 +110,6 @@ export default function ChatbotModal({ onClose }) {
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          console.log('404 오류: 첫 대화시 DB에서 가져올 내용이 없어서 나오는 오류');
           initializeGreetingAndFAQ();
         } else {
           console.warn('대화 불러오기 실패:', err.message);
@@ -179,16 +203,12 @@ export default function ChatbotModal({ onClose }) {
     [sendMessage]
   );
 
-  // 대화 초기화 함수 (세션 삭제 및 상태 초기화)
   const clearConversation = async () => {
     try {
       const sessionId = sessionIdRef.current;
       if (!sessionId) return;
 
-      // 서버에 대화 삭제 요청
       await axios.delete(`/api/conversations/${sessionId}`);
-
-      // 상태 초기화
       setMessages([]);
       initializeGreetingAndFAQ();
     } catch (err) {
@@ -217,13 +237,13 @@ export default function ChatbotModal({ onClose }) {
           {showMenu && (
             <ChatbotMenuModal
               onClose={() => setShowMenu(false)}
-              onClearConversation={clearConversation} // 초기화 함수 전달
+              onClearConversation={clearConversation}
             />
           )}
           <ChatbotToast visible={showToast} />
           <ChatbotHeader onClose={handleClose} onOpenMenu={() => setShowMenu(true)} />
           <ChatbotNoticeBar />
-          <ChatMessages messages={messages} />
+          <ChatMessages messages={messages} onQuickQuestionSelect={handleQuickQuestion} />
           <ChatbotInput message={message} setMessage={setMessage} onSend={handleSend} />
         </div>
       </div>
