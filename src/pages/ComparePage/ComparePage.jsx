@@ -150,54 +150,116 @@ const ComparePage = () => {
   const renderDropdown = (index, isMobile = false) => {
     const plan = selectedPlans[index];
     const isOpen = openDropdownIndex === index;
-    const textColor = index === 0 ? 'text-black' : 'text-pink-600';
+    const textColor = index === 0 ? 'text-black' : 'text-pink-700';
 
     return (
       <div className="relative">
         <div
           className={`w-full ${
             isMobile ? 'h-[80px]' : 'h-[150px]'
-          } border border-gray-300 rounded-lg px-4 flex items-center justify-between cursor-pointer bg-white ${textColor}`}
+          } border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor}`}
           onClick={() => toggleDropdown(index)}
         >
           {plan ? (
             <>
-              <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black`}>
-                {plan.name}
-              </span>
-              {!isMobile && plan.iconPath && (
-                <img
-                  src={getImageUrl(plan.iconPath)}
-                  alt={plan.name}
-                  className="w-[80px] h-[80px] object-contain flex-shrink-0"
-                />
+              {/* 텍스트와 화살표 그룹 */}
+              <div className="flex items-center">
+                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500`}>
+                  {plan.name}
+                </span>
+                {!isMobile && (
+                  <svg
+                    className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} ml-2`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                )}
+              </div>
+
+              {/* 데스크톱: 아이콘이 오른쪽 끝 / 모바일: 화살표가 오른쪽 끝 */}
+              {isMobile ? (
+                <svg
+                  className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} flex-shrink-0 ml-auto`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              ) : (
+                plan.iconPath && (
+                  <img
+                    src={getImageUrl(plan.iconPath)}
+                    alt={plan.name}
+                    className="w-[80px] h-[80px] object-contain flex-shrink-0 ml-auto"
+                  />
+                )
               )}
             </>
           ) : (
-            <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black`}>
-              요금제 선택해주세요
-            </span>
+            <>
+              {/* 선택되지 않은 상태 */}
+              <div className="flex items-center">
+                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black`}>
+                  요금제 선택해주세요
+                </span>
+                {!isMobile && (
+                  <svg
+                    className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} ml-2`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                )}
+              </div>
+
+              {/* 모바일에서만 화살표 오른쪽 끝 */}
+              {isMobile && (
+                <svg
+                  className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} flex-shrink-0 ml-auto`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              )}
+            </>
           )}
-          <svg
-            className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} flex-shrink-0`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
         </div>
 
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
             {/* 전체 요금제 */}
             <div className="p-3 bg-gray-50 border-b border-gray-200">
-              <span className={`${isMobile ? 'm-body-small' : 'body-small'} font-700 text-gray-700`}>
+              <span
+                className={`${isMobile ? 'm-body-small' : 'body-small'} font-700 text-gray-700`}
+              >
                 전체 요금제
               </span>
             </div>
@@ -207,7 +269,9 @@ const ComparePage = () => {
                 className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                 onClick={() => handlePlanSelect(availablePlan._id, index)}
               >
-                <span className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 text-black`}>
+                <span
+                  className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 text-black`}
+                >
                   {availablePlan.name}
                 </span>
               </div>
@@ -236,15 +300,15 @@ const ComparePage = () => {
           <div className={`flex items-baseline gap-2 ${isMobile ? 'mb-0.5' : 'mb-1'}`}>
             <span className={`${titleClass} text-black`}>월정액</span>
             {!isMobile && (
-              <span className="body-medium font-700 text-gray-700">
-                부가세 포함 금액
-              </span>
+              <span className="body-medium font-700 text-gray-700">부가세 포함 금액</span>
             )}
           </div>
           <div className={`${priceContentClass} ${textColor}`}>
             {plan ? formatPrice(plan.price_value) : '-'}
           </div>
-          <div className={`${isMobile ? 'm-body-add' : 'body-small'} font-500 text-gray-700 pt-0.5`}>
+          <div
+            className={`${isMobile ? 'm-body-add' : 'body-small'} font-500 text-gray-700 pt-0.5`}
+          >
             정상가
           </div>
         </div>
@@ -252,7 +316,9 @@ const ComparePage = () => {
 
         {/* 할인상세내역 */}
         <div className={`${sectionHeight} flex flex-col justify-center px-4`}>
-          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>약정 할인 시</div>
+          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>
+            약정 할인 시
+          </div>
           <div className="flex items-baseline gap-1">
             {plan ? (
               <>
@@ -289,7 +355,9 @@ const ComparePage = () => {
 
         {/* 데이터 속도 */}
         <div className={`${sectionHeight} flex flex-col justify-center px-4`}>
-          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>데이터 속도</div>
+          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>
+            데이터 속도
+          </div>
           <div className={`${priceContentClass} ${textColor}`}>
             {plan ? plan.category || '-' : '-'}
           </div>
@@ -325,7 +393,9 @@ const ComparePage = () => {
 
         {/* 프리미엄 혜택 */}
         <div className={`${isMobile ? 'h-[80px]' : 'h-[150px]'} flex flex-col justify-center px-4`}>
-          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>프리미엄 혜택</div>
+          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>
+            프리미엄 혜택
+          </div>
           <div className={`${priceContentClass} ${textColor} overflow-hidden`}>
             {plan
               ? Array.isArray(plan.brands) && plan.brands.length > 0
