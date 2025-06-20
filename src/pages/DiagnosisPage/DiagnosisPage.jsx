@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDiagnosis } from '../../store/DiagnosisContext';
+import DiagnosisIntroSection from './components/DiagnosisIntroSection';
 
 const DiagnosisPage = () => {
   const navigate = useNavigate();
+  const [showIntro, setShowIntro] = useState(true);
+
   const {
     // 상태
     currentQuestion,
@@ -26,10 +29,16 @@ const DiagnosisPage = () => {
     submitDiagnosis,
   } = useDiagnosis();
 
-  // 컴포넌트 마운트 시 질문 로드
-  useEffect(() => {
+  // 진단 시작 핸들러
+  const handleStartDiagnosis = () => {
+    setShowIntro(false);
     loadQuestions();
-  }, []);
+  };
+
+  // 컴포넌트 마운트 시에는 질문을 로드하지 않음 (인트로 화면 표시)
+  // useEffect(() => {
+  //   loadQuestions();
+  // }, []);
 
   // 진단 완료 시 결과 페이지로 이동
   useEffect(() => {
@@ -92,6 +101,11 @@ const DiagnosisPage = () => {
       }
     }
   };
+
+  // 인트로 화면 표시
+  if (showIntro) {
+    return <DiagnosisIntroSection onStartDiagnosis={handleStartDiagnosis} />;
+  }
 
   // 로딩 상태
   if (isLoading) {
