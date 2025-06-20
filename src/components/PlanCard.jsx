@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatter } from '../utils/formatter';
 import { getImageUrl } from '../utils/imageUtils';
 
 const PlanCard = ({
+  id,
   imagePath,
   name,
   infos,
@@ -13,6 +15,7 @@ const PlanCard = ({
   sale_price_value,
   benefits = [],
 }) => {
+  const navigate = useNavigate();
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(!!imagePath); // imagePath가 있을 때만 로딩 상태로 시작
   // benefits가 객체인 경우 배열로 변환
@@ -29,9 +32,15 @@ const PlanCard = ({
   // infos가 배열인 경우 문자열로 변환
   const infosText = Array.isArray(infos) ? infos.join(', ') : infos;
 
+  // 비교 페이지로 이동하는 함수
+  const handleCompareClick = () => {
+    if (id) {
+      navigate(`/compare?planId=${id}`);
+    }
+  };
+
   // 이미지 URL 처리
   const imageUrl = getImageUrl(imagePath);
-  console.log('이미지 URL:', imageUrl, '원본 경로:', imagePath);
 
   return (
     <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border shadow-soft-black">
@@ -44,7 +53,11 @@ const PlanCard = ({
           <div className="w-full h-full flex items-center justify-center bg-gray-50">
             <div className="text-center text-gray-400">
               <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                  clipRule="evenodd"
+                />
               </svg>
               <p className="text-sm font-medium">이미지 없음</p>
             </div>
@@ -79,16 +92,15 @@ const PlanCard = ({
                 minWidth: '246px',
                 minHeight: '224px',
                 maxWidth: '246px',
-                maxHeight: '224px'
+                maxHeight: '224px',
               }}
               onLoad={() => {
                 setImageLoading(false);
                 setImageError(false);
               }}
               onError={(e) => {
-                console.log('이미지 로드 실패:', imageUrl);
                 setImageLoading(false);
-                if (!imageError) { // 무한 루프 방지
+                if (!imageError) {
                   setImageError(true);
                 }
               }}
@@ -157,10 +169,18 @@ const PlanCard = ({
       <div className="h-[25px]" />
 
       {/* 버튼 영역 */}
-      <div className="flex items-center justify-center gap-[17px]">
+      <div className="flex items-center justify-center gap-[8px]">
         {/* 자세히 보기 버튼 */}
-        <button className="w-[206px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 cursor-pointer">
+        <button className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 cursor-pointer">
           자세히 보기
+        </button>
+
+        {/* 비교하기 버튼 */}
+        <button
+          onClick={handleCompareClick}
+          className="w-[78px] h-[38px] rounded-[5px] border border-pink-600 bg-white body-medium font-500 text-pink-600 cursor-pointer hover:bg-pink-50 transition-colors"
+        >
+          비교하기
         </button>
 
         {/* 장바구니 버튼 */}
