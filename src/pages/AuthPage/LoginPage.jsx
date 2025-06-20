@@ -60,6 +60,7 @@ const LoginPage = () => {
 
           {/* 로그인 폼 */}
           <form
+            id="loginForm"
             className="flex flex-col gap-9"
             onSubmit={(e) => {
               e.preventDefault();
@@ -103,7 +104,7 @@ const LoginPage = () => {
             </div>
 
             {/* 회원가입 버튼 */}
-            <div className="mt-[50px] flex justify-center mb-[100px]">
+            <div className="mt-[50px] flex justify-center">
               <Link
                 to="/signup"
                 className="heading-3 font-500 text-gray-700 border-b border-gray-700 hover:text-gray-500 hover:border-gray-500 transition"
@@ -111,40 +112,41 @@ const LoginPage = () => {
                 회원가입
               </Link>
             </div>
-
-            {/* 하단 버튼 그룹 */}
-            <div className="mt-auto w-full pt-[56px]">
-              <div className="flex flex-col gap-[14px] w-full">
-                {/* 기본 로그인 버튼 */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 transition ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
-                  }`}
-                >
-                  {isSubmitting ? '로그인 중...' : '로그인'}
-                </button>
-
-                {/* 카카오 로그인 버튼 */}
-                <button
-                  type="button"
-                  onClick={handleKakaoLogin}
-                  disabled={isSubmitting}
-                  className={`w-full h-[58px] bg-[#FAE100] text-[#371C1D] rounded-[16px] heading-3 font-500 transition relative flex justify-center items-center ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
-                  }`}
-                >
-                  <img
-                    src="/src/assets/svg/kakaoIcon.svg"
-                    alt="카카오 아이콘"
-                    className="absolute left-5"
-                  />
-                  카카오 간편 로그인
-                </button>
-              </div>
-            </div>
           </form>
+
+          {/* 하단 버튼 그룹 - 화면 맨 아래 고정 */}
+          <div className="mt-auto w-full pb-6">
+            <div className="flex flex-col gap-[14px] w-full">
+              {/* 기본 로그인 버튼 */}
+              <button
+                type="submit"
+                form="loginForm"
+                disabled={isSubmitting}
+                className={`w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 transition ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
+                }`}
+              >
+                {isSubmitting ? '로그인 중...' : '로그인'}
+              </button>
+
+              {/* 카카오 로그인 버튼 */}
+              <button
+                type="button"
+                onClick={handleKakaoLogin}
+                disabled={isSubmitting}
+                className={`w-full h-[58px] bg-[#FAE100] text-[#371C1D] rounded-[16px] heading-3 font-500 transition relative flex justify-center items-center ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
+                }`}
+              >
+                <img
+                  src="/src/assets/svg/kakaoIcon.svg"
+                  alt="카카오 아이콘"
+                  className="absolute left-5"
+                />
+                카카오 간편 로그인
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
