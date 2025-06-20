@@ -9,7 +9,7 @@ const LoginPage = () => {
       <div className="w-[675px] flex flex-col min-h-screen">
         <AuthHeader title="로그인" />
 
-        <div className="flex flex-col flex-1 px-4">
+        <div className="flex flex-col flex-1 px-5">
           {/* 안내 문구 */}
           <p className="heading-2 font-500 text-black mt-[60px] mb-[60px] leading-relaxed">
             로그인 정보를
@@ -52,7 +52,7 @@ const LoginPage = () => {
           </div>
 
           {/* 하단 버튼 그룹 */}
-          <div className="mt-auto w-full px-4 pb-[56px]">
+          <div className="mt-auto w-full pb-[56px]">
             <div className="flex flex-col gap-[14px] w-full">
               {/* 기본 로그인 버튼 */}
               <button className="w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 hover:brightness-110 transition">
