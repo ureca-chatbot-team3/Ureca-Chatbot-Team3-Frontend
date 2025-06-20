@@ -45,7 +45,6 @@ const MainIntro = () => {
           </SwiperSlide>
         </Swiper>
 
-        {/* 임시 화살표 */}
         <motion.div
           className="absolute bottom-0"
           style={{ aspectRatio: '16/102' }}
