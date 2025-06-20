@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
+import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import MainPage from '@/pages/MainPage/MainPage';
 import LoginPage from '@/pages/AuthPage/LoginPage';
 import SignupPage from '@/pages/AuthPage/SignupPage';
@@ -32,14 +33,31 @@ export const router = createBrowserRouter([
         path: 'compare',
         element: <ComparePage />,
       },
+      // 마이페이지는 이후 추가 예정
+      // {
+      //   path: 'mypage',
+      //   element: (
+      //     <ProtectedRoute>
+      //       <MyPage />
+      //     </ProtectedRoute>
+      //   ),
+      // },
     ],
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: '/signup',
-    element: <SignupPage />,
+    element: (
+      <PublicRoute>
+        <SignupPage />
+      </PublicRoute>
+    ),
   },
 ]);

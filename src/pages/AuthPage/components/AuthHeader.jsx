@@ -5,7 +5,7 @@ const AuthHeader = ({ title = '로그인' }) => {
 
   return (
     <header className="h-[70px] border-b border-gray-500 bg-white">
-      <div className="relative w-full max-w-[675px] h-full flex items-center px-5 mx-auto">
+      <div className="relative w-full max-w-[560px] h-full flex items-center px-5 mx-auto">
         {/* 뒤로가기 버튼 */}
         <button onClick={() => navigate(-1)} className="mr-4">
           <img src="/src/assets/svg/back2Icon.svg" alt="뒤로가기" />

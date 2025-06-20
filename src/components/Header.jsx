@@ -1,24 +1,62 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuth } from '../contexts/AuthContext';
 import logoImage from '@/assets/images/Logo.png';
 import searchIcon from '@/assets/svg/searchIcon.svg';
 import cartIcon from '@/assets/svg/cartIcon.svg';
 import userIcon from '@/assets/svg/userIcon.svg';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  // 로그아웃 핸들러
+  const handleLogout = async () => {
+    const result = await logout();
+    if (result.success) {
+      toast.success('로그아웃되었습니다.');
+      navigate('/', { replace: true });
+    }
+  };
+
+  // 사용자 메뉴 클릭 핸들러
+  const handleUserMenuClick = () => {
+    if (isAuthenticated) {
+      navigate('/mypage');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
-    <header className="bg-white">
+    <header className="bg-white relative">
       {/* 윗섹션 */}
-      <div className="h-[56px] flex items-center justify-between max-w-[1440px] mx-auto">
+      <div className="h-[56px] flex items-center justify-between max-w-[1440px] mx-auto px-4">
         {/* 왼쪽 로고 */}
         <Link to="/">
           <img src={logoImage} alt="요플랜 로고" />
         </Link>
-        {/* 오른쪽 로그인 버튼 */}
-        <Link to="/login">
-          <button className="heading-3 font-300 text-black bg-transparent p-0 m-0 border-none cursor-pointer">
-            로그인
-          </button>
-        </Link>
+
+        {/* 오른쪽 로그인/사용자 정보 */}
+        <div className="flex items-center gap-4">
+          {isAuthenticated ? (
+            <>
+              <span className="heading-3 font-300 text-pink-700">{user?.nickname}님</span>
+              <button
+                onClick={handleLogout}
+                className="heading-3 font-300 text-gray-500 bg-transparent p-0 m-0 border-none cursor-pointer hover:text-gray-700 transition"
+              >
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <Link to="/login">
+              <button className="heading-3 font-300 text-black bg-transparent p-0 m-0 border-none cursor-pointer hover:text-gray-700 transition">
+                로그인
+              </button>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* 윗섹션 하단 선 */}
@@ -28,20 +66,29 @@ const Header = () => {
       />
 
       {/* 아랫섹션 */}
-      <div className="h-[56px] flex justify-between items-center max-w-[1440px] mx-auto">
+      <div className="h-[56px] flex justify-between items-center max-w-[1440px] mx-auto px-4">
         {/* 왼쪽 내비게이션 버튼 */}
         <div className="flex gap-[40px] items-center relative">
           {/* 네비게이션 링크들 */}
-          <Link to="/plans" className="body-medium font-500 text-black">
+          <Link
+            to="/plans"
+            className="body-medium font-500 text-black hover:text-pink-700 transition"
+          >
             요금제
           </Link>
-          <Link to="/compare" className="body-medium font-500 text-black">
+          <Link
+            to="/compare"
+            className="body-medium font-500 text-black hover:text-pink-700 transition"
+          >
             요금제 비교
           </Link>
 
           {/* 요금제 진단 + 동그라미 + 말풍선 */}
           <div className="relative">
-            <Link to="/diagnosis" className="body-medium font-500 text-black">
+            <Link
+              to="/diagnosis"
+              className="body-medium font-500 text-black hover:text-pink-700 transition"
+            >
               요금제 진단
             </Link>
 
@@ -107,19 +154,34 @@ const Header = () => {
             </div>
           </div>
 
-          <Link to="/chatbot" className="body-medium font-500 text-black">
+          <Link
+            to="/chatbot"
+            className="body-medium font-500 text-black hover:text-pink-700 transition"
+          >
             챗봇 안내
           </Link>
-          <Link to="/store" className="body-medium font-500 text-black">
+          <Link
+            to="/store"
+            className="body-medium font-500 text-black hover:text-pink-700 transition"
+          >
             매장 찾기
           </Link>
         </div>
 
         {/* 오른쪽 아이콘 버튼 */}
         <div className="flex gap-[28px] items-center">
-          <img src={searchIcon} alt="검색" className="h-6 w-6" />
-          <img src={cartIcon} alt="장바구니" className="h-6 w-6" />
-          <img src={userIcon} alt="유저" className="h-6 w-6" />
+          <button className="p-0 m-0 bg-transparent border-none cursor-pointer">
+            <img src={searchIcon} alt="검색" className="h-6 w-6" />
+          </button>
+          <button className="p-0 m-0 bg-transparent border-none cursor-pointer">
+            <img src={cartIcon} alt="장바구니" className="h-6 w-6" />
+          </button>
+          <button
+            onClick={handleUserMenuClick}
+            className="p-0 m-0 bg-transparent border-none cursor-pointer"
+          >
+            <img src={userIcon} alt="유저" className="h-6 w-6" />
+          </button>
         </div>
       </div>
 
