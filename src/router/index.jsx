@@ -7,6 +7,8 @@ import SignupPage from '@/pages/AuthPage/SignupPage';
 import DiagnosisPage from '../pages/DiagnosisPage/DiagnosisPage';
 import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
 import ComparePage from '../pages/ComparePage/ComparePage';
+import MyPage from '../pages/MyPage/MyPage';
+import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
 
 export const router = createBrowserRouter([
   {
@@ -33,15 +35,18 @@ export const router = createBrowserRouter([
         path: 'compare',
         element: <ComparePage />,
       },
-      // 마이페이지는 이후 추가 예정
-      // {
-      //   path: 'mypage',
-      //   element: (
-      //     <ProtectedRoute>
-      //       <MyPage />
-      //     </ProtectedRoute>
-      //   ),
-      // },
+      {
+        path: 'chatbotGuide',
+        element: <ChatbotGuide />,
+      },
+      {
+        path: 'mypage',
+        element: (
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
