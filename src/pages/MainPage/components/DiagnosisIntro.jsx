@@ -24,7 +24,7 @@ const SecondSection = () => {
         className="flex flex-col gap-md justify-center items-center h-full"
         style={{ opacity }}
       >
-        <h2 className="heading-1 font-500">맞춤 요금제 진단</h2>
+        <h2 className="heading-1 font-500 text-pink-700">맞춤 요금제 진단</h2>
         <p className="heading-3 font-300 mb-sm">
           간단한 질문을 통해, 딱 맞는 요금제를 추천해 드려요
         </p>
