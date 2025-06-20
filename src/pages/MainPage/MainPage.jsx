@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import BackgroundWrapper from './components/BackgroundWrapper';
 import MainIntro from './components/MainIntro';
 import DiagnosisIntro from './components/DiagnosisIntro';
-import ThirdSection from './components/ThirdSection';
+import ChatbotIntro from './components/ChatbotIntro';
 import { useAutoScrollToSection } from '@/hooks/useAutoScroll';
 
 const MainPage = () => {
@@ -17,7 +17,7 @@ const MainPage = () => {
         <div ref={secondRef}>
           <DiagnosisIntro />
         </div>
-        <ThirdSection />
+        <ChatbotIntro />
       </BackgroundWrapper>
     </main>
   );
