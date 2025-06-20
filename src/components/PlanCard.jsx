@@ -8,7 +8,7 @@ const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benef
       {/* 이미지 */}
       <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden">
         <img
-          src={imagePath || '/noImageImg.png'}
+          src={`http://localhost:5000${imagePath}`}
           alt={name}
           className="w-full h-full object-cover"
         />
