@@ -21,17 +21,14 @@ const MainIntro = () => {
           centeredSlides={true}
           autoplay={{
             delay: 4000,
-            disableOnInteraction: true,
+            disableOnInteraction: false,
           }}
           pagination={{
             clickable: true,
           }}
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
-          onSlideChange={(swiper) => {
-            console.log(swiper.activeIndex);
-            setActiveIndex(swiper.activeIndex);
-          }}
+          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           className="w-full h-full mb-[100px]"
         >
           <SwiperSlide>
