@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import backIcon from '../../../assets/svg/backIcon.svg';
 
 export default function ChatbotMenuModal({ onClose, onClearConversation }) {
   const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setVisible(true);
@@ -18,6 +20,11 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
       onClearConversation();
       handleClose();
     }
+  };
+
+  const handleGoToGuide = () => {
+    navigate('/chatbotGuide');
+    handleClose();
   };
 
   return (
@@ -48,7 +55,9 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
 
         {/* 메뉴 항목 */}
         <ul className="mt-24 heading-3 font-500 text-[var(--color-black)] divide-y divide-[var(--color-gray-500)]">
-          <li className="py-5">사용법 안내 및 주의사항</li>
+          <li className="py-5 cursor-pointer" onClick={handleGoToGuide}>
+            사용법 안내 및 주의사항
+          </li>
           <li className="py-5">챗봇 상담 내역</li>
           <li className="py-5">이전 질문에서 찾아보기</li>
           <li

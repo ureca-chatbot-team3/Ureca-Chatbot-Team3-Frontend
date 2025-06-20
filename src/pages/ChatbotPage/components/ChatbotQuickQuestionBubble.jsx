@@ -3,15 +3,25 @@ export default function ChatbotQuickQuestionBubble({ onSelect, questions = [] })
   return (
     <div className="flex items-start gap-2">
       <div className="flex flex-col mt-1.5">
-        <div className="mb-2">아래 질문들 중 궁금한 게 있나요?</div>
+        <div className="mb-3">
+          어떤 질문으로 시작해야 할지 모르겠다면, 아래 질문들로 시작 해 보세요!
+        </div>
         <ul className="flex flex-col gap-1">
           {questions.map((q, i) => (
             <li key={i}>
               <button
-                onClick={() => onSelect(q.trim())} // ✅ 공백 제거
-                className="text-left w-full text-sm text-gray-800 font-normal bg-[var(--color-gray-100)] hover:bg-[var(--color-gray-200)] transition px-3 py-2 rounded-md"
+                onClick={() => onSelect(q.trim())}
+                className="
+                  w-full px-3 py-2 mb-3
+                  body-medium font-500
+                  text-[var(--color-black)]
+                  border border-[rgba(217,218,219,0.5)]
+                  rounded-[16px] 
+                  bg-white hover:bg-[var(--color-gray-400)]
+                  transition-colors !text-left
+                "
               >
-                💬 {q}
+                {q}
               </button>
             </li>
           ))}
