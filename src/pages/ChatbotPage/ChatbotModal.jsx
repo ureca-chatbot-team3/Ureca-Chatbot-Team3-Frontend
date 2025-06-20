@@ -85,6 +85,7 @@ export default function ChatbotModal({ onClose }) {
       })
       .catch((err) => {
         if (err.response?.status === 404) {
+          console.log('404 오류: 첫 대화시 DB에서 가져올 내용이 없어서 나오는 오류');
           initializeGreetingAndFAQ();
         } else {
           console.warn('대화 불러오기 실패:', err.message);
