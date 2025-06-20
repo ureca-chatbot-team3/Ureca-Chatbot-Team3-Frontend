@@ -1,5 +1,5 @@
-import PhoneImage from '@/assets/images/Phone.png';
-import LaptopImage from '@/assets/images/Laptop.png';
+import PhoneImage from '@/assets/svg/Phone.svg';
+import LaptopImage from '@/assets/svg/Laptop.svg';
 import { motion } from 'motion/react';
 
 const IntroSection1 = ({ isActive }) => {

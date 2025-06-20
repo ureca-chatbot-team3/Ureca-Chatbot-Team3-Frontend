@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import DiagnosisImage from '@/assets/images/Diagnosis.png';
+import DiagnosisImage from '@/assets/svg/Diagnosis.svg';
 import QuestionICon from '@/assets/svg/questionIcon.svg';
 import TimeIcon from '@/assets/svg/timeIcon.svg';
 import { useNavigate } from 'react-router-dom';
