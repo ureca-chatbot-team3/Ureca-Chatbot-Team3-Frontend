@@ -1,4 +1,3 @@
-const PlanCard = ({ imagePath, name, infos, plan_speed, price, sale_price, benefits = [] }) => {
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatter } from '../utils/formatter';

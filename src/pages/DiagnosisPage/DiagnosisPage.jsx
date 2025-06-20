@@ -99,7 +99,10 @@ const DiagnosisPage = () => {
       <main className="flex justify-center items-center h-[500px]">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-pink-700 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="m-body-large font-500 md:body-large" style={{ color: 'var(--color-black)' }}>
+          <p
+            className="m-body-large font-500 md:body-large"
+            style={{ color: 'var(--color-black)' }}
+          >
             질문을 불러오는 중입니다...
           </p>
         </div>
@@ -128,10 +131,16 @@ const DiagnosisPage = () => {
                 />
               </svg>
             </div>
-            <h2 className="m-heading-3 font-700 mb-4 md:heading-3" style={{ color: 'var(--color-black)' }}>
+            <h2
+              className="m-heading-3 font-700 mb-4 md:heading-3"
+              style={{ color: 'var(--color-black)' }}
+            >
               오류가 발생했습니다
             </h2>
-            <p className="m-body-large mb-6 md:body-large" style={{ color: 'var(--color-gray-700)' }}>
+            <p
+              className="m-body-large mb-6 md:body-large"
+              style={{ color: 'var(--color-gray-700)' }}
+            >
               {error}
             </p>
             <button
@@ -168,10 +177,16 @@ const DiagnosisPage = () => {
         {/* 진행 표시바 */}
         <div className="px-[20px] pt-[20px] pb-[16px] md:px-[80px] md:pt-[40px] md:pb-[40px]">
           <div className="flex items-center justify-between mb-[8px] md:mb-[16px]">
-            <span className="m-body-small font-500 md:body-medium md:font-700" style={{ color: 'var(--color-black)' }}>
+            <span
+              className="m-body-small font-500 md:body-medium md:font-700"
+              style={{ color: 'var(--color-black)' }}
+            >
               요금제 추천 질문
             </span>
-            <span className="m-body-small font-500 md:body-medium md:font-700" style={{ color: 'var(--color-black)' }}>
+            <span
+              className="m-body-small font-500 md:body-medium md:font-700"
+              style={{ color: 'var(--color-black)' }}
+            >
               {currentQuestionNumber}/{totalQuestions}
             </span>
           </div>
@@ -307,7 +322,10 @@ const DiagnosisPage = () => {
                 })
               ) : (
                 <div className="text-center py-8">
-                  <p className="m-body-large md:body-large" style={{ color: 'var(--color-gray-700)' }}>
+                  <p
+                    className="m-body-large md:body-large"
+                    style={{ color: 'var(--color-gray-700)' }}
+                  >
                     선택 가능한 옵션을 불러오는 중입니다...
                   </p>
                 </div>
@@ -338,7 +356,10 @@ const DiagnosisPage = () => {
                 className="w-full h-2 bg-gray-400 rounded-lg appearance-none cursor-pointer"
               />
               <div className="flex justify-between mt-2">
-                <span className="m-body-small md:body-small" style={{ color: 'var(--color-gray-700)' }}>
+                <span
+                  className="m-body-small md:body-small"
+                  style={{ color: 'var(--color-gray-700)' }}
+                >
                   0
                 </span>
                 <span
@@ -347,7 +368,10 @@ const DiagnosisPage = () => {
                 >
                   {currentAnswer || 50}
                 </span>
-                <span className="m-body-small md:body-small" style={{ color: 'var(--color-gray-700)' }}>
+                <span
+                  className="m-body-small md:body-small"
+                  style={{ color: 'var(--color-gray-700)' }}
+                >
                   100
                 </span>
               </div>
