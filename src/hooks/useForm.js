@@ -8,14 +8,14 @@ export const useForm = (initialValues = {}, validationFn = null) => {
 
   // 입력값 변경 핸들러
   const handleChange = (name, value) => {
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
       [name]: value,
     }));
 
     // 입력 중에 해당 필드의 에러 제거
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: '',
       }));
@@ -25,7 +25,7 @@ export const useForm = (initialValues = {}, validationFn = null) => {
   // 폼 검증 실행
   const validate = () => {
     if (!validationFn) return { isValid: true, errors: {} };
-    
+
     const validation = validationFn(values);
     setErrors(validation.errors || {});
     return validation;
@@ -34,10 +34,10 @@ export const useForm = (initialValues = {}, validationFn = null) => {
   // 폼 제출 핸들러
   const handleSubmit = async (submitFn) => {
     setIsSubmitting(true);
-    
+
     try {
       const validation = validate();
-      
+
       if (!validation.isValid) {
         setIsSubmitting(false);
         return { success: false, errors: validation.errors };
@@ -61,7 +61,7 @@ export const useForm = (initialValues = {}, validationFn = null) => {
 
   // 특정 필드 에러 설정
   const setFieldError = (fieldName, errorMessage) => {
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
       [fieldName]: errorMessage,
     }));
