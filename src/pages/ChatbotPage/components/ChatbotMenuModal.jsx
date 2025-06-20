@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import backIcon from '../../../assets/svg/backIcon.svg';
 
-export default function ChatbotMenuModal({ onClose }) {
+export default function ChatbotMenuModal({ onClose, onClearConversation }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -13,6 +13,13 @@ export default function ChatbotMenuModal({ onClose }) {
     setTimeout(() => onClose(), 300);
   };
 
+  const handleClearConversation = () => {
+    if (window.confirm('대화를 초기화하시겠습니까? 이전 대화 내용은 복구할 수 없습니다.')) {
+      onClearConversation();
+      handleClose();
+    }
+  };
+
   return (
     <div
       className={`
@@ -22,8 +29,7 @@ export default function ChatbotMenuModal({ onClose }) {
       `}
     >
       <div
-        className="w-[360px] h-[431px] bg-[var(--color-white)] border-[3px] border-[var(--color-gray-700)]
-                   rounded-[20px] shadow-lg relative"
+        className="w-[360px] h-[431px] bg-[var(--color-white)] border-[3px] border-[var(--color-gray-700)] rounded-[20px] shadow-soft-black relative px-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 닫기 버튼 */}
@@ -41,17 +47,17 @@ export default function ChatbotMenuModal({ onClose }) {
         </div>
 
         {/* 메뉴 항목 */}
-        <ul className="absolute top-[110px] left-[25px] space-y-[22px] heading-3 font-500 text-[var(--color-black)]">
-          <li>사용법 안내 및 주의사항</li>
-          <li>챗봇 상담 내역</li>
-          <li>이전 질문에서 찾아보기</li>
-          <li>대화 초기화</li>
+        <ul className="mt-24 heading-3 font-500 text-[var(--color-black)] divide-y divide-[var(--color-gray-500)]">
+          <li className="py-5">사용법 안내 및 주의사항</li>
+          <li className="py-5">챗봇 상담 내역</li>
+          <li className="py-5">이전 질문에서 찾아보기</li>
+          <li
+            className="py-5 cursor-pointer hover:text-red-600 transition-colors duration-200"
+            onClick={handleClearConversation}
+          >
+            대화 초기화
+          </li>
         </ul>
-
-        {/* 구분선 */}
-        <div className="absolute left-[25px] top-[150px] w-[310px] border-t border-[var(--color-gray-500)]" />
-        <div className="absolute left-[25px] top-[203px] w-[310px] border-t border-[var(--color-gray-500)]" />
-        <div className="absolute left-[25px] top-[257px] w-[310px] border-t border-[var(--color-gray-500)]" />
       </div>
     </div>
   );
