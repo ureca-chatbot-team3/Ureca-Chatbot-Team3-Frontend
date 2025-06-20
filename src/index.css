@@ -130,6 +130,11 @@ body,
   height: 100%;
 }
 
+button {
+  cursor: pointer;
+  text-align: center;
+}
+
 /* 스와이퍼 커스텀 */
 .swiper-slide {
   padding: var(--spacing-xl);

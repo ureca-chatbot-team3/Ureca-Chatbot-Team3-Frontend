@@ -8,6 +8,7 @@ import 'swiper/css/navigation';
 import IntroSection1 from './IntroSection1';
 import { IntroSection2 } from './IntroSection2';
 import { useState } from 'react';
+import { IntroSection3 } from './IntroSection3';
 
 const MainIntro = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -39,7 +40,9 @@ const MainIntro = () => {
           <SwiperSlide>
             <IntroSection2 isActive={activeIndex === 1} />
           </SwiperSlide>
-          <SwiperSlide>Slide 3</SwiperSlide>
+          <SwiperSlide>
+            <IntroSection3 isActive={activeIndex === 2} />
+          </SwiperSlide>
         </Swiper>
 
         {/* 임시 화살표 */}
