@@ -81,6 +81,7 @@ const SignupPage = () => {
 
           {/* 회원가입 폼 */}
           <form
+            id="signupForm"
             className="flex flex-col gap-6"
             onSubmit={(e) => {
               e.preventDefault();
@@ -185,43 +186,44 @@ const SignupPage = () => {
               </div>
             </div>
 
-            <p className="body-medium font-300 text-gray-700 mt-2 px-2">
+            <p className="body-medium font-300 text-gray-700 mb-8 px-2">
               * 비밀번호는 영문, 숫자, 특수문자를 조합하여 10~20자 이내로 입력해 주세요.
             </p>
-
-            {/* 하단 버튼 그룹 */}
-            <div className="mt-auto w-full pt-[63px]">
-              <div className="flex flex-col gap-[14px] w-full">
-                {/* 기본 회원가입 버튼 */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 transition ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
-                  }`}
-                >
-                  {isSubmitting ? '회원가입 중...' : '회원가입'}
-                </button>
-
-                {/* 카카오 회원가입 버튼 */}
-                <button
-                  type="button"
-                  onClick={handleKakaoSignup}
-                  disabled={isSubmitting}
-                  className={`w-full h-[58px] bg-[#FAE100] text-[#371C1D] rounded-[16px] heading-3 font-500 transition relative flex justify-center items-center ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
-                  }`}
-                >
-                  <img
-                    src="/src/assets/svg/kakaoIcon.svg"
-                    alt="카카오 아이콘"
-                    className="absolute left-5"
-                  />
-                  카카오 간편 회원가입
-                </button>
-              </div>
-            </div>
           </form>
+
+          {/* 하단 버튼 그룹 - 화면 맨 아래 고정 */}
+          <div className="mt-auto w-full pb-6">
+            <div className="flex flex-col gap-[14px] w-full">
+              {/* 기본 회원가입 버튼 */}
+              <button
+                type="submit"
+                form="signupForm"
+                disabled={isSubmitting}
+                className={`w-full h-[58px] bg-pink-700 text-white rounded-[16px] heading-3 font-500 transition ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
+                }`}
+              >
+                {isSubmitting ? '회원가입 중...' : '회원가입'}
+              </button>
+
+              {/* 카카오 회원가입 버튼 */}
+              <button
+                type="button"
+                onClick={handleKakaoSignup}
+                disabled={isSubmitting}
+                className={`w-full h-[58px] bg-[#FAE100] text-[#371C1D] rounded-[16px] heading-3 font-500 transition relative flex justify-center items-center ${
+                  isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'
+                }`}
+              >
+                <img
+                  src="/src/assets/svg/kakaoIcon.svg"
+                  alt="카카오 아이콘"
+                  className="absolute left-5"
+                />
+                카카오 간편 회원가입
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

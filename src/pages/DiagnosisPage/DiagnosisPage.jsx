@@ -20,6 +20,9 @@ const DiagnosisPage = () => {
     canGoNext,
     canSubmit,
     isComplete,
+    answers,
+    sessionId,
+    result,
 
     // 액션
     loadQuestions,
@@ -34,6 +37,24 @@ const DiagnosisPage = () => {
     setShowIntro(false);
     loadQuestions();
   };
+
+  // 컴포넌트 마운트 시 진행 중인 진단이 있는지 확인
+  useEffect(() => {
+    // 이미 질문이 로드되어 있거나, 답변이 있거나, 세션이 있다면 진행 중인 진단
+    const hasOngoingDiagnosis =
+      currentQuestion ||
+      (Array.isArray(answers) && answers.length > 0) ||
+      sessionId ||
+      totalQuestions > 0;
+
+    if (hasOngoingDiagnosis) {
+      setShowIntro(false);
+      // 질문이 없다면 로드
+      if (!currentQuestion && totalQuestions === 0) {
+        loadQuestions();
+      }
+    }
+  }, [currentQuestion, answers, sessionId, totalQuestions, loadQuestions]);
 
   // 컴포넌트 마운트 시에는 질문을 로드하지 않음 (인트로 화면 표시)
   // useEffect(() => {
