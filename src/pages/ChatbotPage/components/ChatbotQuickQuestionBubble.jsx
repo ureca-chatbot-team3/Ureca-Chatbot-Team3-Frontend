@@ -8,7 +8,7 @@ export default function ChatbotQuickQuestionBubble({ onSelect, questions = [] })
           {questions.map((q, i) => (
             <li key={i}>
               <button
-                onClick={() => onSelect(q)}
+                onClick={() => onSelect(q.trim())} // ✅ 공백 제거
                 className="text-left w-full text-sm text-gray-800 font-normal bg-[var(--color-gray-100)] hover:bg-[var(--color-gray-200)] transition px-3 py-2 rounded-md"
               >
                 💬 {q}

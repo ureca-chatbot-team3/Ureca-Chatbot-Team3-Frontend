@@ -1,4 +1,3 @@
-// src/components/ChatMessage.jsx 또는 ChatMessages.jsx
 import { useEffect, useRef } from 'react';
 import BotBubble from './BotBubble';
 import UserBubble from './UserBubble';
@@ -17,7 +16,7 @@ export default function ChatMessages({ messages }) {
       {messages.map((msg, idx) =>
         msg.type === 'bot' ? (
           <div key={idx} className="mb-3">
-            <BotBubble message={msg.content} isLoading={msg.isLoading} />
+            <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
           </div>
         ) : (
           <div key={idx} className="mb-3 flex justify-end">

@@ -29,7 +29,7 @@ export default function ChatbotMenuModal({ onClose }) {
         {/* 닫기 버튼 */}
         <button
           onClick={handleClose}
-          className="absolute top-[35px] left-[25px]"
+          className="absolute top-[35px] left-[25px] cursor-pointer"
           aria-label="뒤로가기"
         >
           <img src={backIcon} alt="뒤로가기" className="w-4 h-4" />
