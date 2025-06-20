@@ -226,10 +226,7 @@ const DiagnosisResultPage = () => {
           <div className="flex justify-center items-center h-[500px]">
             <div className="text-center">
               <div className="w-12 h-12 border-4 border-pink-700 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p
-                className="m-body-large font-500 md:body-large"
-                style={{ color: 'var(--color-black)' }}
-              >
+              <p className="m-body-large font-500 text-black md:body-large">
                 진단 결과를 불러오는 중입니다...
               </p>
             </div>
@@ -272,16 +269,10 @@ const DiagnosisResultPage = () => {
                     />
                   </svg>
                 </div>
-                <h2
-                  className="m-body-large font-700 mb-4 md:heading-3"
-                  style={{ color: 'var(--color-black)' }}
-                >
+                <h2 className="m-body-large font-700 mb-4 text-black md:heading-3">
                   결과를 불러올 수 없습니다
                 </h2>
-                <p
-                  className="m-body-medium mb-6 md:body-large"
-                  style={{ color: 'var(--color-gray-700)' }}
-                >
+                <p className="m-body-medium mb-6 text-gray-700 md:body-large">
                   {error}
                 </p>
                 <div className="flex justify-center">
@@ -318,16 +309,10 @@ const DiagnosisResultPage = () => {
           <div className="flex justify-center">
             <div className="w-full max-w-[720px] bg-white rounded-[20px] shadow-sm mt-[40px] mb-[40px] p-[40px] md:p-[80px]">
               <div className="text-center">
-                <h2
-                  className="m-body-large font-700 mb-4 md:heading-3"
-                  style={{ color: 'var(--color-black)' }}
-                >
+                <h2 className="m-body-large font-700 mb-4 text-black md:heading-3">
                   진단 결과가 없습니다
                 </h2>
-                <p
-                  className="m-body-medium mb-6 md:body-large"
-                  style={{ color: 'var(--color-gray-700)' }}
-                >
+                <p className="m-body-medium mb-6 text-gray-700 md:body-large">
                   먼저 요금제 진단을 받아보세요.
                 </p>
                 <button
@@ -360,13 +345,10 @@ const DiagnosisResultPage = () => {
             다시 진단하기
           </button>
 
-          <h1
-            className="m-heading-2 font-500 mb-5 md:heading-1 md:mb-6"
-            style={{ color: 'var(--color-pink-700)' }}
-          >
+          <h1 className="m-heading-2 font-500 mb-5 text-pink-700 md:heading-1 md:mb-6">
             진단 결과
           </h1>
-          <p className="m-body-large font-500 md:heading-3" style={{ color: 'var(--color-black)' }}>
+          <p className="m-body-large font-500 text-black md:heading-3">
             다음과 같은 요금제를 추천드립니다!
           </p>
         </div>
