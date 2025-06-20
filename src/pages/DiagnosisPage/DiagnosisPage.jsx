@@ -86,7 +86,8 @@ const DiagnosisPage = () => {
     } else if (canSubmit) {
       try {
         await submitDiagnosis();
-      } catch (error) {
+      } catch (err) {
+        console.log(err, '요금제 진단 제출 실패');
         alert('진단 제출에 실패했습니다. 다시 시도해주세요.');
       }
     }
