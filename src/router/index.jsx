@@ -1,11 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
+import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import MainPage from '@/pages/MainPage/MainPage';
 import LoginPage from '@/pages/AuthPage/LoginPage';
 import SignupPage from '@/pages/AuthPage/SignupPage';
 import DiagnosisPage from '../pages/DiagnosisPage/DiagnosisPage';
 import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
 import ComparePage from '../pages/ComparePage/ComparePage';
+import MyPage from '../pages/MyPage/MyPage';
+import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
 
 export const router = createBrowserRouter([
   {
@@ -32,14 +35,34 @@ export const router = createBrowserRouter([
         path: 'compare',
         element: <ComparePage />,
       },
+      {
+        path: 'chatbotGuide',
+        element: <ChatbotGuide />,
+      },
+      {
+        path: 'mypage',
+        element: (
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: (
+      <PublicRoute>
+        <LoginPage />
+      </PublicRoute>
+    ),
   },
   {
     path: '/signup',
-    element: <SignupPage />,
+    element: (
+      <PublicRoute>
+        <SignupPage />
+      </PublicRoute>
+    ),
   },
 ]);
