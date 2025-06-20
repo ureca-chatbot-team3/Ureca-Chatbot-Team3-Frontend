@@ -136,6 +136,7 @@ export default function ChatbotModal({ onClose }) {
           <ChatbotHeader onClose={handleClose} onOpenMenu={() => setShowMenu(true)} />
           <ChatbotNoticeBar />
           <ChatMessages messages={messages} />
+
           <ChatbotInput message={message} setMessage={setMessage} onSend={handleSend} />
         </div>
       </div>
