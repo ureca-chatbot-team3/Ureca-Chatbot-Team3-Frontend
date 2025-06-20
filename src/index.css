@@ -39,6 +39,9 @@
   --spacing-lg: 32px;
   --spacing-xl: 48px;
   --spacing-2xl: 64px;
+
+  /* 헤더 높이 */
+  --header-height: 112px;
 }
 
 @layer utilities {
@@ -109,6 +112,11 @@
     line-height: 14px;
   }
 
+  /* 컨텐츠 최대 너비 */
+  .content-max-width {
+    max-width: 1440px;
+  }
+
   /* 반응형 폰트 크기 - md(768px) 이상에서 데스크탑 폰트 적용 */
   @media (min-width: 768px) {
     .md\:heading-1 {
@@ -159,6 +167,38 @@ body,
   height: 100%;
 }
 
+button {
+  cursor: pointer;
+  text-align: center;
+}
+
+/* 스와이퍼 커스텀 */
+.swiper-slide {
+  padding: var(--spacing-xl);
+  display: flex;
+  justify-content: center;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--color-gray-700);
+  opacity: 70%;
+  width: var(--spacing-md);
+  height: var(--spacing-xl);
+}
+.swiper-pagination {
+  text-align: left;
+}
+.swiper-pagination-bullet {
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  background-color: transparent;
+  border: 1px solid var(--color-pink-700);
+  opacity: 1;
+}
+.swiper-pagination-bullet-active {
+  background-color: var(--color-pink-700);
+}
+  
 @layer utilities {
   @keyframes blink {
     0%,
