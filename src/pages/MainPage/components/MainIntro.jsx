@@ -14,7 +14,7 @@ const MainIntro = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative z-10 px-[40px] bg-linear-[to_bottom,var(--color-pink-300),var(--color-white)] h-[calc(100vh-var(--header-height))]">
+    <section className="relative z-10 px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-pink-300),var(--color-white)] h-[calc(100vh-var(--header-height))]">
       <div className="content-max-width mx-auto flex flex-col items-center h-full gap-3 relative">
         <Swiper
           spaceBetween={30}

@@ -34,11 +34,12 @@ const DefaultLayout = () => {
         >
           <div className="max-w-[1440px] mx-auto">
             <Outlet />
-            <ChatbotLauncher onClick={() => setIsOpen(true)} />
-            {isOpen && <ChatbotModal onClose={() => setIsOpen(false)} />}
           </div>
         </div>
       )}
+
+      <ChatbotLauncher onClick={() => setIsOpen(true)} />
+      {isOpen && <ChatbotModal onClose={() => setIsOpen(false)} />}
     </div>
   );
 };
