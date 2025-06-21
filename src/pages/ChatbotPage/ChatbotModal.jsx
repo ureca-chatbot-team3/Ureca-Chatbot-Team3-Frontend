@@ -35,11 +35,11 @@ export default function ChatbotModal({ onClose }) {
   const initializeGreetingAndFAQ = async () => {
     try {
       const res = await axios.get('/api/faq');
-      const allFaqs = res.data.faq || [];
+      const allFaqs = res.data || [];
       setFaqList(allFaqs);
 
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, 4).map((item) => item.question);
+      const selected = shuffled.slice(0, 4);
 
       const greetingText = `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.
 데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.
