@@ -17,6 +17,7 @@ export default function ChatbotModal({ onClose }) {
   const [showMenu, setShowMenu] = useState(false);
   const [messages, setMessages] = useState([]);
   const [faqList, setFaqList] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   const socketRef = useRef(null);
   const sessionIdRef = useRef(null);
@@ -24,7 +25,8 @@ export default function ChatbotModal({ onClose }) {
   const tempContentRef = useRef('');
   const initializedRef = useRef(false);
 
-  const getOrCreateSessionId = () => {
+  const getOrCreateSessionId = (userId) => {
+    if (userId) return `user_${userId}`;
     let sessionId = localStorage.getItem('chat-session-id');
     if (!sessionId) {
       sessionId = 'client_' + Date.now();
@@ -35,7 +37,6 @@ export default function ChatbotModal({ onClose }) {
 
   const initializeGreetingAndFAQ = async () => {
     try {
-      // 1. FAQ 가져오기
       const res = await axios.get('/api/faq');
       const allFaqs = res.data || [];
       setFaqList(allFaqs);
@@ -43,54 +44,36 @@ export default function ChatbotModal({ onClose }) {
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
 
-      // 2. 사용자 프로필 요청 (로그인 상태면 닉네임 있음)
       let nickname = '';
       try {
         const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
         nickname = profileRes.data?.data?.nickname || '';
-      } catch (e) {
-        nickname = ''; // 비로그인 또는 토큰 만료 시
-      }
+      } catch (e) {}
 
-      // 3. 인사말 만들기
       const greetingText = nickname
-        ? `반가워요, ${nickname}님! 🦩\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
-        : `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
+        ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
+        : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
 
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
-      // 4. 서버로 메시지 전송
       await new Promise((res) => {
-        socketRef.current?.emit('stream-start', {
-          role: 'assistant',
-          content: greetingText,
-        });
+        socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
         socketRef.current?.emit('stream-end', {});
         setTimeout(res, 300);
       });
 
-      socketRef.current?.emit('stream-start', {
-        role: 'assistant',
-        content: quickText,
-      });
+      socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
       socketRef.current?.emit('stream-end', {});
 
-      // 5. 프론트 UI 상태 업데이트
-      const greetingMessage = {
-        id: 'greeting',
-        type: 'bot',
-        content: greetingText,
-        role: 'assistant',
-      };
-
-      const quickQuestionMessage = {
-        id: 'quick-questions',
-        type: 'bot',
-        content: <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />,
-        role: 'assistant',
-      };
-
-      setMessages([greetingMessage, quickQuestionMessage]);
+      setMessages([
+        { id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' },
+        {
+          id: 'quick-questions',
+          type: 'bot',
+          content: <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />,
+          role: 'assistant',
+        },
+      ]);
     } catch (err) {
       console.error('❌ 초기 인사말 구성 실패:', err);
     }
@@ -98,14 +81,79 @@ export default function ChatbotModal({ onClose }) {
 
   useEffect(() => {
     setIsVisible(true);
-    const sessionId = getOrCreateSessionId();
-    sessionIdRef.current = sessionId;
+    let tempUserId = null;
 
-    axios
-      .get(`/api/conversations/${sessionId}`)
-      .then((res) => {
+    const fetchUserAndConnectSocket = async () => {
+      try {
+        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+        tempUserId = profileRes.data?.data?._id || null;
+        setUserId(tempUserId);
+      } catch (e) {}
+
+      const sessionId = getOrCreateSessionId(tempUserId);
+      sessionIdRef.current = sessionId;
+
+      console.log('✅ userId:', tempUserId);
+      console.log('✅ sessionId:', sessionId);
+
+      const newSocket = io('http://localhost:5000', {
+        query: { sessionId, userId: tempUserId || undefined },
+      });
+
+      socketRef.current = newSocket;
+
+      newSocket.on('connect', () => {
+        console.log('✅ 소켓 연결됨:', newSocket.id);
+        if (tempUserId) {
+          newSocket.emit('authenticate', { userId: tempUserId });
+        }
+      });
+
+      newSocket.on('disconnect', () => {
+        console.log('❌ 소켓 연결 끊김');
+      });
+
+      newSocket.on('stream-start', ({ messageId }) => {
+        tempMessageIdRef.current = messageId;
+        tempContentRef.current = '';
+        setMessages((prev) => [...prev, { id: messageId, type: 'bot', content: '', isLoading: true }]);
+      });
+
+      newSocket.on('stream-chunk', (chunk) => {
+        tempContentRef.current += chunk;
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === tempMessageIdRef.current ? { ...msg, content: tempContentRef.current } : msg
+          )
+        );
+      });
+
+      newSocket.on('stream-end', ({ message }) => {
+        const finalMessage = {
+          ...(message || { content: '응답을 완료했어요.' }),
+          id: message?.id || tempMessageIdRef.current,
+          type: message?.role === 'assistant' ? 'bot' : 'user',
+          isLoading: false,
+        };
+        setMessages((prev) =>
+          prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg))
+        );
+
+        tempMessageIdRef.current = null;
+        tempContentRef.current = '';
+      });
+
+      newSocket.on('error', ({ message }) => {
+        setMessages((prev) => [...prev, { type: 'bot', content: `❌ 오류: ${message}` }]);
+      });
+
+      try {
+        const res = tempUserId
+          ? await axios.get(`/api/conversations?userId=${tempUserId}`)
+          : await axios.get(`/api/conversations/${sessionId}`);
+
         const loadedMessages = (res.data.messages || [])
-          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // 🔁 순서 보장
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
           .map((msg) => ({
             id: msg._id,
             type: msg.role === 'user' ? 'user' : 'bot',
@@ -120,64 +168,17 @@ export default function ChatbotModal({ onClose }) {
         } else {
           setMessages(loadedMessages);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         if (err.response?.status === 404 && !initializedRef.current) {
           initializedRef.current = true;
           initializeGreetingAndFAQ();
         } else {
           console.warn('대화 불러오기 실패:', err.message);
         }
-      });
+      }
+    };
 
-    const newSocket = io('http://localhost:5000', {
-      query: { sessionId },
-    });
-
-    socketRef.current = newSocket;
-
-    newSocket.on('connect', () => {
-      console.log('✅ 소켓 연결됨:', newSocket.id);
-    });
-
-    newSocket.on('disconnect', () => {
-      console.log('❌ 소켓 연결 끊김');
-    });
-
-    newSocket.on('stream-start', ({ messageId }) => {
-      tempMessageIdRef.current = messageId;
-      tempContentRef.current = '';
-      setMessages((prev) => [
-        ...prev,
-        { id: messageId, type: 'bot', content: '', isLoading: true },
-      ]);
-    });
-
-    newSocket.on('stream-chunk', (chunk) => {
-      tempContentRef.current += chunk;
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === tempMessageIdRef.current ? { ...msg, content: tempContentRef.current } : msg
-        )
-      );
-    });
-
-    newSocket.on('stream-end', ({ message }) => {
-      const finalMessage = {
-        ...(message || { content: '응답을 완료했어요.' }),
-        id: message?.id || tempMessageIdRef.current,
-        type: message?.role === 'assistant' ? 'bot' : 'user',
-        isLoading: false,
-      };
-      setMessages((prev) => prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg)));
-
-      tempMessageIdRef.current = null;
-      tempContentRef.current = '';
-    });
-
-    newSocket.on('error', ({ message }) => {
-      setMessages((prev) => [...prev, { type: 'bot', content: `❌ 오류: ${message}` }]);
-    });
+    fetchUserAndConnectSocket();
 
     const toastTimer = setTimeout(() => setShowToast(true), 400);
     const hideToast = setTimeout(() => setShowToast(false), 3400);
@@ -185,7 +186,7 @@ export default function ChatbotModal({ onClose }) {
     return () => {
       clearTimeout(toastTimer);
       clearTimeout(hideToast);
-      newSocket.disconnect();
+      socketRef.current?.disconnect();
     };
   }, []);
 
@@ -196,10 +197,7 @@ export default function ChatbotModal({ onClose }) {
     if (socketRef.current?.connected) {
       socketRef.current.emit('user-message', text);
     } else {
-      setMessages((prev) => [
-        ...prev,
-        { type: 'bot', content: '❌ 소켓 연결이 안 되어 있어요. 다시 시도해주세요.' },
-      ]);
+      setMessages((prev) => [...prev, { type: 'bot', content: '❌ 소켓 연결이 안 되어 있어요.' }]);
     }
 
     setMessage('');
@@ -210,19 +208,16 @@ export default function ChatbotModal({ onClose }) {
     sendMessage(message.trim());
   };
 
-  const handleQuickQuestion = useCallback(
-    (text) => {
-      sendMessage(text.trim());
-    },
-    [sendMessage]
-  );
+  const handleQuickQuestion = useCallback((text) => {
+    sendMessage(text.trim());
+  }, [sendMessage]);
 
   const clearConversation = async () => {
     try {
       const sessionId = sessionIdRef.current;
-      if (!sessionId) return;
+      const params = userId ? { userId } : { sessionId };
 
-      await axios.delete(`/api/conversations/${sessionId}`);
+      await axios.delete('/api/conversations', { params });
       setMessages([]);
       initializeGreetingAndFAQ();
     } catch (err) {
