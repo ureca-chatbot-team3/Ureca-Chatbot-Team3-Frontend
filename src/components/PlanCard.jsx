@@ -171,7 +171,7 @@ const PlanCard = ({
       {/* 버튼 영역 */}
       <div className="flex items-center justify-center gap-[8px]">
         {/* 자세히 보기 버튼 */}
-        <button className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 cursor-pointer">
+        <button className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors">
           자세히 보기
         </button>
 

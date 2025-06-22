@@ -107,7 +107,7 @@ const LoginPage = () => {
             <div className="mt-[50px] flex justify-center">
               <Link
                 to="/signup"
-                className="heading-3 font-500 text-gray-700 border-b border-gray-700 hover:text-gray-500 hover:border-gray-500 transition"
+                className="heading-3 font-500 text-gray-700 border-b border-gray-700 hover:text-pink-700 hover:border-pink-700 transition"
               >
                 회원가입
               </Link>
