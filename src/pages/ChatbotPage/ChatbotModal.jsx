@@ -22,6 +22,7 @@ export default function ChatbotModal({ onClose }) {
   const sessionIdRef = useRef(null);
   const tempMessageIdRef = useRef(null);
   const tempContentRef = useRef('');
+  const initializedRef = useRef(false);
 
   const getOrCreateSessionId = () => {
     let sessionId = localStorage.getItem('chat-session-id');
@@ -102,14 +103,16 @@ export default function ChatbotModal({ onClose }) {
             role: msg.role,
           }));
 
-        if (loadedMessages.length === 0) {
+        if (loadedMessages.length === 0 && !initializedRef.current) {
+          initializedRef.current = true;
           initializeGreetingAndFAQ();
         } else {
           setMessages(loadedMessages);
         }
       })
       .catch((err) => {
-        if (err.response?.status === 404) {
+        if (err.response?.status === 404 && !initializedRef.current) {
+          initializedRef.current = true;
           initializeGreetingAndFAQ();
         } else {
           console.warn('대화 불러오기 실패:', err.message);
