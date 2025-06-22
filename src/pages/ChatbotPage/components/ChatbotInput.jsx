@@ -15,7 +15,7 @@ export default function ChatbotInput({ message, setMessage, onSend }) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent outline-none font-500 text-[13px] text-[var(--color-black)] placeholder-[#666666]"
+          className="flex-1 bg-transparent outline-none font-500 body-medium text-[var(--color-black)] placeholder-[var(--color-gray-700)]"
         />
         <img
           src={message.trim() ? sendIcon : sendIconWhite}

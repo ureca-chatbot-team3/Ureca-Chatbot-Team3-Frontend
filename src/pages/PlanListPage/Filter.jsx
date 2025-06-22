@@ -151,7 +151,7 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
         <div className="flex flex-col space-y-[90px] [&>*:last-child]:mb-0">
           {Object.entries(filterSections).map(([section, options]) => (
             <div key={section}>
-              <h3 className="heading-3 font-700 text-black mb-2">{section}</h3>
+              <h3 className="heading-3 font-700 text-black mb-3">{section}</h3>
               <div className="flex flex-wrap gap-[25px] ">
                 {options.map((opt) => {
                   const isActive = selected[section].includes(opt);

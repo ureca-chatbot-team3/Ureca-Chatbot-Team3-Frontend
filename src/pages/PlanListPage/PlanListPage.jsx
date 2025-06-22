@@ -6,6 +6,14 @@ import ToggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
 import Filter from './Filter';
 import PlanCard from '@/components/PlanCard';
 
+const getDailyDataGB = (infos) => {
+  for (const info of infos) {
+    const m = info.match(/데이터\s*일\s*(\d+)GB/i);
+    if (m) return parseInt(m[1], 10);
+  }
+  return 0;
+};
+
 const categories = [
   { label: '5G/LTE', value: 'all' },
   { label: '온라인 전용', value: 'online' },
@@ -28,7 +36,8 @@ const PlanListPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 1) 탭(active) 에 맞춰 category 결정
+  const [search, setSearch] = useState('');
+
   const catMap = {
     all: 'all',
     online: '온라인 전용 요금제',
@@ -38,16 +47,21 @@ const PlanListPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-
     params.append('category', catMap[active] || 'all');
 
-    // 2) 정렬·페이징
-    params.append('sortBy', sortBy === 'popular' ? 'price_value' : sortBy);
+    params.append('sortBy', 'price_value'); // 서버 허용 값
     params.append('sortOrder', sortOrder);
-    params.append('page', page);
-    params.append('limit', limit);
+    params.append('customSort', sortBy); // 클라 표시용
+    params.append('search', search);
 
-    // 3) 가격 범위 → minPrice / maxPrice
+    if (sortBy === 'price_value') {
+      params.append('page', page);
+      params.append('limit', limit);
+    } else {
+      params.append('page', 1);
+      params.append('limit', 100);
+    }
+
     (filter['요금범위'] || []).forEach((r) => {
       if (r === '~5만원대') {
         params.append('minPrice', 0);
@@ -60,61 +74,55 @@ const PlanListPage = () => {
       }
     });
 
-    // 4) 데이터 옵션
     if (filter['데이터']?.length) {
       params.append('dataOption', filter['데이터'].join(','));
     }
-    // 5) 연령대
+
     if (filter['연령대']?.length) {
-      // 전체대상 제외
       const ages = filter['연령대'].filter((age) => age !== '전체대상');
       if (ages.length > 0) {
         params.append('ageRange', ages.join(','));
       }
     }
 
-    // 6) 혜택
     if (filter['혜택']?.length) {
       params.append('brands', filter['혜택'].join(','));
     }
-    // 7) 퀵태그
+
     if (filter.quickTag && filter.quickTag !== '#전체') {
       params.append('quickTag', filter.quickTag.replace('#', ''));
     }
 
-    // 8) API 호출
     fetch(`/api/plans?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         let loadedPlans = data.data.plans;
 
-        // 인기순
         if (sortBy === 'popular') {
-          loadedPlans = loadedPlans.sort(
-            (a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0)
-          );
-        }
-        // 데이터 많은 순
-        if (sortBy === 'data') {
-          const getDataGB = (infos) => {
-            const m = infos.join(' ').match(/(\d+)GB/i);
-            return m ? parseInt(m[1], 10) : 0;
-          };
-          loadedPlans = loadedPlans.sort((a, b) => getDataGB(b.infos) - getDataGB(a.infos));
+          loadedPlans.sort((a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0));
+        } else if (sortBy === 'data') {
+          loadedPlans.sort((a, b) => getDailyDataGB(b.infos) - getDailyDataGB(a.infos));
         }
 
-        setPlans(loadedPlans);
-        setTotalPages(data.data.pagination.totalPages);
+        const paged =
+          sortBy === 'price_value'
+            ? loadedPlans
+            : loadedPlans.slice((page - 1) * limit, page * limit);
+
+        setPlans(paged);
+        setTotalPages(
+          sortBy === 'price_value'
+            ? data.data.pagination.totalPages
+            : Math.ceil(loadedPlans.length / limit)
+        );
       })
-      .catch((err) => console.error(err));
-  }, [active, sortBy, sortOrder, page, limit, filter]);
+      .catch(console.error);
+  }, [active, sortBy, sortOrder, page, limit, filter, search]);
 
   const handleCategoryClick = (value) => {
     if (value === 'online') {
       window.open('https://www.lguplus.com/mobile/plan/mplan/direct', '_blank');
-    } else if (value === 'tablet') {
-      window.open('https://www.lguplus.com/mobile/plan/mplan/2nd-device', '_blank');
-    } else if (value === 'dual') {
+    } else if (value === 'tablet' || value === 'dual') {
       window.open('https://www.lguplus.com/mobile/plan/mplan/2nd-device', '_blank');
     } else {
       setActive(value);
@@ -133,30 +141,48 @@ const PlanListPage = () => {
   };
 
   const handlePopularSort = () => {
+    setPage(1);
     setSortBy('popular');
     setOpen(false);
   };
 
   const handleDataSort = () => {
+    setPage(1);
     setSortBy('data');
     setOpen(false);
   };
 
+  const handleSearch = () => {
+    setPage(1);
+  };
   return (
-    <div className=" text-white min-h-screen p-10">
+    <div className="min-h-screen p-10 text-black">
       <div className="flex items-center justify-between mb-[18px]">
         <h2 className="heading-2 font-500 text-black">요금제</h2>
 
-        <div className="relative flex items-center rounded-full">
+        <div className="relative flex items-center rounded-full w-70">
           <input
             type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch();
+            }}
             placeholder="검색어를 입력하세요."
-            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-4 py-3 w-70 focus:outline-none focus:border-black placeholder:body-large placeholder:font-500"
-          ></input>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-full focus:outline-none focus:border-black placeholder:body-large placeholder:font-500"
+          />
+          <div
+            className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"
+            onClick={handleSearch}
+          >
             <img src={SearchIcon} alt="검색 아이콘" className="w-5 h-5" />
           </div>
         </div>
+
+        <div
+          className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+          onClick={handleSearch}
+        ></div>
       </div>
 
       <div className="flex items-center justify-between mb-[18px]">
@@ -249,6 +275,8 @@ const PlanListPage = () => {
             plan_speed={plan.plan_speed}
             price={plan.price}
             sale_price={plan.sale_price}
+            price_value={plan.price_value}
+            sale_price_value={plan.sale_price_value}
             benefits={Object.entries(plan.benefits)}
           />
         ))}

@@ -3,7 +3,7 @@ export default function UserBubble({ message }) {
     <div className="relative flex justify-end">
       <div
         className="
-    bg-[#FFCECE] text-[14px] text-[#333] font-500
+    bg-[#FFCECE] body-medium text-[var(--color-black)] font-500
     shadow-[0_0_6px_rgba(43,43,43,0.08)]
     rounded-tl-[16px] rounded-br-[16px] rounded-bl-[16px]
     px-4 py-2
