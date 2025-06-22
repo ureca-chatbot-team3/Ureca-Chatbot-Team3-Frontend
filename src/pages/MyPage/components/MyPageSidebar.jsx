@@ -5,7 +5,7 @@ const MyPageSidebar = () => {
 
   const menuItems = [
     { path: '/mypage', label: '개인정보 수정' },
-    { path: '/mypage/plans', label: '요금제 보관함' },
+    { path: '/mypage/bookmarks', label: '요금제 보관함' },
     { path: '/mypage/history', label: '챗봇 상담 내역' },
   ];
 

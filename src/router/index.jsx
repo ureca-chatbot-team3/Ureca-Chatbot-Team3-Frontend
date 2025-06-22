@@ -10,6 +10,7 @@ import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
 import ComparePage from '../pages/ComparePage/ComparePage';
 import MyPage from '../pages/MyPage/MyPage';
 import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
+import BookmarkPage from '../pages/MyPage/BookmarkPage';
 import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
 
 export const router = createBrowserRouter([
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <PasswordChangePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'mypage/bookmarks',
+        element: (
+          <ProtectedRoute>
+            <BookmarkPage />
           </ProtectedRoute>
         ),
       },
