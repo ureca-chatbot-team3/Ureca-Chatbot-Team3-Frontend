@@ -11,6 +11,7 @@ import ComparePage from '../pages/ComparePage/ComparePage';
 import MyPage from '../pages/MyPage/MyPage';
 import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
 import BookmarkPage from '../pages/MyPage/BookmarkPage';
+import ChatHistoryPage from '../pages/MyPage/ChatHistoryPage';
 import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
 
 export const router = createBrowserRouter([
@@ -67,6 +68,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <BookmarkPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'mypage/chat-history',
+        element: (
+          <ProtectedRoute>
+            <ChatHistoryPage />
           </ProtectedRoute>
         ),
       },

@@ -13,11 +13,11 @@ const MyPage = () => {
     birthYear: '',
     nickname: '',
   });
-  
+
   // 에러 메시지 상태
   const [errors, setErrors] = useState({
     birthYear: '',
-    nickname: ''
+    nickname: '',
   });
 
   // 사용자 정보가 로드되면 폼 데이터 업데이트
@@ -34,12 +34,12 @@ const MyPage = () => {
   // 입력 필드 변경 핸들러
   const handleInputChange = (field, value) => {
     // 에러 메시지 초기화
-    setErrors(prev => ({ ...prev, [field]: '' }));
-    
+    setErrors((prev) => ({ ...prev, [field]: '' }));
+
     // 출생연도 검증
     if (field === 'birthYear') {
       const currentYear = new Date().getFullYear();
-      
+
       // 빈 값이면 허용
       if (value === '') {
         setFormData((prev) => ({
@@ -48,61 +48,64 @@ const MyPage = () => {
         }));
         return;
       }
-      
+
       // 숫자가 아닌 문자 입력 시 에러
       if (!/^[0-9]*$/.test(value)) {
-        setErrors(prev => ({ ...prev, birthYear: '숫자만 입력 가능합니다.' }));
+        setErrors((prev) => ({ ...prev, birthYear: '숫자만 입력 가능합니다.' }));
         return;
       }
-      
+
       // 4자리 초과 시 에러
       if (value.length > 4) {
-        setErrors(prev => ({ ...prev, birthYear: '4자리까지만 입력 가능합니다.' }));
+        setErrors((prev) => ({ ...prev, birthYear: '4자리까지만 입력 가능합니다.' }));
         return;
       }
-      
+
       // 4자리 입력 완료 시 범위 검사
       if (value.length === 4) {
         const numValue = parseInt(value);
         if (numValue < 1900) {
-          setErrors(prev => ({ ...prev, birthYear: '1900년 이후의 연도를 입력해주세요.' }));
+          setErrors((prev) => ({ ...prev, birthYear: '1900년 이후의 연도를 입력해주세요.' }));
           return;
         }
         if (numValue > currentYear) {
-          setErrors(prev => ({ ...prev, birthYear: `${currentYear}년 이전의 연도를 입력해주세요.` }));
+          setErrors((prev) => ({
+            ...prev,
+            birthYear: `${currentYear}년 이전의 연도를 입력해주세요.`,
+          }));
           return;
         }
       }
-      
+
       setFormData((prev) => ({
         ...prev,
         [field]: value,
       }));
       return;
     }
-    
+
     // 닉네임 검증
     if (field === 'nickname') {
       // 공백 검사
       if (/\s/.test(value)) {
-        setErrors(prev => ({ ...prev, nickname: '닉네임에는 공백을 포함할 수 없습니다.' }));
+        setErrors((prev) => ({ ...prev, nickname: '닉네임에는 공백을 포함할 수 없습니다.' }));
         // 공백을 제거한 값으로 설정
         value = value.replace(/\s/g, '');
       }
-      
+
       // 길이 검사
       if (value.length > 8) {
-        setErrors(prev => ({ ...prev, nickname: '닉네임은 8자 이하로 입력해주세요.' }));
+        setErrors((prev) => ({ ...prev, nickname: '닉네임은 8자 이하로 입력해주세요.' }));
         return;
       }
-      
+
       // 허용되지 않는 문자 검사
       if (value && !/^[가-힣a-zA-Z0-9]*$/.test(value)) {
-        setErrors(prev => ({ ...prev, nickname: '한글, 영문, 숫자만 사용 가능합니다.' }));
+        setErrors((prev) => ({ ...prev, nickname: '한글, 영문, 숫자만 사용 가능합니다.' }));
         return;
       }
     }
-    
+
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -110,11 +113,11 @@ const MyPage = () => {
   };
 
   // 저장 버튼 활성화 조건 - 현재 사용자 정보와 다르고 에러가 없을 때만 활성화
-  const isSaveEnabled = (
+  const isSaveEnabled =
     ((formData.nickname.trim() && formData.nickname.trim() !== user?.nickname) ||
-    (formData.birthYear.trim() && formData.birthYear !== String(user?.birthYear || ''))) &&
-    !errors.birthYear && !errors.nickname
-  );
+      (formData.birthYear.trim() && formData.birthYear !== String(user?.birthYear || ''))) &&
+    !errors.birthYear &&
+    !errors.nickname;
 
   // 저장 핸들러
   const handleSave = async () => {
@@ -122,47 +125,46 @@ const MyPage = () => {
       console.log('저장 버튼 비활성화 상태');
       return;
     }
-    
+
     console.log('저장 시도 시작:', { user, formData, isSaveEnabled });
-    
+
     try {
       // 업데이트할 데이터 준비
       const updateData = {};
-      
+
       // 닉네임 변경 반영
       if (formData.nickname.trim() && formData.nickname.trim() !== user?.nickname) {
         updateData.nickname = formData.nickname.trim();
         console.log('닉네임 변경:', formData.nickname.trim(), '→', user?.nickname);
       }
-      
+
       // 출생연도 변경 반영
       if (formData.birthYear.trim() && formData.birthYear !== String(user?.birthYear || '')) {
         updateData.birthYear = parseInt(formData.birthYear);
         console.log('출생연도 변경:', formData.birthYear, '→', user?.birthYear);
       }
-      
+
       console.log('전송할 데이터:', updateData);
-      
+
       // 실제로 변경사항이 없으면 알림 (이론적으로 여기에 도달하지 않습니다)
       if (Object.keys(updateData).length === 0) {
         console.log('변경사항 없음');
         toast.info('변경된 사항이 없습니다.');
         return;
       }
-      
+
       // API 호출
       console.log('API 호출 시작');
       const response = await authApi.updateProfile(updateData);
       console.log('API 응답:', response);
-      
+
       // 성공 메시지
       toast.success('정보가 성공적으로 업데이트되었습니다.');
-      
+
       // 사용자 정보 재로드로 새로운 데이터 반영
       console.log('checkAuth 호출 시작');
       await checkAuth();
       console.log('checkAuth 완료');
-      
     } catch (error) {
       console.error('사용자 정보 업데이트 오류:', error);
       toast.error('정보 업데이트에 실패했습니다. 다시 시도해주세요.');
@@ -200,8 +202,8 @@ const MyPage = () => {
                   value={formData.birthYear}
                   onChange={(e) => handleInputChange('birthYear', e.target.value)}
                   className={`w-[120px] h-[56px] px-[20px] border bg-white text-black rounded-[16px] heading-3 font-400 focus:outline-none ${
-                    errors.birthYear 
-                      ? 'border-red-500 focus:border-red-500' 
+                    errors.birthYear
+                      ? 'border-red-500 focus:border-red-500'
                       : 'border-gray-400 focus:border-pink-700'
                   }`}
                   placeholder="2000"
@@ -222,8 +224,8 @@ const MyPage = () => {
                 value={formData.nickname}
                 onChange={(e) => handleInputChange('nickname', e.target.value)}
                 className={`w-full h-[56px] px-[20px] border bg-white text-black rounded-[16px] heading-3 font-400 focus:outline-none ${
-                  errors.nickname 
-                    ? 'border-red-500 focus:border-red-500' 
+                  errors.nickname
+                    ? 'border-red-500 focus:border-red-500'
                     : 'border-gray-400 focus:border-pink-700'
                 }`}
                 placeholder="닉네임을 입력해주세요"
