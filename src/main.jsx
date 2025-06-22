@@ -5,6 +5,9 @@ import { router } from './router/index.jsx';
 import { StoreProvider } from './store/index.jsx';
 import { Toaster } from 'react-hot-toast';
 import './index.css';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

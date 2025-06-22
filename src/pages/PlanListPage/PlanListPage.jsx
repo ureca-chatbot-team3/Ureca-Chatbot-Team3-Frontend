@@ -1,0 +1,306 @@
+import React, { useState, useEffect } from 'react';
+import SearchIcon from '@/assets/svg/searchIcon.svg';
+import FilterIcon from '@/assets/svg/filterIcon.svg';
+import ToggleDownIcon from '@/assets/svg/toggleDownIcon.svg';
+import ToggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
+import Filter from './Filter';
+import PlanCard from '@/components/PlanCard';
+
+const getDailyDataGB = (infos) => {
+  for (const info of infos) {
+    const m = info.match(/데이터\s*일\s*(\d+)GB/i);
+    if (m) return parseInt(m[1], 10);
+  }
+  return 0;
+};
+
+const categories = [
+  { label: '5G/LTE', value: 'all' },
+  { label: '온라인 전용', value: 'online' },
+  { label: '태블릿/스마트워치', value: 'tablet' },
+  { label: '듀얼넘버 플러스', value: 'dual' },
+];
+
+const PlanListPage = () => {
+  const [active, setActive] = useState(categories[0].value);
+  const [isFilterOpen, setFilterOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const [plans, setPlans] = useState([]);
+  const [limit, setLimit] = useState(20);
+  const [filter, setFilter] = useState({});
+
+  const [sortBy, setSortBy] = useState('popular');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [search, setSearch] = useState('');
+
+  const catMap = {
+    all: 'all',
+    online: '온라인 전용 요금제',
+    tablet: '태블릿/스마트워치',
+    dual: '듀얼넘버 플러스',
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.append('category', catMap[active] || 'all');
+
+    params.append('sortBy', 'price_value'); // 서버 허용 값
+    params.append('sortOrder', sortOrder);
+    params.append('customSort', sortBy); // 클라 표시용
+    params.append('search', search);
+
+    if (sortBy === 'price_value') {
+      params.append('page', page);
+      params.append('limit', limit);
+    } else {
+      params.append('page', 1);
+      params.append('limit', 100);
+    }
+
+    (filter['요금범위'] || []).forEach((r) => {
+      if (r === '~5만원대') {
+        params.append('minPrice', 0);
+        params.append('maxPrice', 50000);
+      } else if (r === '6~8만원대') {
+        params.append('minPrice', 60000);
+        params.append('maxPrice', 80000);
+      } else if (r === '9만원대~') {
+        params.append('minPrice', 90000);
+      }
+    });
+
+    if (filter['데이터']?.length) {
+      params.append('dataOption', filter['데이터'].join(','));
+    }
+
+    if (filter['연령대']?.length) {
+      const ages = filter['연령대'].filter((age) => age !== '전체대상');
+      if (ages.length > 0) {
+        params.append('ageRange', ages.join(','));
+      }
+    }
+
+    if (filter['혜택']?.length) {
+      params.append('brands', filter['혜택'].join(','));
+    }
+
+    if (filter.quickTag && filter.quickTag !== '#전체') {
+      params.append('quickTag', filter.quickTag.replace('#', ''));
+    }
+
+    fetch(`/api/plans?${params.toString()}`)
+      .then((res) => res.json())
+      .then((data) => {
+        let loadedPlans = data.data.plans;
+
+        if (sortBy === 'popular') {
+          loadedPlans.sort((a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0));
+        } else if (sortBy === 'data') {
+          loadedPlans.sort((a, b) => getDailyDataGB(b.infos) - getDailyDataGB(a.infos));
+        }
+
+        const paged =
+          sortBy === 'price_value'
+            ? loadedPlans
+            : loadedPlans.slice((page - 1) * limit, page * limit);
+
+        setPlans(paged);
+        setTotalPages(
+          sortBy === 'price_value'
+            ? data.data.pagination.totalPages
+            : Math.ceil(loadedPlans.length / limit)
+        );
+      })
+      .catch(console.error);
+  }, [active, sortBy, sortOrder, page, limit, filter, search]);
+
+  const handleCategoryClick = (value) => {
+    if (value === 'online') {
+      window.open('https://www.lguplus.com/mobile/plan/mplan/direct', '_blank');
+    } else if (value === 'tablet' || value === 'dual') {
+      window.open('https://www.lguplus.com/mobile/plan/mplan/2nd-device', '_blank');
+    } else {
+      setActive(value);
+    }
+  };
+
+  const handleFilter = (selectedFilter) => {
+    setFilter(selectedFilter);
+    setPage(1);
+  };
+
+  const handleSort = (sortField, order) => {
+    setSortBy(sortField);
+    setSortOrder(order);
+    setOpen(false);
+  };
+
+  const handlePopularSort = () => {
+    setPage(1);
+    setSortBy('popular');
+    setOpen(false);
+  };
+
+  const handleDataSort = () => {
+    setPage(1);
+    setSortBy('data');
+    setOpen(false);
+  };
+
+  const handleSearch = () => {
+    setPage(1);
+  };
+  return (
+    <div className="min-h-screen p-10 text-black">
+      <div className="flex items-center justify-between mb-[18px]">
+        <h2 className="heading-2 font-500 text-black">요금제</h2>
+
+        <div className="relative flex items-center rounded-full w-70">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSearch();
+            }}
+            placeholder="검색어를 입력하세요."
+            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-full focus:outline-none focus:border-black placeholder:body-large placeholder:font-500"
+          />
+          <div
+            className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"
+            onClick={handleSearch}
+          >
+            <img src={SearchIcon} alt="검색 아이콘" className="w-5 h-5" />
+          </div>
+        </div>
+
+        <div
+          className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+          onClick={handleSearch}
+        ></div>
+      </div>
+
+      <div className="flex items-center justify-between mb-[18px]">
+        <div>
+          <ul className="flex space-x-5 border-b border-gray-500">
+            {categories.map((category) => (
+              <li
+                key={category.value}
+                onClick={() => handleCategoryClick(category.value)}
+                className={`cursor-pointer heading-3 text-black transition-colors pb-2 ${
+                  active === category.value ? 'border-b-2 border-pink-600' : ''
+                }`}
+              >
+                {category.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div
+          className="ml-auto flex gap-2 text-black body-large body-500 cursor-pointer"
+          onClick={() => setFilterOpen(true)}
+        >
+          <img src={FilterIcon} alt="필터 아이콘" className="w-5 h-5" />
+          필터
+        </div>
+
+        <Filter
+          isOpen={isFilterOpen}
+          onClose={() => setFilterOpen(false)}
+          onFilter={handleFilter}
+          activeCategory={catMap[active] || 'all'}
+        />
+      </div>
+
+      <div className="relative inline-block text-left text-black ">
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-2 cursor-pointer mb-[18px]"
+        >
+          {sortBy === 'popular'
+            ? '인기순'
+            : sortBy === 'price_value' && sortOrder === 'asc'
+              ? '낮은 가격순'
+              : sortBy === 'price_value' && sortOrder === 'desc'
+                ? '높은 가격순'
+                : sortBy === 'data'
+                  ? '데이터 많은 순'
+                  : '정렬'}
+          <img src={open ? ToggleUpIcon : ToggleDownIcon} alt="토글 아이콘" />
+        </button>
+
+        {open && (
+          <div className="cursor-pointer absolute mt-2 w-40 text-center bg-white text-black rounded-[16px] shadow">
+            <button
+              onClick={handlePopularSort}
+              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+            >
+              인기순
+            </button>
+            <button
+              onClick={() => handleSort('price_value', 'asc')}
+              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+            >
+              낮은 가격순
+            </button>
+            <button
+              onClick={() => handleSort('price_value', 'desc')}
+              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+            >
+              높은 가격순
+            </button>
+            <button
+              onClick={handleDataSort}
+              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+            >
+              데이터 많은 순
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-4 gap-6">
+        {plans.map((plan) => (
+          <PlanCard
+            key={plan._id}
+            imagePath={plan.imagePath}
+            name={plan.name}
+            infos={plan.infos}
+            plan_speed={plan.plan_speed}
+            price={plan.price}
+            sale_price={plan.sale_price}
+            price_value={plan.price_value}
+            sale_price_value={plan.sale_price_value}
+            benefits={Object.entries(plan.benefits)}
+          />
+        ))}
+      </div>
+
+      <div className="flex justify-center mt-10">
+        <nav className="flex items-center space-x-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setPage(i + 1)}
+              className={`px-2 py-2 rounded-full body-small font-500 transition-colors duration-300 ease-in-out ${
+                page === i + 1
+                  ? 'bg-pink-600 text-white'
+                  : 'bg-gray-500 text-white hover:bg-pink-600'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </nav>
+      </div>
+    </div>
+  );
+};
+
+export default PlanListPage;

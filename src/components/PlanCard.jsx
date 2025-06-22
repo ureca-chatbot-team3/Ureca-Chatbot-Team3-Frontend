@@ -47,6 +47,7 @@ const PlanCard = ({
       <div className="h-[24px]" />
 
       {/* 이미지 */}
+
       <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
         {!imagePath || imageError ? (
           // 이미지 경로가 없거나 에러 상태일 때 대체 UI 표시

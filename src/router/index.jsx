@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
+import PlanListPage from '../pages/PlanListPage/PlanListPage';
 import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import MainPage from '@/pages/MainPage/MainPage';
@@ -26,6 +27,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <MainPage />,
+      },
+      {
+        path: 'plans',
+        element: <PlanListPage />,
       },
       {
         path: 'diagnosis',
