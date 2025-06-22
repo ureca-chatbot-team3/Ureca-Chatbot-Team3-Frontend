@@ -35,6 +35,7 @@ export default function ChatbotModal({ onClose }) {
 
   const initializeGreetingAndFAQ = async () => {
     try {
+      // 1. FAQ 가져오기
       const res = await axios.get('/api/faq');
       const allFaqs = res.data || [];
       setFaqList(allFaqs);
@@ -42,20 +43,30 @@ export default function ChatbotModal({ onClose }) {
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
 
-      const greetingText = `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.
-데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.
-궁금한 걸 채팅창에 말씀해주세요! ✨`;
+      // 2. 사용자 프로필 요청 (로그인 상태면 닉네임 있음)
+      let nickname = '';
+      try {
+        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+        nickname = profileRes.data?.data?.nickname || '';
+      } catch (e) {
+        nickname = ''; // 비로그인 또는 토큰 만료 시
+      }
+
+      // 3. 인사말 만들기
+      const greetingText = nickname
+        ? `반가워요, ${nickname}님! 🦩\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
+        : `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
 
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
-      // 👇 순차적으로 메시지 전송
+      // 4. 서버로 메시지 전송
       await new Promise((res) => {
         socketRef.current?.emit('stream-start', {
           role: 'assistant',
           content: greetingText,
         });
         socketRef.current?.emit('stream-end', {});
-        setTimeout(res, 300); // 300ms 지연
+        setTimeout(res, 300);
       });
 
       socketRef.current?.emit('stream-start', {
@@ -64,7 +75,7 @@ export default function ChatbotModal({ onClose }) {
       });
       socketRef.current?.emit('stream-end', {});
 
-      // 👇 프론트 상태 업데이트
+      // 5. 프론트 UI 상태 업데이트
       const greetingMessage = {
         id: 'greeting',
         type: 'bot',
@@ -81,7 +92,7 @@ export default function ChatbotModal({ onClose }) {
 
       setMessages([greetingMessage, quickQuestionMessage]);
     } catch (err) {
-      console.error('❌ FAQ 불러오기 실패:', err);
+      console.error('❌ 초기 인사말 구성 실패:', err);
     }
   };
 
