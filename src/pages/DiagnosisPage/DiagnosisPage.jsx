@@ -248,7 +248,7 @@ const DiagnosisPage = () => {
                     <button
                       key={index}
                       onClick={() => handleAnswerSelect(option)}
-                      className={`w-full h-[36px] border-[1px] rounded-[8px] flex items-center px-[12px] transition-all duration-200 md:h-[64px] md:border-[2px] md:rounded-[12px] md:px-[24px] ${
+                      className={`group w-full h-[36px] border-[1px] rounded-[8px] flex items-center px-[12px] transition-all duration-200 md:h-[64px] md:border-[2px] md:rounded-[12px] md:px-[24px] ${
                         isSelected
                           ? 'border-pink-700 bg-pink-200'
                           : 'border-gray-500 bg-white hover:border-pink-700 hover:bg-pink-200'
@@ -256,8 +256,8 @@ const DiagnosisPage = () => {
                     >
                       <div className="flex items-center justify-between w-full">
                         <span
-                          className={`m-body-medium font-500 text-left md:body-large ${
-                            isSelected ? 'text-pink-700' : 'text-black'
+                          className={`m-body-medium font-500 text-left md:body-large transition-colors ${
+                            isSelected ? 'text-pink-700' : 'text-black group-hover:text-pink-700'
                           }`}
                         >
                           {option}

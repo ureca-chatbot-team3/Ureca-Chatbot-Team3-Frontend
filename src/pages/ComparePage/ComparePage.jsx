@@ -410,8 +410,8 @@ const ComparePage = () => {
 
         {/* 요금제 상세보기 버튼 */}
         <div className={`${isMobile ? 'pt-3' : 'pt-6'}`}>
-          <button className="w-full py-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-            <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700`}>
+          <button className="group w-full py-3 border border-gray-300 rounded-lg bg-white hover:border-pink-700 hover:bg-pink-200 transition-colors">
+            <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700 group-hover:text-pink-700 transition-colors`}>
               요금제 상세보기
             </span>
           </button>

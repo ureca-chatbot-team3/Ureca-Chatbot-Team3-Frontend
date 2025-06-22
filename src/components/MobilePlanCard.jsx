@@ -260,7 +260,7 @@ const MobilePlanCard = ({
       <div className={`flex items-center justify-center ${cardStyles.buttons.gap}`}>
         {/* 자세히 보기 버튼 */}
         <button
-          className={`${cardStyles.buttons.detail} rounded-[4px] border border-gray-700 bg-white ${cardStyles.text.button} font-500 text-gray-700 cursor-pointer`}
+          className={`${cardStyles.buttons.detail} rounded-[4px] border border-gray-700 bg-white ${cardStyles.text.button} font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors`}
         >
           자세히 보기
         </button>

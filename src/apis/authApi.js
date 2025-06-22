@@ -91,6 +91,16 @@ export const authApi = {
   deleteAccount: () => {
     return apiClient.delete('/auth/delete-account');
   },
+
+  // 사용자 정보 업데이트
+  updateProfile: (userData) => {
+    return apiClient.put('/auth/profile', userData);
+  },
+
+  // 비밀번호 변경
+  changePassword: (passwordData) => {
+    return apiClient.put('/auth/change-password', passwordData);
+  },
 };
 
 export default authApi;
