@@ -177,7 +177,7 @@ const MyPage = () => {
   };
 
   return (
-    <main className="max-w-[1440px] mx-auto px-[20px] py-[60px]">
+    <main className="max-w-[1440px] mx-auto py-[60px]">
       <div className="flex">
         <MyPageSidebar />
 
