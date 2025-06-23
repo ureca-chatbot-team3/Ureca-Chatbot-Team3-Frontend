@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { io } from 'socket.io-client';
-import axios from 'axios';
 
 import ChatbotMenuModal from './components/ChatbotMenuModal';
 import ChatbotHeader from './components/ChatbotHeader';
@@ -9,6 +8,10 @@ import ChatbotNoticeBar from './components/ChatbotNoticeBar';
 import ChatbotInput from './components/ChatbotInput';
 import ChatMessages from './components/ChatMessage';
 import ChatbotQuickQuestionBubble from './components/ChatbotQuickQuestionBubble';
+
+// 환경변수에서 API URL 가져오기
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const SOCKET_URL = API_BASE_URL.replace('/api', ''); // /api 제거
 
 export default function ChatbotModal({ onClose }) {
   const [message, setMessage] = useState('');
@@ -37,8 +40,14 @@ export default function ChatbotModal({ onClose }) {
 
   const initializeGreetingAndFAQ = async () => {
     try {
-      const res = await axios.get('/api/faq');
-      const allFaqs = res.data || [];
+      const response = await fetch(`${API_BASE_URL}/faq`, {
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const data = await response.json();
+      const allFaqs = data.data || [];
       setFaqList(allFaqs);
 
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
@@ -46,8 +55,13 @@ export default function ChatbotModal({ onClose }) {
 
       let nickname = '';
       try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
-        nickname = profileRes.data?.data?.nickname || '';
+        const profileResponse = await fetch(`${API_BASE_URL}/auth/profile`, {
+          credentials: 'include',
+        });
+        if (profileResponse.ok) {
+          const profileData = await profileResponse.json();
+          nickname = profileData.data?.nickname || '';
+        }
       } catch (e) {}
 
       const greetingText = nickname
@@ -70,7 +84,9 @@ export default function ChatbotModal({ onClose }) {
         {
           id: 'quick-questions',
           type: 'bot',
-          content: <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />,
+          content: (
+            <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />
+          ),
           role: 'assistant',
         },
       ]);
@@ -85,9 +101,14 @@ export default function ChatbotModal({ onClose }) {
 
     const fetchUserAndConnectSocket = async () => {
       try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
-        tempUserId = profileRes.data?.data?._id || null;
-        setUserId(tempUserId);
+        const profileResponse = await fetch(`${API_BASE_URL}/auth/profile`, {
+          credentials: 'include',
+        });
+        if (profileResponse.ok) {
+          const profileData = await profileResponse.json();
+          tempUserId = profileData.data?._id || null;
+          setUserId(tempUserId);
+        }
       } catch (e) {}
 
       const sessionId = getOrCreateSessionId(tempUserId);
@@ -96,7 +117,7 @@ export default function ChatbotModal({ onClose }) {
       console.log('✅ userId:', tempUserId);
       console.log('✅ sessionId:', sessionId);
 
-      const newSocket = io('http://localhost:5000', {
+      const newSocket = io(SOCKET_URL, {
         query: { sessionId, userId: tempUserId || undefined },
       });
 
@@ -116,7 +137,10 @@ export default function ChatbotModal({ onClose }) {
       newSocket.on('stream-start', ({ messageId }) => {
         tempMessageIdRef.current = messageId;
         tempContentRef.current = '';
-        setMessages((prev) => [...prev, { id: messageId, type: 'bot', content: '', isLoading: true }]);
+        setMessages((prev) => [
+          ...prev,
+          { id: messageId, type: 'bot', content: '', isLoading: true },
+        ]);
       });
 
       newSocket.on('stream-chunk', (chunk) => {
@@ -135,9 +159,7 @@ export default function ChatbotModal({ onClose }) {
           type: message?.role === 'assistant' ? 'bot' : 'user',
           isLoading: false,
         };
-        setMessages((prev) =>
-          prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg))
-        );
+        setMessages((prev) => prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg)));
 
         tempMessageIdRef.current = null;
         tempContentRef.current = '';
@@ -148,32 +170,39 @@ export default function ChatbotModal({ onClose }) {
       });
 
       try {
-        const res = tempUserId
-          ? await axios.get(`/api/conversations?userId=${tempUserId}`)
-          : await axios.get(`/api/conversations/${sessionId}`);
+        const url = tempUserId
+          ? `${API_BASE_URL}/conversations?userId=${tempUserId}`
+          : `${API_BASE_URL}/conversations/${sessionId}`;
 
-        const loadedMessages = (res.data.messages || [])
-          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
-          .map((msg) => ({
-            id: msg._id,
-            type: msg.role === 'user' ? 'user' : 'bot',
-            content: msg.content,
-            timestamp: msg.timestamp,
-            role: msg.role,
-          }));
+        const response = await fetch(url, { credentials: 'include' });
 
-        if (loadedMessages.length === 0 && !initializedRef.current) {
+        if (response.ok) {
+          const data = await response.json();
+          const loadedMessages = (data.messages || [])
+            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+            .map((msg) => ({
+              id: msg._id,
+              type: msg.role === 'user' ? 'user' : 'bot',
+              content: msg.content,
+              timestamp: msg.timestamp,
+              role: msg.role,
+            }));
+
+          if (loadedMessages.length === 0 && !initializedRef.current) {
+            initializedRef.current = true;
+            initializeGreetingAndFAQ();
+          } else {
+            setMessages(loadedMessages);
+          }
+        } else if (response.status === 404 && !initializedRef.current) {
           initializedRef.current = true;
           initializeGreetingAndFAQ();
-        } else {
-          setMessages(loadedMessages);
         }
       } catch (err) {
-        if (err.response?.status === 404 && !initializedRef.current) {
+        console.warn('대화 불러오기 실패:', err.message);
+        if (!initializedRef.current) {
           initializedRef.current = true;
           initializeGreetingAndFAQ();
-        } else {
-          console.warn('대화 불러오기 실패:', err.message);
         }
       }
     };
@@ -208,18 +237,29 @@ export default function ChatbotModal({ onClose }) {
     sendMessage(message.trim());
   };
 
-  const handleQuickQuestion = useCallback((text) => {
-    sendMessage(text.trim());
-  }, [sendMessage]);
+  const handleQuickQuestion = useCallback(
+    (text) => {
+      sendMessage(text.trim());
+    },
+    [sendMessage]
+  );
 
   const clearConversation = async () => {
     try {
       const sessionId = sessionIdRef.current;
-      const params = userId ? { userId } : { sessionId };
+      const url = userId
+        ? `${API_BASE_URL}/conversations?userId=${userId}`
+        : `${API_BASE_URL}/conversations?sessionId=${sessionId}`;
 
-      await axios.delete('/api/conversations', { params });
-      setMessages([]);
-      initializeGreetingAndFAQ();
+      const response = await fetch(url, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setMessages([]);
+        initializeGreetingAndFAQ();
+      }
     } catch (err) {
       console.error('❌ 대화 초기화 실패:', err);
     }
