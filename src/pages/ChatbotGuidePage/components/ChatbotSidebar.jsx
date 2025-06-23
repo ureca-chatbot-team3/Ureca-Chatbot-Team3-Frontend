@@ -5,6 +5,15 @@ const ChatbotSidebar = () => {
   const sectionIds = CHATBOT_GUIDE_SECTIONS.map((s) => s.id);
   const activeId = useScrollHashSync(sectionIds);
 
+  const handleSectionScroll = (id) => (e) => {
+    e.preventDefault();
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      window.history.replaceState(null, '', `#${id}`);
+    }
+  };
+
   return (
     <div className="w-[280px] sticky top-[calc(var(--header-height)+var(--spacing-2xl))] h-fit flex flex-col gap-md">
       <h1 className="heading-1 font-500">챗봇 안내</h1>
@@ -12,12 +21,12 @@ const ChatbotSidebar = () => {
       <ul className="space-y-2">
         {CHATBOT_GUIDE_SECTIONS.map(({ id, label }) => (
           <li key={id}>
-            <a
-              href={`#${id}`}
-              className={`heading-3 ransition-colors duration-200 ${activeId === id ? 'text-pink-700' : ''}`}
+            <button
+              onClick={handleSectionScroll(id)}
+              className={`heading-3 transition-colors duration-200 ${activeId === id ? 'text-pink-700' : 'hover:text-pink-700'}`}
             >
               {label}
-            </a>
+            </button>
           </li>
         ))}
       </ul>
