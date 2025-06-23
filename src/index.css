@@ -165,6 +165,8 @@ body,
 #root {
   background-color: var(--color-gray-200);
   height: 100%;
+  scroll-behavior: smooth;
+  color: var(--color-black);
 }
 
 button {
@@ -198,7 +200,7 @@ button {
 .swiper-pagination-bullet-active {
   background-color: var(--color-pink-700);
 }
-  
+
 @layer utilities {
   @keyframes blink {
     0%,

@@ -14,7 +14,7 @@ import MyPage from '../pages/MyPage/MyPage';
 import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
 import BookmarkPage from '../pages/MyPage/BookmarkPage';
 import ChatHistoryPage from '../pages/MyPage/ChatHistoryPage';
-import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
+import ChatbotGuidePage from '../pages/ChatbotGuidePage/ChatbotGuidePage';
 
 export const router = createBrowserRouter([
   {
@@ -52,8 +52,8 @@ export const router = createBrowserRouter([
         element: <ComparePage />,
       },
       {
-        path: 'chatbotGuide',
-        element: <ChatbotGuide />,
+        path: 'chatbot-guide',
+        element: <ChatbotGuidePage />,
       },
       {
         path: 'mypage',
