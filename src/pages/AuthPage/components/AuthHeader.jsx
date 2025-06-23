@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import back2Icon from '../../../assets/svg/back2Icon.svg';
 
 const AuthHeader = ({ title = '로그인' }) => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const AuthHeader = ({ title = '로그인' }) => {
       <div className="relative w-full max-w-[560px] h-full flex items-center px-5 mx-auto">
         {/* 뒤로가기 버튼 */}
         <button onClick={() => navigate(-1)} className="mr-4">
-          <img src="/src/assets/svg/back2Icon.svg" alt="뒤로가기" />
+          <img src={back2Icon} alt="뒤로가기" />
         </button>
 
         {/* 왼쪽 정렬 타이틀 */}

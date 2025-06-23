@@ -103,7 +103,7 @@ const PlanListPage = () => {
     }
 
     fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) {
@@ -368,6 +368,7 @@ const PlanListPage = () => {
                 price_value={plan.price_value}
                 sale_price_value={plan.sale_price_value}
                 benefits={Object.entries(plan.benefits)}
+                id={plan._id}
               />
             ))}
           </div>
@@ -386,11 +387,11 @@ const PlanListPage = () => {
                 price_value={plan.price_value}
                 sale_price_value={plan.sale_price_value}
                 benefits={Object.entries(plan.benefits)}
+                id={plan._id}
               />
             ))}
           </div>
         </>
-
       )}
       {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">
