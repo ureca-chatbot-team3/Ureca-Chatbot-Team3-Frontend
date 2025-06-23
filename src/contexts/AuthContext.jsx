@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import { authApi } from '../apis/authApi';
 
 // 초기 상태
@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // 프로필 확인 (페이지 새로고침 시 인증 상태 복원)
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await authApi.getProfile();
       dispatch({
@@ -134,9 +134,11 @@ export const AuthProvider = ({ children }) => {
         payload: response.data,
       });
     } catch (error) {
+      // 서버가 연결되지 않았거나 인증 실패 시 로그아웃 상태로 설정
+      console.warn('인증 상태 확인 실패:', error.message);
       dispatch({ type: actionTypes.AUTH_FAILURE, payload: null });
     }
-  };
+  }, []);
 
   // 에러 클리어
   const clearError = () => {
@@ -146,7 +148,7 @@ export const AuthProvider = ({ children }) => {
   // 컴포넌트 마운트 시 인증 상태 확인
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const value = {
     ...state,

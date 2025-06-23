@@ -269,6 +269,7 @@ const PlanListPage = () => {
         {plans.map((plan) => (
           <PlanCard
             key={plan._id}
+            id={plan._id}
             imagePath={plan.imagePath}
             name={plan.name}
             infos={plan.infos}

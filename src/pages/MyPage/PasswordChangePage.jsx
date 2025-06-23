@@ -32,7 +32,7 @@ const PasswordChangePage = () => {
   // 사용자 정보 로딩 중이거나 카카오 사용자인 경우 로딩 화면 표시
   if (!user || user.kakaoId || user.isKakaoUser) {
     return (
-      <main className="max-w-[1440px] mx-auto px-[20px] py-[60px]">
+      <main className="max-w-[1440px] mx-auto py-[60px]">
         <div className="flex justify-center items-center min-h-[400px]">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-700"></div>
         </div>
@@ -162,7 +162,7 @@ const PasswordChangePage = () => {
     !errors.confirmPassword;
 
   return (
-    <main className="max-w-[1440px] mx-auto px-[20px] py-[60px]">
+    <main className="max-w-[1440px] mx-auto py-[60px]">
       <div className="flex">
         <MyPageSidebar />
 
