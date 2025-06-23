@@ -12,9 +12,11 @@ class ApiClient {
     const config = {
       headers: {
         'Content-Type': 'application/json',
+        Accept: 'application/json',
         ...options.headers,
       },
-      credentials: 'include', // 쿠키 포함
+      credentials: 'include', // 쿠키 포함 (매우 중요)
+      mode: 'cors',
       ...options,
     };
 
