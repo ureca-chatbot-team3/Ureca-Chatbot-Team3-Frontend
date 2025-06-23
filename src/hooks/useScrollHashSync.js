@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function useScrollHashSync(sectionIds) {
+const useScrollHashSync = (sectionIds) => {
   const [activeId, setActiveId] = useState(sectionIds[0] || '');
 
   useEffect(() => {
@@ -42,4 +42,6 @@ export default function useScrollHashSync(sectionIds) {
   }, [activeId, sectionIds]);
 
   return activeId;
-}
+};
+
+export default useScrollHashSync;
