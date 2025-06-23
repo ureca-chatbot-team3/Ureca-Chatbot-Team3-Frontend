@@ -38,8 +38,11 @@ export default function ChatbotModal({ onClose }) {
 
   const initializeGreetingAndFAQ = async () => {
     try {
-      const res = await axios.get('/api/faq');
-      const allFaqs = res.data || [];
+      const response = await axios.get('/api/faq', { withCredentials: true });
+
+      // 백엔드에서 { success: true, data: [questions] } 형태로 오는 것을 처리
+      const allFaqs = response.data.success ? response.data.data || [] : response.data || [];
+
       setFaqList(allFaqs);
 
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
