@@ -18,7 +18,7 @@ const AIYopleming = () => {
         <motion.div
           className="absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 w-full flex gap-lg pr-lg max-w-[959px] max-h-full"
           initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: false }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
         >
