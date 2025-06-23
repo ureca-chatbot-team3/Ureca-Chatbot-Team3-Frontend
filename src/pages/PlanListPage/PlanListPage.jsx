@@ -10,6 +10,9 @@ import Filter from './Filter';
 import PlanCard from '@/components/PlanCard';
 import MobilePlanCard from '@/components/MobilePlanCard';
 
+// API 기본 URL 가져오기
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 const getDailyDataGB = (infos) => {
   for (const info of infos) {
     const m = info.match(/데이터\s*일\s*(\d+)GB/i);
@@ -99,8 +102,15 @@ const PlanListPage = () => {
       params.append('quickTag', filter.quickTag.replace('#', ''));
     }
 
-    fetch(`/api/plans?${params.toString()}`)
-      .then((res) => res.json())
+    fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
+      credentials: 'include'
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         let loadedPlans = data.data.plans;
 
@@ -380,6 +390,7 @@ const PlanListPage = () => {
             ))}
           </div>
         </>
+
       )}
       {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">

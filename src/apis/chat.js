@@ -1,9 +1,25 @@
-import axios from 'axios';
+// 챗봇 API
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 export const askChatbot = async (message) => {
   try {
-    const res = await axios.post('/api/chat', { message });
-    return res.data.reply; // 성공 시 응답
+    const response = await fetch(`${API_BASE_URL}/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      credentials: 'include',
+      mode: 'cors',
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.reply;
   } catch (err) {
     console.error('챗봇 API 호출 실패:', err);
     throw new Error('요청 실패');
