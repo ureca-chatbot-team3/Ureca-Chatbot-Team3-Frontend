@@ -4,12 +4,12 @@ import { motion } from 'motion/react';
 
 const AIYopleming = () => {
   return (
-    <div className="h-full flex flex-col">
+    <div className="max-h-[calc(100vh-var(--header-height)-123px)] h-full flex flex-col">
       <div className="flex flex-col text-center">
         <h2 className="text-2xl font-bold">요플랜 AI 챗봇 요플밍 소개</h2>
         <p className="mt-2 text-gray-700">요금제 고민? 플밍이가 도와드릴게요!</p>
       </div>
-      <div className="relative max-w-full w-full h-full overflow-hidden rounded-2xl">
+      <div className="relative flex items-end w-full h-full overflow-hidden rounded-2xl">
         <img
           src={YoplemingBackgroundImage}
           alt="요플밍 소개 배경"
