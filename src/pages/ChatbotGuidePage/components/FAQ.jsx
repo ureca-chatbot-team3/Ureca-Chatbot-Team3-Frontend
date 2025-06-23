@@ -33,7 +33,7 @@ const faqs = [
 const FAQ = () => {
   return (
     <motion.div
-      className="flex flex-col items-center overflow-hidden"
+      className="flex flex-col items-center"
       initial={{ y: 30, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: false, amount: 0.3 }}
@@ -48,7 +48,7 @@ const FAQ = () => {
         </div>
       </div>
 
-      <div className="max-w-[955px] w-full flex flex-col gap-xs shadow-soft-black px-8 py-5 rounded-[20px]">
+      <div className="bg-white max-w-[955px] w-full flex flex-col gap-xs shadow-soft-black px-8 py-5 rounded-[20px]">
         {faqs.map(({ answer, question }, index) => (
           <FQAItem key={index} question={question} answer={answer} />
         ))}

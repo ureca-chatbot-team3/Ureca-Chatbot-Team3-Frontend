@@ -46,7 +46,7 @@ const ChatbotUsage = () => {
           <img src={UsageYopleming} alt="챗봇 사용법" />
         </div>
       </div>
-      <div className="p-lg shadow-soft-black rounded-[20px] flex flex-col gap-lg max-w-[754px] w-full mx-auto">
+      <div className="p-lg shadow-soft-black rounded-[20px] flex flex-col gap-lg max-w-[754px] w-full mx-auto bg-white">
         <h3 className="heading-2 font-700">어떻게 사용하나요? (Step-by-step 가이드)</h3>
         <div className="flex flex-col gap-md">
           {steps.map(({ numberBgColor, title, description }, index) => (

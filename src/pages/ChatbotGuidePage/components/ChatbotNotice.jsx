@@ -46,7 +46,7 @@ const ChatbotNotice = () => {
         <h2 className="heading-1 font-700">유의사항 안내</h2>
         <img src={NoticeYopleming} alt="유의사항 안내" />
       </div>
-      <div className="p-md shadow-soft-black rounded-[20px] max-w-[640px] w-full flex flex-col gap-1">
+      <div className="p-md shadow-soft-black rounded-[20px] max-w-[640px] w-full flex flex-col gap-1 bg-white">
         {notices.map(({ title, descriptions }, index) => (
           <NoticeItem key={index} number={index + 1} title={title} descriptions={descriptions} />
         ))}
