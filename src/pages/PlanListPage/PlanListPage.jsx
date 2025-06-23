@@ -284,7 +284,6 @@ const PlanListPage = () => {
             src={emptyReason === 'filter' ? FilterOff : SearchOff}
             alt="결과 없음"
             className="w-[150px] h-auto mb-6"
-
           />
 
           {/* 텍스트 */}
@@ -342,6 +341,7 @@ const PlanListPage = () => {
               imagePath={plan.imagePath}
               name={plan.name}
               infos={plan.infos}
+              id={plan._id}
               plan_speed={plan.plan_speed}
               price={plan.price}
               sale_price={plan.sale_price}
