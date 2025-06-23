@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { io } from 'socket.io-client';
 import axios from 'axios';
 
 import ChatbotMenuModal from './components/ChatbotMenuModal';
@@ -9,6 +8,8 @@ import ChatbotNoticeBar from './components/ChatbotNoticeBar';
 import ChatbotInput from './components/ChatbotInput';
 import ChatMessages from './components/ChatMessage';
 import ChatbotQuickQuestionBubble from './components/ChatbotQuickQuestionBubble';
+import { getRedirectResponse } from './utils/chatbotRedirectHelper';
+import { getSocket, resetSocket } from '../../utils/socket';
 
 export default function ChatbotModal({ onClose }) {
   const [message, setMessage] = useState('');
@@ -19,11 +20,11 @@ export default function ChatbotModal({ onClose }) {
   const [faqList, setFaqList] = useState([]);
   const [userId, setUserId] = useState(null);
 
-  const socketRef = useRef(null);
   const sessionIdRef = useRef(null);
   const tempMessageIdRef = useRef(null);
   const tempContentRef = useRef('');
   const initializedRef = useRef(false);
+  const socketRef = useRef(null);
 
   const getOrCreateSessionId = (userId) => {
     if (userId) return `user_${userId}`;
@@ -56,21 +57,26 @@ export default function ChatbotModal({ onClose }) {
 
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
-      await new Promise((res) => {
-        socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
-        socketRef.current?.emit('stream-end', {});
-        setTimeout(res, 300);
+      socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
+      socketRef.current?.emit('stream-end', {
+        message: { role: 'assistant', content: greetingText, type: 'text' },
       });
 
-      socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
-      socketRef.current?.emit('stream-end', {});
+      setTimeout(() => {
+        socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
+        socketRef.current?.emit('stream-end', {
+          message: { role: 'assistant', content: quickText, type: 'text' },
+        });
+      }, 300);
 
       setMessages([
         { id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' },
         {
           id: 'quick-questions',
           type: 'bot',
-          content: <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />,
+          content: (
+            <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />
+          ),
           role: 'assistant',
         },
       ]);
@@ -93,33 +99,26 @@ export default function ChatbotModal({ onClose }) {
       const sessionId = getOrCreateSessionId(tempUserId);
       sessionIdRef.current = sessionId;
 
-      console.log('✅ userId:', tempUserId);
-      console.log('✅ sessionId:', sessionId);
+      const socket = getSocket(sessionId, tempUserId);
+      socketRef.current = socket;
 
-      const newSocket = io('http://localhost:5000', {
-        query: { sessionId, userId: tempUserId || undefined },
-      });
+      // ✅ 기존 리스너 제거 (중복 방지)
+      socket.off('stream-start');
+      socket.off('stream-chunk');
+      socket.off('stream-end');
+      socket.off('error');
 
-      socketRef.current = newSocket;
-
-      newSocket.on('connect', () => {
-        console.log('✅ 소켓 연결됨:', newSocket.id);
-        if (tempUserId) {
-          newSocket.emit('authenticate', { userId: tempUserId });
-        }
-      });
-
-      newSocket.on('disconnect', () => {
-        console.log('❌ 소켓 연결 끊김');
-      });
-
-      newSocket.on('stream-start', ({ messageId }) => {
+      // ✅ 새 리스너 등록
+      socket.on('stream-start', ({ messageId }) => {
         tempMessageIdRef.current = messageId;
         tempContentRef.current = '';
-        setMessages((prev) => [...prev, { id: messageId, type: 'bot', content: '', isLoading: true }]);
+        setMessages((prev) => [
+          ...prev,
+          { id: messageId, type: 'bot', content: '', isLoading: true },
+        ]);
       });
 
-      newSocket.on('stream-chunk', (chunk) => {
+      socket.on('stream-chunk', (chunk) => {
         tempContentRef.current += chunk;
         setMessages((prev) =>
           prev.map((msg) =>
@@ -128,22 +127,19 @@ export default function ChatbotModal({ onClose }) {
         );
       });
 
-      newSocket.on('stream-end', ({ message }) => {
+      socket.on('stream-end', ({ message }) => {
         const finalMessage = {
           ...(message || { content: '응답을 완료했어요.' }),
           id: message?.id || tempMessageIdRef.current,
           type: message?.role === 'assistant' ? 'bot' : 'user',
           isLoading: false,
         };
-        setMessages((prev) =>
-          prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg))
-        );
-
+        setMessages((prev) => prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg)));
         tempMessageIdRef.current = null;
         tempContentRef.current = '';
       });
 
-      newSocket.on('error', ({ message }) => {
+      socket.on('error', ({ message }) => {
         setMessages((prev) => [...prev, { type: 'bot', content: `❌ 오류: ${message}` }]);
       });
 
@@ -160,6 +156,8 @@ export default function ChatbotModal({ onClose }) {
             content: msg.content,
             timestamp: msg.timestamp,
             role: msg.role,
+            label: msg.label || null,
+            route: msg.route || null,
           }));
 
         if (loadedMessages.length === 0 && !initializedRef.current) {
@@ -186,21 +184,66 @@ export default function ChatbotModal({ onClose }) {
     return () => {
       clearTimeout(toastTimer);
       clearTimeout(hideToast);
-      socketRef.current?.disconnect();
+
+      const socket = socketRef.current;
+      if (socket) {
+        socket.off('stream-start');
+        socket.off('stream-chunk');
+        socket.off('stream-end');
+        socket.off('error');
+      }
+
+      resetSocket();
     };
   }, []);
 
   const sendMessage = useCallback((text) => {
-    const userMsg = { type: 'user', content: text };
+    const trimmedText = text.trim();
+    if (!trimmedText) return;
+
+    const userMsg = { type: 'user', content: trimmedText };
     setMessages((prev) => [...prev, userMsg]);
+    setMessage('');
+
+    const redirectMsg = getRedirectResponse(trimmedText);
+    if (redirectMsg) {
+      const redirectId = `redirect-${Date.now()}`;
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: redirectId,
+          type: 'bot',
+          role: 'assistant',
+          content: redirectMsg.content,
+          label: redirectMsg.label,
+          route: redirectMsg.route,
+        },
+      ]);
+
+      socketRef.current?.emit('stream-end', {
+        message: {
+          role: 'assistant',
+          content: redirectMsg.content,
+          type: 'redirect',
+          label: redirectMsg.label,
+          route: redirectMsg.route,
+        },
+        userMessage: {
+          role: 'user',
+          content: trimmedText,
+          type: 'text',
+          timestamp: new Date().toISOString(),
+        },
+      });
+
+      return;
+    }
 
     if (socketRef.current?.connected) {
-      socketRef.current.emit('user-message', text);
+      socketRef.current.emit('user-message', trimmedText);
     } else {
       setMessages((prev) => [...prev, { type: 'bot', content: '❌ 소켓 연결이 안 되어 있어요.' }]);
     }
-
-    setMessage('');
   }, []);
 
   const handleSend = () => {
@@ -208,9 +251,12 @@ export default function ChatbotModal({ onClose }) {
     sendMessage(message.trim());
   };
 
-  const handleQuickQuestion = useCallback((text) => {
-    sendMessage(text.trim());
-  }, [sendMessage]);
+  const handleQuickQuestion = useCallback(
+    (text) => {
+      sendMessage(text.trim());
+    },
+    [sendMessage]
+  );
 
   const clearConversation = async () => {
     try {

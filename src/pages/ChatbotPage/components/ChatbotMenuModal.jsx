@@ -22,6 +22,11 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
     }
   };
 
+  const handleGoToChatHistory = () => {
+    navigate('/mypage/chat-history');
+    handleClose();
+  };
+
   const handleGoToGuide = () => {
     navigate('/chatbotGuide');
     handleClose();
@@ -58,7 +63,9 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
           <li className="py-5 cursor-pointer" onClick={handleGoToGuide}>
             사용법 안내 및 주의사항
           </li>
-          <li className="py-5">챗봇 상담 내역</li>
+          <li className="py-5 cursor-pointer" onClick={handleGoToChatHistory}>
+            챗봇 상담 내역
+          </li>
           <li className="py-5">이전 질문에서 찾아보기</li>
           <li
             className="py-5 cursor-pointer hover:text-red-600 transition-colors duration-200"
