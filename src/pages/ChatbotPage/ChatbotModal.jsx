@@ -47,11 +47,9 @@ export default function ChatbotModal({ onClose }) {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
-      console.log('📊 FAQ 응답 데이터:', data);
 
       // 백엔드에서 { success: true, data: [questions] } 형태로 오는 것을 처리
       const allFaqs = data.success ? data.data || [] : data || [];
-      console.log('📝 추출된 FAQ 목록:', allFaqs);
       setFaqList(allFaqs);
 
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
