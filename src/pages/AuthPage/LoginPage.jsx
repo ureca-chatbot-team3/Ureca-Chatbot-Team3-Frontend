@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useForm } from '../../hooks/useForm';
 import { validateLoginForm } from '../../utils/validation';
 import { authApi } from '../../apis/authApi';
+import kakaoIcon from '../../assets/svg/kakaoIcon.svg';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -139,7 +140,7 @@ const LoginPage = () => {
                 }`}
               >
                 <img
-                  src="/src/assets/svg/kakaoIcon.svg"
+                  src={kakaoIcon}
                   alt="카카오 아이콘"
                   className="absolute left-5"
                 />
