@@ -8,6 +8,7 @@ import FilterOff from '@/assets/svg/FilterOff.svg';
 import Notice from '@/assets/svg/notice.svg';
 import Filter from './Filter';
 import PlanCard from '@/components/PlanCard';
+import MobilePlanCard from '@/components/MobilePlanCard';
 
 // API 기본 URL 가져오기
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
@@ -352,23 +353,44 @@ const PlanListPage = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 md:px-10 mx-auto">
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan._id}
-              imagePath={plan.imagePath}
-              name={plan.name}
-              infos={plan.infos}
-              id={plan._id}
-              plan_speed={plan.plan_speed}
-              price={plan.price}
-              sale_price={plan.sale_price}
-              price_value={plan.price_value}
-              sale_price_value={plan.sale_price_value}
-              benefits={Object.entries(plan.benefits)}
-            />
-          ))}
-        </div>
+        <>
+          {/* PC - 4열 */}
+          <div className="hidden md:grid grid-cols-4 gap-6">
+            {plans.map((plan) => (
+              <PlanCard
+                key={plan._id}
+                imagePath={plan.imagePath}
+                name={plan.name}
+                infos={plan.infos}
+                plan_speed={plan.plan_speed}
+                price={plan.price}
+                sale_price={plan.sale_price}
+                price_value={plan.price_value}
+                sale_price_value={plan.sale_price_value}
+                benefits={Object.entries(plan.benefits)}
+              />
+            ))}
+          </div>
+
+          {/* 모바일 - 2열 */}
+          <div className="grid grid-cols-2 gap-4 px-4 md:hidden">
+            {plans.map((plan) => (
+              <MobilePlanCard
+                key={plan._id}
+                imagePath={plan.imagePath}
+                name={plan.name}
+                infos={plan.infos}
+                plan_speed={plan.plan_speed}
+                price={plan.price}
+                sale_price={plan.sale_price}
+                price_value={plan.price_value}
+                sale_price_value={plan.sale_price_value}
+                benefits={Object.entries(plan.benefits)}
+              />
+            ))}
+          </div>
+        </>
+
       )}
       {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">
