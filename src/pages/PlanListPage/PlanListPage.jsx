@@ -3,6 +3,9 @@ import SearchIcon from '@/assets/svg/searchIcon.svg';
 import FilterIcon from '@/assets/svg/filterIcon.svg';
 import ToggleDownIcon from '@/assets/svg/toggleDownIcon.svg';
 import ToggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
+import SearchOff from '@/assets/svg/SearchOff.svg';
+import FilterOff from '@/assets/svg/FilterOff.svg';
+import Notice from '@/assets/svg/notice.svg';
 import Filter from './Filter';
 import PlanCard from '@/components/PlanCard';
 
@@ -37,6 +40,8 @@ const PlanListPage = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [search, setSearch] = useState('');
+
+  const [emptyReason, setEmptyReason] = useState('');
 
   const catMap = {
     all: 'all',
@@ -115,6 +120,10 @@ const PlanListPage = () => {
             ? data.data.pagination.totalPages
             : Math.ceil(loadedPlans.length / limit)
         );
+
+        if (!search && Object.keys(filter).length === 0) {
+          setEmptyReason('');
+        }
       })
       .catch(console.error);
   }, [active, sortBy, sortOrder, page, limit, filter, search]);
@@ -127,11 +136,6 @@ const PlanListPage = () => {
     } else {
       setActive(value);
     }
-  };
-
-  const handleFilter = (selectedFilter) => {
-    setFilter(selectedFilter);
-    setPage(1);
   };
 
   const handleSort = (sortField, order) => {
@@ -154,7 +158,15 @@ const PlanListPage = () => {
 
   const handleSearch = () => {
     setPage(1);
+    setEmptyReason('search');
   };
+
+  const handleFilter = (selectedFilter) => {
+    setFilter(selectedFilter);
+    setPage(1);
+    setEmptyReason('filter');
+  };
+
   return (
     <div className="min-h-screen p-10 text-black">
       <div className="flex items-center justify-between mb-[18px]">
@@ -265,31 +277,90 @@ const PlanListPage = () => {
         )}
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
-        {plans.map((plan) => (
-          <PlanCard
-            key={plan._id}
-            id={plan._id}
-            imagePath={plan.imagePath}
-            name={plan.name}
-            infos={plan.infos}
-            plan_speed={plan.plan_speed}
-            price={plan.price}
-            sale_price={plan.sale_price}
-            price_value={plan.price_value}
-            sale_price_value={plan.sale_price_value}
-            benefits={Object.entries(plan.benefits)}
-          />
-        ))}
-      </div>
+      {plans.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center text-black">
+          {/* 이미지 */}
+          <img
+            src={emptyReason === 'filter' ? FilterOff : SearchOff}
+            alt="결과 없음"
+            className="w-[150px] h-auto mb-6"
 
+          />
+
+          {/* 텍스트 */}
+          {emptyReason === 'search' && (
+            <>
+              <p className="m-heading-2 mb-2">‘{search}’ 에 대한 검색 결과가 없습니다.</p>
+              <p className="body-medium text-black mb-8">
+                검색어를 확인하고 입력했는지 다시 확인해 주세요.
+              </p>
+            </>
+          )}
+
+          {emptyReason === 'filter' && (
+            <>
+              <p className="m-heading-2 mb-2">조건에 맞는 요금제가 없어요!</p>
+              <p className="body-medium text-black mb-8">필터를 변경해서 다시 확인해 주세요.</p>
+            </>
+          )}
+
+          {/* 이용안내 박스 */}
+          <div className="text-left border bg-white border-gray-400 rounded-[12px] p-6 w-[830px] h-[172px] flex flex-col justify-center">
+            <p className="font-500 text-gray-700 flex items-center mb-2">
+              <img
+                src={emptyReason === 'filter' ? Notice : Notice}
+                alt="이용안내"
+                className="w-5 h-5 mr-2"
+              />
+              이용안내
+            </p>
+
+            {/* 안내 문구 */}
+            <ul className="list-disc pl-5 space-y-1 text-gray-700 text-[14px] leading-[20px]">
+              {emptyReason === 'filter' ? (
+                <>
+                  <li>선택한 조건에 맞는 요금제가 없습니다.</li>
+                  <li>조건을 줄이거나 초기화 후 다시 시도해 주세요.</li>
+                  <li>숫자가 표시되지 않으면, 현재 선택된 요금제가 없습니다.</li>
+                </>
+              ) : (
+                <>
+                  <li>검색어는 초성이 아닌 단어를 정확히 입력해 주세요.</li>
+                  <li>철자가 맞는지 확인해 주세요.</li>
+                  <li>다른 키워드나 단어로 다시 검색해보세요.</li>
+                  <li>띄어쓰기나 특수문자를 제거해보세요.</li>
+                </>
+              )}
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 gap-6">
+          {plans.map((plan) => (
+            <PlanCard
+              key={plan._id}
+              imagePath={plan.imagePath}
+              name={plan.name}
+              infos={plan.infos}
+              plan_speed={plan.plan_speed}
+              price={plan.price}
+              sale_price={plan.sale_price}
+              price_value={plan.price_value}
+              sale_price_value={plan.sale_price_value}
+              benefits={Object.entries(plan.benefits)}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">
         <nav className="flex items-center space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i + 1}
               onClick={() => setPage(i + 1)}
-              className={`px-2 py-2 rounded-full body-small font-500 transition-colors duration-300 ease-in-out ${
+              className={`w-6 h-6 flex items-center justify-center rounded-full body-small font-500 transition-colors duration-300 ease-in-out ${
                 page === i + 1
                   ? 'bg-pink-600 text-white'
                   : 'bg-gray-500 text-white hover:bg-pink-600'
