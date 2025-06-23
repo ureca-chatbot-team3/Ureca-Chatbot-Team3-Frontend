@@ -2,7 +2,7 @@ import { CHATBOT_GUIDE_SECTIONS } from '../../constants/chatbotGuide.js';
 import ChatbotSidebar from './components/ChatbotSidebar';
 
 const ChatbotGuidePage = () => {
-  const sectionClass = 'border scroll-mt-[var(--header-height)] py-[60px] w-full';
+  const sectionClass = 'scroll-mt-[var(--header-height)] py-[60px] w-full';
 
   return (
     <main className="flex gap-[60px]">
