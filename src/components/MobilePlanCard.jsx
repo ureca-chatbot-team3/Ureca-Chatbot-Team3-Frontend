@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatter } from '../utils/formatter';
 import { getImageUrl } from '../utils/imageUtils';
+import cart2Icon from '../assets/svg/cart2Icon.svg';
 
 const MobilePlanCard = ({
   id,
@@ -278,7 +279,7 @@ const MobilePlanCard = ({
           className={`${cardStyles.buttons.cart} rounded-[4px] bg-gray-700 flex items-center justify-center cursor-pointer`}
         >
           <img
-            src="/src/assets/svg/cart2Icon.svg"
+            src={cart2Icon}
             alt="장바구니"
             className={`${cardStyles.buttons.icon} h-auto`}
           />

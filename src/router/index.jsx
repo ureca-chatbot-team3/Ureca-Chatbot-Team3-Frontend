@@ -3,6 +3,7 @@ import DefaultLayout from '../layout/DefaultLayout';
 import PlanListPage from '../pages/PlanListPage/PlanListPage';
 import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
+import { BookmarkProvider } from '../contexts/BookmarkContext';
 import MainPage from '@/pages/MainPage/MainPage';
 import LoginPage from '@/pages/AuthPage/LoginPage';
 import SignupPage from '@/pages/AuthPage/SignupPage';
@@ -13,14 +14,16 @@ import MyPage from '../pages/MyPage/MyPage';
 import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
 import BookmarkPage from '../pages/MyPage/BookmarkPage';
 import ChatHistoryPage from '../pages/MyPage/ChatHistoryPage';
-import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
+import ChatbotGuidePage from '../pages/ChatbotGuidePage/ChatbotGuidePage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <AuthProvider>
-        <DefaultLayout />
+        <BookmarkProvider>
+          <DefaultLayout />
+        </BookmarkProvider>
       </AuthProvider>
     ),
     children: [
@@ -49,8 +52,8 @@ export const router = createBrowserRouter([
         element: <ComparePage />,
       },
       {
-        path: 'chatbotGuide',
-        element: <ChatbotGuide />,
+        path: 'chatbot-guide',
+        element: <ChatbotGuidePage />,
       },
       {
         path: 'mypage',
@@ -90,9 +93,11 @@ export const router = createBrowserRouter([
     path: '/login',
     element: (
       <AuthProvider>
-        <PublicRoute>
-          <LoginPage />
-        </PublicRoute>
+        <BookmarkProvider>
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        </BookmarkProvider>
       </AuthProvider>
     ),
   },
@@ -100,9 +105,11 @@ export const router = createBrowserRouter([
     path: '/signup',
     element: (
       <AuthProvider>
-        <PublicRoute>
-          <SignupPage />
-        </PublicRoute>
+        <BookmarkProvider>
+          <PublicRoute>
+            <SignupPage />
+          </PublicRoute>
+        </BookmarkProvider>
       </AuthProvider>
     ),
   },
