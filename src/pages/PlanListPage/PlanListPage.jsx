@@ -284,6 +284,7 @@ const PlanListPage = () => {
             src={emptyReason === 'filter' ? FilterOff : SearchOff}
             alt="결과 없음"
             className="w-[150px] h-auto mb-6"
+
           />
 
           {/* 텍스트 */}
