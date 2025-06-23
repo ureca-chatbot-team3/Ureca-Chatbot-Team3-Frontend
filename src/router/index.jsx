@@ -6,6 +6,7 @@ import SignupPage from '@/pages/AuthPage/SignupPage';
 import DiagnosisPage from '../pages/DiagnosisPage/DiagnosisPage';
 import DiagnosisResultPage from '../pages/DiagnosisPage/DiagnosisResultPage';
 import ComparePage from '../pages/ComparePage/ComparePage';
+import ChatbotGuidePage from '../pages/ChatbotGuidePage/ChatbotGuidePage';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: 'compare',
         element: <ComparePage />,
+      },
+      {
+        path: 'chatbot-guide',
+        element: <ChatbotGuidePage />,
       },
     ],
   },
