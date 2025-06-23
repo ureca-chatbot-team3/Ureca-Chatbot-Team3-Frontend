@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { planApi } from '../../apis/planApi';
+import { useBookmarkContext } from '../../contexts/BookmarkContext';
 import { getImageUrl } from '../../utils/imageUtils';
 import toast from 'react-hot-toast';
 
 const ComparePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { bookmarkedPlanIds } = useBookmarkContext();
 
   // 최대 3개의 요금제를 비교할 수 있도록 설정 (데스크톱) / 모바일은 2개
   const [selectedPlans, setSelectedPlans] = useState([null, null, null]);
@@ -153,19 +155,19 @@ const ComparePage = () => {
     const textColor = index === 0 ? 'text-black' : 'text-pink-700';
 
     return (
-      <div className="relative">
+      <div className="relative w-full">
         <div
           className={`w-full ${
             isMobile ? 'h-[80px]' : 'h-[150px]'
-          } border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor}`}
+          } border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor} ${isMobile ? 'min-w-0' : ''}`}
           onClick={() => toggleDropdown(index)}
         >
           {plan ? (
             <>
               {/* 텍스트와 화살표 그룹 */}
-              <div className="flex items-center">
+              <div className="flex items-center flex-1 min-w-0">
                 <span
-                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 ${index === 0 ? 'text-black' : 'text-pink-700'}`}
+                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 ${index === 0 ? 'text-black' : 'text-pink-700'} truncate`}
                 >
                   {plan.name}
                 </span>
@@ -214,8 +216,8 @@ const ComparePage = () => {
           ) : (
             <>
               {/* 선택되지 않은 상태 */}
-              <div className="flex items-center">
-                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black`}>
+              <div className="flex items-center flex-1 min-w-0">
+                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black truncate`}>
                   요금제 선택해주세요
                 </span>
                 {!isMobile && (
@@ -257,27 +259,92 @@ const ComparePage = () => {
 
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            {/* 북마크된 요금제가 있을 때만 표시 */}
+            {availablePlans.filter((plan) => bookmarkedPlanIds.has(plan._id)).length > 0 && (
+              <>
+                <div className="p-3 border-b border-gray-200">
+                  <span
+                    className={`${isMobile ? 'm-body-small' : 'body-large'} font-500 text-pink-700`}
+                  >
+                    저장 목록
+                  </span>
+                </div>
+                {availablePlans
+                  .filter((plan) => bookmarkedPlanIds.has(plan._id))
+                  .map((availablePlan) => {
+                    const isSelected = selectedPlans.some(plan => plan && plan._id === availablePlan._id);
+                    return (
+                      <div
+                        key={`bookmarked-${availablePlan._id}`}
+                        className={`p-3 border-b border-gray-100 last:border-b-0 ${
+                          isSelected 
+                            ? 'bg-gray-200 cursor-not-allowed' 
+                            : 'hover:bg-gray-50 cursor-pointer bg-pink-25'
+                        }`}
+                        onClick={() => !isSelected && handlePlanSelect(availablePlan._id, index)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm ${
+                            isSelected ? 'text-gray-400' : 'text-pink-600'
+                          }`}>★</span>
+                          <span
+                            className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 ${
+                              isSelected ? 'text-gray-400' : 'text-black'
+                            }`}
+                          >
+                            {availablePlan.name}
+                          </span>
+                          {isSelected && !isMobile && (
+                            <span className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400 ml-auto`}>
+                              선택됨
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </>
+            )}
+
             {/* 전체 요금제 */}
-            <div className="p-3 bg-gray-50 border-b border-gray-200">
+            <div className="p-3 border-b border-gray-200">
               <span
-                className={`${isMobile ? 'm-body-small' : 'body-small'} font-700 text-gray-700`}
+                className={`${isMobile ? 'm-body-small' : 'body-large'} font-500 text-gray-700`}
               >
                 전체 요금제
               </span>
             </div>
-            {availablePlans.map((availablePlan) => (
-              <div
-                key={availablePlan._id}
-                className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                onClick={() => handlePlanSelect(availablePlan._id, index)}
-              >
-                <span
-                  className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 text-black`}
-                >
-                  {availablePlan.name}
-                </span>
-              </div>
-            ))}
+            {availablePlans
+              .filter((plan) => !bookmarkedPlanIds.has(plan._id))
+              .map((availablePlan) => {
+                const isSelected = selectedPlans.some(plan => plan && plan._id === availablePlan._id);
+                return (
+                  <div
+                    key={availablePlan._id}
+                    className={`p-3 border-b border-gray-100 last:border-b-0 ${
+                      isSelected 
+                        ? 'bg-gray-200 cursor-not-allowed' 
+                        : 'hover:bg-gray-50 cursor-pointer'
+                    }`}
+                    onClick={() => !isSelected && handlePlanSelect(availablePlan._id, index)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 ${
+                          isSelected ? 'text-gray-400' : 'text-black'
+                        }`}
+                      >
+                        {availablePlan.name}
+                      </span>
+                      {isSelected && !isMobile && (
+                        <span className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400`}>
+                          선택됨
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}}
           </div>
         )}
       </div>
@@ -410,8 +477,10 @@ const ComparePage = () => {
 
         {/* 요금제 상세보기 버튼 */}
         <div className={`${isMobile ? 'pt-3' : 'pt-6'}`}>
-          <button className="w-full py-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors">
-            <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700`}>
+          <button className="group w-full py-3 border border-gray-300 rounded-lg bg-white hover:border-pink-700 hover:bg-pink-200 transition-colors">
+            <span
+              className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700 group-hover:text-pink-700 transition-colors`}
+            >
               요금제 상세보기
             </span>
           </button>
@@ -457,10 +526,10 @@ const ComparePage = () => {
         </div>
 
         {/* 모바일 2개 요금제 비교 */}
-        <div className="flex gap-[10px]">
+        <div className="flex gap-[10px] w-full">
           {[0, 1].map((index) => (
-            <div key={index} className="flex-1">
-              <div className="bg-white rounded-[16px] p-[12px] shadow-soft-black">
+            <div key={index} className="flex-1 min-w-0 max-w-[50%]">
+              <div className="bg-white rounded-[16px] p-[12px] shadow-soft-black w-full overflow-hidden">
                 {/* 모바일 드롭다운 */}
                 {renderDropdown(index, true)}
 

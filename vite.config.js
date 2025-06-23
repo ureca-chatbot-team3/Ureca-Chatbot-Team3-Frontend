@@ -16,7 +16,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': 'http://localhost:5000', // 백엔드 주소
+      '/api': {
+        target: 'http://localhost:5000', // 너의 백엔드 포트 (5000번 서버)
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
     },
   },
 });
