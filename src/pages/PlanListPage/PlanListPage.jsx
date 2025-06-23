@@ -168,11 +168,12 @@ const PlanListPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-10 text-black">
-      <div className="flex items-center justify-between mb-[18px]">
-        <h2 className="heading-2 font-500 text-black">요금제</h2>
-
-        <div className="relative flex items-center rounded-full w-70">
+    <div className="min-h-screen p-0  text-black">
+      <div className="flex items-center justify-between mb-[18px] mt-[18px]">
+        {/* 요금제 */}
+        <h2 className="m-heading-2 md:heading-2 font-500 text-black">요금제</h2>
+        {/* 검색 */}
+        <div className="relative flex items-center rounded-full w-[182px] h-[28px] md:w-70">
           <input
             type="text"
             value={search}
@@ -181,8 +182,15 @@ const PlanListPage = () => {
               if (e.key === 'Enter') handleSearch();
             }}
             placeholder="검색어를 입력하세요."
-            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-full focus:outline-none focus:border-black placeholder:body-large placeholder:font-500"
+            className="
+    border border-gray-500 bg-white text-black rounded-2xl
+    pl-3 pr-10 py-3 w-full
+    focus:outline-none focus:border-black
+    placeholder:text-[12px] md:placeholder:text-[16px]
+    placeholder:leading-[20px] placeholder:font-500
+  "
           />
+
           <div
             className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"
             onClick={handleSearch}
@@ -190,32 +198,80 @@ const PlanListPage = () => {
             <img src={SearchIcon} alt="검색 아이콘" className="w-5 h-5" />
           </div>
         </div>
-
         <div
           className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
           onClick={handleSearch}
         ></div>
       </div>
 
-      <div className="flex items-center justify-between mb-[18px]">
-        <div>
-          <ul className="flex space-x-5 border-b border-gray-500">
-            {categories.map((category) => (
-              <li
-                key={category.value}
-                onClick={() => handleCategoryClick(category.value)}
-                className={`cursor-pointer heading-3 text-black transition-colors pb-2 ${
-                  active === category.value ? 'border-b-2 border-pink-600' : ''
-                }`}
-              >
-                {category.label}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {/* 카테고리 */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-[18px] gap-2 md:gap-0">
+        <ul className="flex space-x-5 border-b border-gray-500 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          {categories.map((category) => (
+            <li
+              key={category.value}
+              onClick={() => handleCategoryClick(category.value)}
+              className={`cursor-pointer m-body-medium font-700 md:heading-3 text-black transition-colors pb-2 ${
+                active === category.value ? 'border-b-2 border-pink-600' : ''
+              }`}
+            >
+              {category.label}
+            </li>
+          ))}
+        </ul>
+      </div>
 
+      <div className="flex flex-row justify-between items-center mb-[18px] gap-2">
+        {/* 토클 */}
+        <div className="relative inline-block text-left text-black  m-body-medium md: font-500">
+          <button
+            onClick={() => setOpen(!open)}
+            className="flex items-center gap-2 cursor-pointer "
+          >
+            {sortBy === 'popular'
+              ? '인기순'
+              : sortBy === 'price_value' && sortOrder === 'asc'
+                ? '낮은 가격순'
+                : sortBy === 'price_value' && sortOrder === 'desc'
+                  ? '높은 가격순'
+                  : sortBy === 'data'
+                    ? '데이터 많은 순'
+                    : '정렬'}
+            <img src={open ? ToggleUpIcon : ToggleDownIcon} alt="토글 아이콘" />
+          </button>
+
+          {open && (
+            <div className="z-50 cursor-pointer absolute mt-2 w-40 text-center bg-white text-black rounded-[16px] shadow">
+              <button
+                onClick={handlePopularSort}
+                className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+              >
+                인기순
+              </button>
+              <button
+                onClick={() => handleSort('price_value', 'asc')}
+                className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+              >
+                낮은 가격순
+              </button>
+              <button
+                onClick={() => handleSort('price_value', 'desc')}
+                className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+              >
+                높은 가격순
+              </button>
+              <button
+                onClick={handleDataSort}
+                className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
+              >
+                데이터 많은 순
+              </button>
+            </div>
+          )}
+        </div>
+        {/* 필터 */}
         <div
-          className="ml-auto flex gap-2 text-black body-large body-500 cursor-pointer"
+          className="ml-auto flex gap-2 text-black m-body-medium font-700 md:body-large md:font-500 cursor-pointer"
           onClick={() => setFilterOpen(true)}
         >
           <img src={FilterIcon} alt="필터 아이콘" className="w-5 h-5" />
@@ -229,54 +285,6 @@ const PlanListPage = () => {
           activeCategory={catMap[active] || 'all'}
         />
       </div>
-
-      <div className="relative inline-block text-left text-black ">
-        <button
-          onClick={() => setOpen(!open)}
-          className="flex items-center gap-2 cursor-pointer mb-[18px]"
-        >
-          {sortBy === 'popular'
-            ? '인기순'
-            : sortBy === 'price_value' && sortOrder === 'asc'
-              ? '낮은 가격순'
-              : sortBy === 'price_value' && sortOrder === 'desc'
-                ? '높은 가격순'
-                : sortBy === 'data'
-                  ? '데이터 많은 순'
-                  : '정렬'}
-          <img src={open ? ToggleUpIcon : ToggleDownIcon} alt="토글 아이콘" />
-        </button>
-
-        {open && (
-          <div className="cursor-pointer absolute mt-2 w-40 text-center bg-white text-black rounded-[16px] shadow">
-            <button
-              onClick={handlePopularSort}
-              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
-            >
-              인기순
-            </button>
-            <button
-              onClick={() => handleSort('price_value', 'asc')}
-              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
-            >
-              낮은 가격순
-            </button>
-            <button
-              onClick={() => handleSort('price_value', 'desc')}
-              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
-            >
-              높은 가격순
-            </button>
-            <button
-              onClick={handleDataSort}
-              className="cursor-pointer block w-full text-center px-4 py-2 hover:text-pink-700"
-            >
-              데이터 많은 순
-            </button>
-          </div>
-        )}
-      </div>
-
       {plans.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center text-black">
           {/* 이미지 */}
@@ -284,7 +292,6 @@ const PlanListPage = () => {
             src={emptyReason === 'filter' ? FilterOff : SearchOff}
             alt="결과 없음"
             className="w-[150px] h-auto mb-6"
-
           />
 
           {/* 텍스트 */}
@@ -305,7 +312,7 @@ const PlanListPage = () => {
           )}
 
           {/* 이용안내 박스 */}
-          <div className="text-left border bg-white border-gray-400 rounded-[12px] p-6 w-[830px] h-[172px] flex flex-col justify-center">
+          <div className="text-left border bg-white border-gray-400 rounded-[12px] p-6 w-full max-w-[830px] h-auto flex flex-col justify-center">
             <p className="font-500 text-gray-700 flex items-center mb-2">
               <img
                 src={emptyReason === 'filter' ? Notice : Notice}
@@ -335,7 +342,7 @@ const PlanListPage = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 md:px-10 mx-auto">
           {plans.map((plan) => (
             <PlanCard
               key={plan._id}
@@ -352,7 +359,6 @@ const PlanListPage = () => {
           ))}
         </div>
       )}
-
       {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">
         <nav className="flex items-center space-x-2">

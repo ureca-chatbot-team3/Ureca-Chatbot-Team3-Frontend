@@ -111,20 +111,30 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
         },
       }}
       overlayClassName="fixed inset-0 flex items-start justify-center pt-16 z-50"
-      className="z-50 py-[40px] px-[30px]  bg-white  w-[797px] max-h-[80vh] rounded-[20px] outline-none flex flex-col overflow-hidden"
+      className="
+        z-50 
+        w-full md:w-[797px] 
+        max-h-[80vh] 
+        bg-white 
+        rounded-[20px] 
+        outline-none 
+        flex flex-col 
+        overflow-hidden
+        py-6 px-4 md:py-[40px] md:px-[30px] 
+      "
       bodyOpenClassName="overflow-hidden"
     >
       {/* 헤더 */}
-      <div className="flex items-center justify-between mb-4  border-b border-gray-500 pb-[35px] ">
-        <h2 className="heading-2  font-semibold text-black">어떤 요금제를 찾으시나요?</h2>
+      <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-[35px]">
+        <h2 className="heading-2 font-semibold text-black">어떤 요금제를 찾으시나요?</h2>
         <button onClick={onClose} className="text-gray-500 hover:text-black">
           <img src={CloseIcon} alt="닫기" className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="flex-grow overflow-y-auto space-y-px-[30px] py-[35px] ">
+      <div className="flex-grow overflow-y-auto space-y-px-[30px] py-[35px]">
         {/* 퀵태그 행 */}
-        <div className="flex gap-[25px] mb-[90px]">
+        <div className="grid grid-cols-3 md:flex md:gap-[25px] mb-[90px] gap-[10px]">
           {quickTags.map((tag) => {
             const isActive = activeQuick === tag;
             return (
@@ -133,13 +143,13 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
                 type="button"
                 onClick={() => toggleQuick(tag)}
                 className={`cursor-pointer 
-          w-[124px] h-[45px] px-[20px] border rounded-[16px]  body-large font-500 
-          ${
-            isActive
-              ? 'border-pink-600 text-pink-600'
-              : 'border-gray-500 bg-white text-gray-700 hover:border-pink-600 hover:text-pink-600'
-          }
-        `}
+                  w-full md:w-[124px] h-[45px] px-[20px] border rounded-[16px] body-large font-500 
+                  ${
+                    isActive
+                      ? 'border-pink-600 text-pink-600'
+                      : 'border-gray-500 bg-white text-gray-700 hover:border-pink-600 hover:text-pink-600'
+                  }
+                `}
               >
                 {tag}
               </button>
@@ -152,7 +162,7 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
           {Object.entries(filterSections).map(([section, options]) => (
             <div key={section}>
               <h3 className="heading-3 font-700 text-black mb-3">{section}</h3>
-              <div className="flex flex-wrap gap-[25px] ">
+              <div className="grid grid-cols-3 md:flex md:flex-wrap gap-[10px] md:gap-[25px]">
                 {options.map((opt) => {
                   const isActive = selected[section].includes(opt);
                   return (
@@ -160,14 +170,14 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
                       key={opt}
                       type="button"
                       onClick={() => toggleOption(section, opt)}
-                      className={` cursor-pointer 
-                    w-[124px] h-[45px] px-[5px] border rounded-[16px]  body-large  font-500 
-                    ${
-                      isActive
-                        ? 'border-pink-600 text-pink-600   '
-                        : 'border-gray-500 bg-white text-gray-700  hover:border-pink-600 hover:text-pink-600'
-                    }
-                  `}
+                      className={`cursor-pointer 
+                        w-full md:w-[124px] h-[45px] px-[5px] border rounded-[16px] body-large font-500 
+                        ${
+                          isActive
+                            ? 'border-pink-600 text-pink-600'
+                            : 'border-gray-500 bg-white text-gray-700 hover:border-pink-600 hover:text-pink-600'
+                        }
+                      `}
                     >
                       {opt}
                     </button>
@@ -179,27 +189,34 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
         </div>
 
         {/* 푸터 */}
-        <div className="flex justify-end items-center ">
+        <div className="flex flex-row justify-end items-center gap-4 mt-[35px]">
           <button
             onClick={() =>
               setSelected(Object.fromEntries(Object.keys(filterSections).map((key) => [key, []])))
             }
-            className=" cursor-pointer
-      w-[201px] h-[45px]
-      flex items-center justify-center 
-      text-gray-600
-      border border-gray-500
-      rounded-full
-      body-large font-500
-      mr-4 mt-[35px]
-    "
+            className="
+              cursor-pointer
+             w-[141px] md:w-[201px] h-[45px]
+              flex items-center justify-center
+              text-gray-600
+              border border-gray-500
+              rounded-full
+              body-large font-500
+            "
           >
             전체해제
           </button>
 
           <button
             onClick={applyFilter}
-            className="cursor-pointer w-[201px] h-[45px] flex items-center justify-center bg-pink-600 text-white rounded-full body-large font-500 mt-[35px]"
+            className="
+              cursor-pointer
+              w-[141px] md:w-[201px] h-[45px]
+              flex items-center justify-center
+              bg-pink-600 text-white
+              rounded-full
+              body-large font-500
+            "
           >
             {count > 0 ? `${count}개 요금제 보기` : '요금제 보기'}
           </button>
