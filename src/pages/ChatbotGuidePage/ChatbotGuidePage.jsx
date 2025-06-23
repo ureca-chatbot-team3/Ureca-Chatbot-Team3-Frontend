@@ -1,5 +1,6 @@
 import AIYopleming from './components/AIYopleming';
 import ChatbotFeatures from './components/ChatbotFeatures';
+import ChatbotNotice from './components/ChatbotNotice';
 import ChatbotUsage from './components/ChatbotUsage';
 import FAQ from './components/FAQ';
 
@@ -27,12 +28,7 @@ const sections = [
   {
     id: 'notice',
     label: '유의사항 안내',
-    content: (
-      <>
-        <h2>FAQ</h2>
-        <p>자주 묻는 질문들</p>
-      </>
-    ),
+    content: <ChatbotNotice />,
   },
 ];
 
