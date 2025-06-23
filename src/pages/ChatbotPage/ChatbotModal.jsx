@@ -41,48 +41,79 @@ export default function ChatbotModal({ onClose }) {
       const response = await axios.get('/api/faq', { withCredentials: true });
 
       // 백엔드에서 { success: true, data: [questions] } 형태로 오는 것을 처리
-      const allFaqs = response.data.success ? response.data.data || [] : response.data || [];
+      const responseData = response.data;
+      let allFaqs = [];
+
+      if (responseData.success && Array.isArray(responseData.data)) {
+        allFaqs = responseData.data;
+      } else if (Array.isArray(responseData)) {
+        allFaqs = responseData;
+      } else {
+        console.warn('⚠️ FAQ 데이터가 배열 형태가 아닙니다:', responseData);
+        allFaqs = [];
+      }
 
       setFaqList(allFaqs);
 
-      const shuffled = allFaqs.sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, 4);
+      // 배열인지 확인 후 sort 사용
+      if (allFaqs.length > 0) {
+        const shuffled = [...allFaqs].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 4);
 
-      let nickname = '';
-      try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
-        nickname = profileRes.data?.data?.nickname || '';
-      } catch (e) {}
+        let nickname = '';
+        try {
+          const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+          nickname = profileRes.data?.data?.nickname || '';
+        } catch (e) {}
 
-      const greetingText = nickname
-        ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
-        : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
+        const greetingText = nickname
+          ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
+          : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
 
-      const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
+        const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
-      socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
-      socketRef.current?.emit('stream-end', {
-        message: { role: 'assistant', content: greetingText, type: 'text' },
-      });
-
-      setTimeout(() => {
-        socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
+        socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
         socketRef.current?.emit('stream-end', {
-          message: { role: 'assistant', content: quickText, type: 'text' },
+          message: { role: 'assistant', content: greetingText, type: 'text' },
         });
-      }, 300);
 
-      setMessages([
-        { id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' },
-        {
-          id: 'quick-questions',
-          type: 'bot',
-          content: (
-            <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />
-          ),
-          role: 'assistant',
-        },
-      ]);
+        setTimeout(() => {
+          socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
+          socketRef.current?.emit('stream-end', {
+            message: { role: 'assistant', content: quickText, type: 'text' },
+          });
+        }, 300);
+
+        setMessages([
+          { id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' },
+          {
+            id: 'quick-questions',
+            type: 'bot',
+            content: (
+              <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />
+            ),
+            role: 'assistant',
+          },
+        ]);
+      } else {
+        // FAQ 데이터가 없을 때 기본 인사말만 표시
+        let nickname = '';
+        try {
+          const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+          nickname = profileRes.data?.data?.nickname || '';
+        } catch (e) {}
+
+        const greetingText = nickname
+          ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똁똁하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씨해주세요! ✨`
+          : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똁눁하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씨해주세요! ✨`;
+
+        socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
+        socketRef.current?.emit('stream-end', {
+          message: { role: 'assistant', content: greetingText, type: 'text' },
+        });
+
+        setMessages([{ id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' }]);
+      }
     } catch (err) {
       console.error('❌ 초기 인사말 구성 실패:', err);
     }
