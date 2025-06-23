@@ -1,4 +1,5 @@
 import AIYopleming from './components/AIYopleming';
+import ChatbotUsage from './components/ChatbotUsage';
 
 const sections = [
   {
@@ -8,13 +9,8 @@ const sections = [
   },
   {
     id: 'usage',
-    label: '사용법',
-    content: (
-      <>
-        <h2>사용법</h2>
-        <p>챗봇 사용법 설명</p>
-      </>
-    ),
+    label: '어떻게 사용하나요?',
+    content: <ChatbotUsage />,
   },
   {
     id: 'faq',
@@ -29,8 +25,7 @@ const sections = [
 ];
 
 const ChatbotGuidePage = () => {
-  const sectionClass =
-    'h-[calc(100vh-var(--header-height))] scroll-mt-[var(--header-height)] py-[60px] w-full';
+  const sectionClass = 'border scroll-mt-[var(--header-height)] py-[60px] w-full';
 
   return (
     <main className="flex gap-[60px]">
