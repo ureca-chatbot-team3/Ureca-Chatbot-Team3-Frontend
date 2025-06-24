@@ -158,7 +158,7 @@ const ComparePage = () => {
       <div className="relative w-full">
         <div
           className={`w-full ${
-            isMobile ? 'h-[80px]' : 'h-[150px]'
+            isMobile ? 'h-[60px]' : 'h-[100px]'
           } border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor} ${isMobile ? 'min-w-0' : ''}`}
           onClick={() => toggleDropdown(index)}
         >
@@ -217,7 +217,9 @@ const ComparePage = () => {
             <>
               {/* 선택되지 않은 상태 */}
               <div className="flex items-center flex-1 min-w-0">
-                <span className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black truncate`}>
+                <span
+                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-black truncate`}
+                >
                   요금제 선택해주세요
                 </span>
                 {!isMobile && (
@@ -272,21 +274,25 @@ const ComparePage = () => {
                 {availablePlans
                   .filter((plan) => bookmarkedPlanIds.has(plan._id))
                   .map((availablePlan) => {
-                    const isSelected = selectedPlans.some(plan => plan && plan._id === availablePlan._id);
+                    const isSelected = selectedPlans.some(
+                      (plan) => plan && plan._id === availablePlan._id
+                    );
                     return (
                       <div
                         key={`bookmarked-${availablePlan._id}`}
                         className={`p-3 border-b border-gray-100 last:border-b-0 ${
-                          isSelected 
-                            ? 'bg-gray-200 cursor-not-allowed' 
+                          isSelected
+                            ? 'bg-gray-200 cursor-not-allowed'
                             : 'hover:bg-gray-50 cursor-pointer bg-pink-25'
                         }`}
                         onClick={() => !isSelected && handlePlanSelect(availablePlan._id, index)}
                       >
                         <div className="flex items-center gap-2">
-                          <span className={`text-sm ${
-                            isSelected ? 'text-gray-400' : 'text-pink-600'
-                          }`}>★</span>
+                          <span
+                            className={`text-sm ${isSelected ? 'text-gray-400' : 'text-pink-600'}`}
+                          >
+                            ★
+                          </span>
                           <span
                             className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 ${
                               isSelected ? 'text-gray-400' : 'text-black'
@@ -295,7 +301,9 @@ const ComparePage = () => {
                             {availablePlan.name}
                           </span>
                           {isSelected && !isMobile && (
-                            <span className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400 ml-auto`}>
+                            <span
+                              className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400 ml-auto`}
+                            >
                               선택됨
                             </span>
                           )}
@@ -305,7 +313,6 @@ const ComparePage = () => {
                   })}
               </>
             )}
-
             {/* 전체 요금제 */}
             <div className="p-3 border-b border-gray-200">
               <span
@@ -317,13 +324,15 @@ const ComparePage = () => {
             {availablePlans
               .filter((plan) => !bookmarkedPlanIds.has(plan._id))
               .map((availablePlan) => {
-                const isSelected = selectedPlans.some(plan => plan && plan._id === availablePlan._id);
+                const isSelected = selectedPlans.some(
+                  (plan) => plan && plan._id === availablePlan._id
+                );
                 return (
                   <div
                     key={availablePlan._id}
                     className={`p-3 border-b border-gray-100 last:border-b-0 ${
-                      isSelected 
-                        ? 'bg-gray-200 cursor-not-allowed' 
+                      isSelected
+                        ? 'bg-gray-200 cursor-not-allowed'
                         : 'hover:bg-gray-50 cursor-pointer'
                     }`}
                     onClick={() => !isSelected && handlePlanSelect(availablePlan._id, index)}
@@ -337,14 +346,17 @@ const ComparePage = () => {
                         {availablePlan.name}
                       </span>
                       {isSelected && !isMobile && (
-                        <span className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400`}>
+                        <span
+                          className={`${isMobile ? 'm-body-small' : 'body-small'} text-gray-400`}
+                        >
                           선택됨
                         </span>
                       )}
                     </div>
                   </div>
                 );
-              })}}
+              })}
+            }
           </div>
         )}
       </div>
@@ -477,7 +489,10 @@ const ComparePage = () => {
 
         {/* 요금제 상세보기 버튼 */}
         <div className={`${isMobile ? 'pt-3' : 'pt-6'}`}>
-          <button className="group w-full py-3 border border-gray-300 rounded-lg bg-white hover:border-pink-700 hover:bg-pink-200 transition-colors">
+          <button
+            className="group w-full py-3 border border-gray-300 rounded-lg bg-white hover:border-pink-700 hover:bg-pink-200 transition-colors"
+            onClick={() => navigate(`/plans/${plan?._id}`)}
+          >
             <span
               className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700 group-hover:text-pink-700 transition-colors`}
             >
