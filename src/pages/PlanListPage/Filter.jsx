@@ -60,7 +60,6 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
 
     const params = new URLSearchParams();
     params.append('category', activeCategory || 'all');
-
     params.append('page', 1);
     params.append('limit', 0);
 
