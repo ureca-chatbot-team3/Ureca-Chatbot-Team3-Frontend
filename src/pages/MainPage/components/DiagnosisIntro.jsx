@@ -4,10 +4,13 @@ import DiagnosisImage from '@/assets/svg/Diagnosis.svg';
 import QuestionICon from '@/assets/svg/questionIcon.svg';
 import TimeIcon from '@/assets/svg/timeIcon.svg';
 import { useNavigate } from 'react-router-dom';
+import useIsMobile from '../../../hooks/useIsMobile';
 
 const SecondSection = () => {
   const naviagte = useNavigate();
   const ref = useRef(null);
+
+  const isMobile = useIsMobile();
 
   // 스크롤 진행도 가져오기
   const { scrollYProgress } = useScroll({
@@ -24,10 +27,10 @@ const SecondSection = () => {
       className="content-max-width mx-auto md:h-[calc(100vh-var(--header-height))]"
     >
       <motion.div
-        className="py-2xl md:py-xl flex flex-col gap-sm md:gap-md items-center h-full"
-        style={{ opacity }}
+        className="pt-2xl md:py-xl flex flex-col gap-sm md:gap-md items-center h-full"
+        style={isMobile ? {} : { opacity }}
       >
-        <h2 className="m-heading-2 font:700 md:heading-1 md:font-500 text-pink-700">
+        <h2 className="m-heading-2 font-700 md:heading-1 md:font-500 text-pink-700">
           맞춤 요금제 진단
         </h2>
         <p className="m-body-medium font-500 md:heading-3 md:font-300 mb-sm">
