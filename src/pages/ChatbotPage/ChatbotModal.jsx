@@ -19,12 +19,30 @@ export default function ChatbotModal({ onClose }) {
   const [messages, setMessages] = useState([]);
   const [faqList, setFaqList] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [nickname, setNickname] = useState(''); // ✅ 닉네임 상태 추가
 
   const sessionIdRef = useRef(null);
   const tempMessageIdRef = useRef(null);
   const tempContentRef = useRef('');
   const initializedRef = useRef(false);
   const socketRef = useRef(null);
+
+  const getGreetingText = () => {
+    return nickname
+      ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
+      : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
+  };
+
+  const handleResetMessages = () => {
+    socketRef.current?.emit('force-end-session');
+    const greeting = {
+      role: 'assistant',
+      content: getGreetingText(),
+      type: 'bot',
+      timestamp: new Date(),
+    };
+    setMessages([greeting]);
+  };
 
   const getOrCreateSessionId = (userId) => {
     if (userId) return `user_${userId}`;
@@ -45,15 +63,7 @@ export default function ChatbotModal({ onClose }) {
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
 
-      let nickname = '';
-      try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
-        nickname = profileRes.data?.data?.nickname || '';
-      } catch (e) {}
-
-      const greetingText = nickname
-        ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
-        : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
+      const greetingText = getGreetingText();
 
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
@@ -94,6 +104,9 @@ export default function ChatbotModal({ onClose }) {
         const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
         tempUserId = profileRes.data?.data?._id || null;
         setUserId(tempUserId);
+
+        const fetchedNickname = profileRes.data?.data?.nickname || '';
+        setNickname(fetchedNickname); // ✅ 닉네임 상태 저장
       } catch (e) {}
 
       const sessionId = getOrCreateSessionId(tempUserId);
@@ -102,13 +115,11 @@ export default function ChatbotModal({ onClose }) {
       const socket = getSocket(sessionId, tempUserId);
       socketRef.current = socket;
 
-      // ✅ 기존 리스너 제거 (중복 방지)
       socket.off('stream-start');
       socket.off('stream-chunk');
       socket.off('stream-end');
       socket.off('error');
 
-      // ✅ 새 리스너 등록
       socket.on('stream-start', ({ messageId }) => {
         tempMessageIdRef.current = messageId;
         tempContentRef.current = '';
@@ -200,6 +211,22 @@ export default function ChatbotModal({ onClose }) {
   const sendMessage = useCallback((text) => {
     const trimmedText = text.trim();
     if (!trimmedText) return;
+
+    // ✅ 이전 응답 강제 종료
+    socketRef.current?.emit('force-end');
+
+    // ✅ 로딩 메시지에 '중단됨' 표시
+    setMessages((prev) =>
+      prev.map((msg) =>
+        msg.isLoading
+          ? {
+              ...msg,
+              isLoading: false,
+              content: msg.content + '❗요청이 중단되었어요.',
+            }
+          : msg
+      )
+    );
 
     const userMsg = { type: 'user', content: trimmedText };
     setMessages((prev) => [...prev, userMsg]);
@@ -298,7 +325,11 @@ export default function ChatbotModal({ onClose }) {
           <ChatbotToast visible={showToast} />
           <ChatbotHeader onClose={handleClose} onOpenMenu={() => setShowMenu(true)} />
           <ChatbotNoticeBar />
-          <ChatMessages messages={messages} onQuickQuestionSelect={handleQuickQuestion} />
+          <ChatMessages
+            messages={messages}
+            onQuickQuestionSelect={handleQuickQuestion}
+            onResetMessages={handleResetMessages}
+          />
           <ChatbotInput message={message} setMessage={setMessage} onSend={handleSend} />
         </div>
       </div>

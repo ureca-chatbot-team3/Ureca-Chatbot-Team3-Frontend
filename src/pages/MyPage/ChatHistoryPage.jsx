@@ -8,6 +8,7 @@ import UserBubble from '../ChatbotPage/components/UserBubble';
 
 import upIcon from '../../assets/svg/upIcon.svg';
 import downIcon from '../../assets/svg/downIcon.svg';
+import { splitIntoSessions } from '../../utils/splitConversationSessions';
 
 const ChatHistoryPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ const ChatHistoryPage = () => {
   const [expandedSessions, setExpandedSessions] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // ✅ 대화 불러오기
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
@@ -27,7 +27,17 @@ const ChatHistoryPage = () => {
 
         if (userId) {
           const res = await axios.get(`/api/conversations?userId=${userId}&full=true`);
-          setConversationList(res.data);
+          const fullConversations = res.data;
+
+          const splitSessions = fullConversations.flatMap((conv) =>
+            splitIntoSessions(conv.messages).map((sessionMessages, index) => ({
+              _id: `${conv._id}-${index}`,
+              updatedAt: conv.updatedAt,
+              messages: sessionMessages,
+            }))
+          );
+
+          setConversationList(splitSessions);
         }
       } catch (err) {
         console.error('❌ 대화 불러오기 실패:', err);
@@ -37,7 +47,6 @@ const ChatHistoryPage = () => {
     fetchChatHistory();
   }, []);
 
-  // ✅ 챗봇 세션 토글
   const toggleSession = (sessionId) => {
     setExpandedSessions((prev) => ({
       ...prev,
@@ -45,7 +54,6 @@ const ChatHistoryPage = () => {
     }));
   };
 
-  // ✅ 모바일 메뉴 토글
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -103,7 +111,7 @@ const ChatHistoryPage = () => {
 
   return (
     <>
-      {/* 모바일 레이아웃 */}
+      {/* 모바일 */}
       <div className="md:hidden">
         <main className="min-h-screen bg-gray-200 py-[20px]">
           <div className="max-w-[430px] mx-auto">
@@ -125,9 +133,7 @@ const ChatHistoryPage = () => {
             <div className="w-full h-[2px] bg-black"></div>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                isMenuOpen ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'
-              }`}
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}
             >
               <div className="pb-[16px]">
                 <div

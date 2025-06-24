@@ -1,5 +1,5 @@
 import sendIcon from '../../../assets/images/send-icon.png';
-import sendIconWhite from '../../../assets/images/sendIconWhite.png'
+import sendIconWhite from '../../../assets/images/sendIconWhite.png';
 
 export default function ChatbotInput({ message, setMessage, onSend }) {
   const handleKeyDown = (e) => {
