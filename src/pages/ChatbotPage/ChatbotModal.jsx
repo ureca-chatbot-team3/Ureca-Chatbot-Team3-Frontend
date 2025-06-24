@@ -19,7 +19,8 @@ export default function ChatbotModal({ onClose }) {
   const [messages, setMessages] = useState([]);
   const [faqList, setFaqList] = useState([]);
   const [userId, setUserId] = useState(null);
-  const [nickname, setNickname] = useState(''); // ✅ 닉네임 상태 추가
+  const [nickname, setNickname] = useState('');
+  const [isChatEnded, setIsChatEnded] = useState(false);
 
   const sessionIdRef = useRef(null);
   const tempMessageIdRef = useRef(null);
@@ -42,6 +43,7 @@ export default function ChatbotModal({ onClose }) {
       timestamp: new Date(),
     };
     setMessages([greeting]);
+    setIsChatEnded(false);
   };
 
   const getOrCreateSessionId = (userId) => {
@@ -64,7 +66,6 @@ export default function ChatbotModal({ onClose }) {
       const selected = shuffled.slice(0, 4);
 
       const greetingText = getGreetingText();
-
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
       socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
@@ -90,10 +91,28 @@ export default function ChatbotModal({ onClose }) {
           role: 'assistant',
         },
       ]);
+      setIsChatEnded(false);
     } catch (err) {
       console.error('❌ 초기 인사말 구성 실패:', err);
     }
   };
+
+  useEffect(() => {
+    const lastMsg = messages.at(-1);
+    console.log('📦 마지막 메시지:', lastMsg);
+
+    if (
+      (lastMsg?.role === 'system' || lastMsg?.type === 'notice') &&
+      typeof lastMsg.content === 'string' &&
+      lastMsg.content.includes('대화는 종료되었습니다')
+    ) {
+      console.log('🔒 입력창 비활성화 조건 통과');
+      setIsChatEnded(true);
+    } else {
+      console.log('🔓 입력창 활성화');
+      setIsChatEnded(false);
+    }
+  }, [messages]);
 
   useEffect(() => {
     setIsVisible(true);
@@ -104,9 +123,7 @@ export default function ChatbotModal({ onClose }) {
         const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
         tempUserId = profileRes.data?.data?._id || null;
         setUserId(tempUserId);
-
-        const fetchedNickname = profileRes.data?.data?.nickname || '';
-        setNickname(fetchedNickname); // ✅ 닉네임 상태 저장
+        setNickname(profileRes.data?.data?.nickname || '');
       } catch (e) {}
 
       const sessionId = getOrCreateSessionId(tempUserId);
@@ -212,10 +229,8 @@ export default function ChatbotModal({ onClose }) {
     const trimmedText = text.trim();
     if (!trimmedText) return;
 
-    // ✅ 이전 응답 강제 종료
     socketRef.current?.emit('force-end');
 
-    // ✅ 로딩 메시지에 '중단됨' 표시
     setMessages((prev) =>
       prev.map((msg) =>
         msg.isLoading
@@ -289,9 +304,9 @@ export default function ChatbotModal({ onClose }) {
     try {
       const sessionId = sessionIdRef.current;
       const params = userId ? { userId } : { sessionId };
-
       await axios.delete('/api/conversations', { params });
       setMessages([]);
+      setIsChatEnded(false);
       initializeGreetingAndFAQ();
     } catch (err) {
       console.error('❌ 대화 초기화 실패:', err);
@@ -330,7 +345,12 @@ export default function ChatbotModal({ onClose }) {
             onQuickQuestionSelect={handleQuickQuestion}
             onResetMessages={handleResetMessages}
           />
-          <ChatbotInput message={message} setMessage={setMessage} onSend={handleSend} />
+          <ChatbotInput
+            message={message}
+            setMessage={setMessage}
+            onSend={handleSend}
+            disabled={isChatEnded}
+          />
         </div>
       </div>
     </div>
