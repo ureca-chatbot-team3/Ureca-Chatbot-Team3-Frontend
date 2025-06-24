@@ -8,7 +8,7 @@ const REDIRECT_KEYWORDS = [
     label: '전체 요금제 보기',
   },
   {
-    keywords: ['비교', '더'],
+    keywords: ['비교'],
     route: '/compare',
     label: '요금제 비교하기',
   },
