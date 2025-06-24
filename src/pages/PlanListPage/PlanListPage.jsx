@@ -103,7 +103,7 @@ const PlanListPage = () => {
     }
 
     fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) {
@@ -390,7 +390,6 @@ const PlanListPage = () => {
             ))}
           </div>
         </>
-
       )}
       {/* Pagination은 항상 유지 */}
       <div className="flex justify-center mt-10">
