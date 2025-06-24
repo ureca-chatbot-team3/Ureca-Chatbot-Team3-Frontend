@@ -5,6 +5,11 @@ import PlanCard from '../../components/PlanCard';
 import MobilePlanCard from '../../components/MobilePlanCard';
 import confetti from 'canvas-confetti';
 
+// 메달 이미지 import
+import firstMedal from '@/assets/svg/1-medal.svg';
+import secondMedal from '@/assets/svg/2-medal.svg';
+import thirdMedal from '@/assets/svg/3-medal.svg';
+
 // 순위별 빛나는 테두리 효과를 위한 인라인 스타일
 const createAnimationStyles = () => {
   const style = document.createElement('style');
@@ -272,9 +277,7 @@ const DiagnosisResultPage = () => {
                 <h2 className="m-body-large font-700 mb-4 text-black md:heading-3">
                   결과를 불러올 수 없습니다
                 </h2>
-                <p className="m-body-medium mb-6 text-gray-700 md:body-large">
-                  {error}
-                </p>
+                <p className="m-body-medium mb-6 text-gray-700 md:body-large">{error}</p>
                 <div className="flex justify-center">
                   <button
                     onClick={handleRetryDiagnosis}
@@ -389,7 +392,7 @@ const DiagnosisResultPage = () => {
                 {isWinner && (
                   <div className="absolute -top-[18px] -left-[9px] z-10">
                     <img
-                      src="/src/assets/svg/1-medal.svg"
+                      src={firstMedal}
                       alt="1등 메달"
                       className="w-[72px] h-[72px]"
                       style={{
@@ -403,7 +406,7 @@ const DiagnosisResultPage = () => {
                 {isSecond && (
                   <div className="absolute -top-[7px] -left-[7px] z-10">
                     <img
-                      src="/src/assets/svg/2-medal.svg"
+                      src={secondMedal}
                       alt="2등 메달"
                       className="w-[72px] h-[63px]"
                       style={{
@@ -417,7 +420,7 @@ const DiagnosisResultPage = () => {
                 {isThird && (
                   <div className="absolute -top-[7px] -left-[7px] z-10">
                     <img
-                      src="/src/assets/svg/3-medal.svg"
+                      src={thirdMedal}
                       alt="3등 메달"
                       className="w-[72px] h-[63px]"
                       style={{
@@ -495,7 +498,7 @@ const DiagnosisResultPage = () => {
                       {isWinner && (
                         <div className="absolute -top-[12px] -left-[6px] z-10">
                           <img
-                            src="/src/assets/svg/1-medal.svg"
+                            src={firstMedal}
                             alt="1등 메달"
                             className="w-[48px] h-[48px]"
                             style={{
@@ -509,7 +512,7 @@ const DiagnosisResultPage = () => {
                       {isSecond && (
                         <div className="absolute -top-[4px] -left-[4px] z-10">
                           <img
-                            src="/src/assets/svg/2-medal.svg"
+                            src={secondMedal}
                             alt="2등 메달"
                             className="w-[48px] h-[42px]"
                             style={{
@@ -523,7 +526,7 @@ const DiagnosisResultPage = () => {
                       {isThird && (
                         <div className="absolute -top-[4px] -left-[4px] z-10">
                           <img
-                            src="/src/assets/svg/3-medal.svg"
+                            src={thirdMedal}
                             alt="3등 메달"
                             className="w-[48px] h-[42px]"
                             style={{
