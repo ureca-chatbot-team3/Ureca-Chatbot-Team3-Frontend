@@ -48,6 +48,37 @@ const PlanListPage = () => {
       params.append('limit', 100);
     }
 
+    (filter['요금범위'] || []).forEach((r) => {
+      if (r === '~5만원대') {
+        params.append('minPrice', 0);
+        params.append('maxPrice', 50000);
+      } else if (r === '6~8만원대') {
+        params.append('minPrice', 60000);
+        params.append('maxPrice', 80000);
+      } else if (r === '9만원대~') {
+        params.append('minPrice', 90000);
+      }
+    });
+
+    if (filter['데이터']?.length) {
+      params.append('dataOption', filter['데이터'].join(','));
+    }
+
+    if (filter['연령대']?.length) {
+      const ages = filter['연령대'].filter((age) => age !== '전체대상');
+      if (ages.length > 0) {
+        params.append('ageRange', ages.join(','));
+      }
+    }
+
+    if (filter['혜택']?.length) {
+      params.append('brands', filter['혜택'].join(','));
+    }
+
+    if (filter.quickTag && filter.quickTag !== '#전체') {
+      params.append('quickTag', filter.quickTag.replace('#', ''));
+    }
+
     fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
       credentials: 'include',
     })
