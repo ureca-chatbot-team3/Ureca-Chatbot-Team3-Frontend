@@ -48,18 +48,51 @@ const PlanListPage = () => {
       params.append('limit', 100);
     }
 
+    (filter['요금범위'] || []).forEach((r) => {
+      if (r === '~5만원대') {
+        params.append('minPrice', 0);
+        params.append('maxPrice', 50000);
+      } else if (r === '6~8만원대') {
+        params.append('minPrice', 60000);
+        params.append('maxPrice', 80000);
+      } else if (r === '9만원대~') {
+        params.append('minPrice', 90000);
+      }
+    });
+
+    if (filter['데이터']?.length) {
+      params.append('dataOption', filter['데이터'].join(','));
+    }
+
+    if (filter['연령대']?.length) {
+      const ages = filter['연령대'].filter((age) => age !== '전체대상');
+      if (ages.length > 0) {
+        params.append('ageRange', ages.join(','));
+      }
+    }
+
+    if (filter['혜택']?.length) {
+      params.append('brands', filter['혜택'].join(','));
+    }
+
+    if (filter.quickTag && filter.quickTag !== '#전체') {
+      params.append('quickTag', filter.quickTag.replace('#', ''));
+    }
+
     fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
       credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) {
+          console.log('📡 응답 상태:', res.status);
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         return res.json();
       })
       .then((data) => {
+        console.log('📦 응답 데이터:', data);
         let loadedPlans = data.data.plans;
-
+        console.log('🎁 불러온 plans:', loadedPlans);
         if (sortBy === 'popular') {
           loadedPlans.sort((a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0));
         } else if (sortBy === 'data') {
@@ -228,17 +261,23 @@ const PlanListPage = () => {
         <>
           <div className="hidden md:grid grid-cols-4 gap-x-6 gap-y-12">
             {plans.map((plan) => (
-
-              <PlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
-
+              <PlanCard
+                key={plan._id}
+                {...plan}
+                id={plan._id}
+                benefits={Object.entries(plan.benefits)}
+              />
             ))}
           </div>
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-4 md:hidden">
             {plans.map((plan) => (
-
-              <MobilePlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
-
+              <MobilePlanCard
+                key={plan._id}
+                {...plan}
+                id={plan._id}
+                benefits={Object.entries(plan.benefits)}
+              />
             ))}
           </div>
         </>

@@ -157,12 +157,6 @@ const Header = () => {
           <Link to="/chatbot-guide" className="body-medium font-500 text-black">
             챗봇 안내
           </Link>
-          <Link
-            to="/store"
-            className="body-medium font-500 text-black hover:text-pink-700 transition"
-          >
-            매장 찾기
-          </Link>
         </div>
 
         {/* 오른쪽 아이콘 버튼 */}
