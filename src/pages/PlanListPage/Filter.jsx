@@ -37,7 +37,10 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
   const [count, setCount] = useState(0);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const toggleQuick = (tag) => setActiveQuick(tag);
+  const toggleQuick = (tag) => {
+    setActiveQuick((prev) => (prev === tag ? '' : tag));
+  };
+
   const toggleOption = (section, option) => {
     setSelected((prev) => {
       const arr = prev[section];

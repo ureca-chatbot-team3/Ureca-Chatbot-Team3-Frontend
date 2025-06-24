@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatter } from '../utils/formatter';
 import { getImageUrl } from '../utils/imageUtils';
+import cart2Icon from '../assets/svg/cart2Icon.svg';
 
 const MobilePlanCard = ({
   id,
@@ -50,7 +51,7 @@ const MobilePlanCard = ({
         },
       }
     : {
-        container: 'w-[164px] h-[326px]',
+        container: 'w-[164px] h-[370px]',
         spacing: {
           top: 'h-[12px]',
           afterImage: 'h-[12px]',
@@ -63,7 +64,7 @@ const MobilePlanCard = ({
         image: 'w-[134px] h-[122px]',
         buttons: {
           detail: 'w-[66px] h-[21px]',
-          compare: 'w-[43px] h-[21px]',
+          compare: 'w-[55px] h-[21px]',
           cart: 'w-[25px] h-[21px]',
           icon: 'w-[10px]',
           gap: 'gap-[4px]',
@@ -277,11 +278,7 @@ const MobilePlanCard = ({
         <button
           className={`${cardStyles.buttons.cart} rounded-[4px] bg-gray-700 flex items-center justify-center cursor-pointer`}
         >
-          <img
-            src="/src/assets/svg/cart2Icon.svg"
-            alt="장바구니"
-            className={`${cardStyles.buttons.icon} h-auto`}
-          />
+          <img src={cart2Icon} alt="장바구니" className={`${cardStyles.buttons.icon} h-auto`} />
         </button>
       </div>
 
