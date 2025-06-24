@@ -19,19 +19,26 @@ const SecondSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={ref} className="content-max-width mx-auto h-[calc(100vh-var(--header-height))]">
+    <section
+      ref={ref}
+      className="content-max-width mx-auto md:h-[calc(100vh-var(--header-height))]"
+    >
       <motion.div
-        className="flex flex-col gap-md justify-center items-center h-full"
+        className="py-2xl md:py-xl flex flex-col gap-sm md:gap-md items-center h-full"
         style={{ opacity }}
       >
-        <h2 className="heading-1 font-500 text-pink-700">맞춤 요금제 진단</h2>
-        <p className="heading-3 font-300 mb-sm">
+        <h2 className="m-heading-2 font:700 md:heading-1 md:font-500 text-pink-700">
+          맞춤 요금제 진단
+        </h2>
+        <p className="m-body-medium font-500 md:heading-3 md:font-300 mb-sm">
           간단한 질문을 통해, 딱 맞는 요금제를 추천해 드려요
         </p>
-        <div className="p-lg max-w-[802px] bg-white flex flex-col w-full justify-center items-center gap-md rounded-[20px] shadow-[0px_0px_10px_0px_rgba(0,0,12,0.08)]">
-          <img src={DiagnosisImage} alt="맞춤 요금제 진단 안내" />
+        <div className="md:p-lg max-w-[300px] md:max-w-[802px] md:bg-white flex flex-col w-full justify-center items-center gap-md rounded-[20px] md:shadow-[0px_0px_10px_0px_rgba(0,0,12,0.08)]">
+          <div className="max-w-[253px] md:max-w-[319px]">
+            <img src={DiagnosisImage} alt="맞춤 요금제 진단 안내" />
+          </div>
 
-          <div className="flex justify-between max-w-[410px] w-full">
+          <div className="flex justify-between max-w-[410px] w-full m-body-small font-500 md:body-medium">
             <div className="flex gap-2 items-center">
               <img src={QuestionICon} alt="질문 수" />
               <span>질문 수: 10개</span>
@@ -42,7 +49,7 @@ const SecondSection = () => {
             </div>
           </div>
           <button
-            className="max-w-[270px] w-full bg-linear-[135deg,var(--color-pink-700),var(--color-purple-700)] px-md py-sm body-midium font-500 rounded-(--spacing-sm) text-white"
+            className="max-w-[250px] md:max-w-[270px] w-full bg-linear-[135deg,var(--color-pink-700),var(--color-purple-700)] px-md py-[10px] md:py-sm body-midium font-500 rounded-[12px] md:rounded-(--spacing-sm) text-white"
             onClick={() => naviagte('/diagnosis')}
           >
             진단 시작하기

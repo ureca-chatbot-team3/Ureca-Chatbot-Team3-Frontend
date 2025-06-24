@@ -23,7 +23,7 @@ const bubbles = [
 
 const BackgroundWrapper = ({ children }) => {
   return (
-    <div className="px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-white)_30%,var(--color-purple-200)_58%] bg-fixed bg-cover bg-center min-h-[calc(100vh-var(--header-height))]">
+    <div className="px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-white)_55%,var(--color-purple-200)] bg-white md:bg-linear-[to_bottom,var(--color-white)_30%,var(--color-purple-200)_58%] bg-fixed bg-cover bg-center">
       <div className="fixed inset-0 pointer-events-none">
         {bubbles.map((bubble, i) => (
           <motion.span
