@@ -11,7 +11,7 @@ export default function ChatbotLauncher({ onClick }) {
           <img
             src={flamingo}
             alt="플밍이 GIF"
-            className="w-[61px] h-[61px] object-contain pointer-events-none"
+            className="w-[61px] h-[61px] object-contain pointer-events-none border-1 border-white rounded-full"
           />
         </button>
       </div>

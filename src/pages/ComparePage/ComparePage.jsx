@@ -148,7 +148,10 @@ const ComparePage = () => {
     return (
       <div className="relative w-full">
         <div
-          className={`w-full ${isMobile ? 'h-[80px]' : 'h-[150px]'} border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor} ${isMobile ? 'min-w-0' : ''}`}
+          className={`w-full ${
+            isMobile ? 'h-[60px]' : 'h-[100px]'
+          } border border-gray-300 rounded-lg px-4 flex items-center cursor-pointer bg-white ${textColor} ${isMobile ? 'min-w-0' : ''}`}
+
           onClick={() => toggleDropdown(index)}
         >
           {plan ? (
@@ -278,6 +281,11 @@ const ComparePage = () => {
                             ★
                           </span>
                           <span
+                            className={`text-sm ${isSelected ? 'text-gray-400' : 'text-pink-600'}`}
+                          >
+                            ★
+                          </span>
+                          <span
                             className={`${isMobile ? 'm-body-medium' : 'body-medium'} font-700 ${isSelected ? 'text-gray-400' : 'text-black'}`}
                           >
                             {availablePlan.name}
@@ -295,7 +303,7 @@ const ComparePage = () => {
                   })}
               </>
             )}
-
+            {/* 전체 요금제 */}
             <div className="p-3 border-b border-gray-200">
               <span
                 className={`${isMobile ? 'm-body-small' : 'body-large'} font-500 text-gray-700`}
@@ -336,6 +344,7 @@ const ComparePage = () => {
                   </div>
                 );
               })}
+            }
           </div>
         )}
       </div>
@@ -388,13 +397,36 @@ const ComparePage = () => {
           </div>
         )}
 
-        {/* 상세보기 버튼 */}
-        <button
+<
+        {/* 프리미엄 혜택 */}
+        <div className={`${isMobile ? 'h-[80px]' : 'h-[150px]'} flex flex-col justify-center px-4`}>
+          <div className={`${titleClass} text-black ${isMobile ? 'mb-1' : 'mb-2'}`}>
+            프리미엄 혜택
+          </div>
+          <div className={`${priceContentClass} ${textColor} overflow-hidden`}>
+            {plan
+              ? Array.isArray(plan.brands) && plan.brands.length > 0
+                ? plan.brands.join(', ')
+                : '-'
+              : '-'}
+          </div>
+        </div>
+        <div className="border-t border-gray-200"></div>
+
+        {/* 요금제 상세보기 버튼 */}
+        <div className={`${isMobile ? 'pt-3' : 'pt-6'}`}>
+          <button
           className={`mt-3 py-2 px-4 rounded-lg border ${textColor} border-current font-600 hover:bg-pink-100 transition`}
           onClick={() => navigate(`/detail/${plan._id}`)}
         >
-          자세히 보기
-        </button>
+            <span
+              className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 text-gray-700 group-hover:text-pink-700 transition-colors`}
+            >
+               자세히 보기
+            </span>
+          </button>
+        </div>
+
       </div>
     );
   };
