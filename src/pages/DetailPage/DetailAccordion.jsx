@@ -43,7 +43,7 @@ const DetailAccordion = () => {
           <img
             src={toggleDownIcon}
             alt="전체 펼치기 아이콘"
-            className={`w-[16px] h-[16px] transition-transform duration-200 ${
+            className={`w-[16px] h-[16px] transition-transform duration-200 align-middle ${
               allExpanded ? 'rotate-180' : 'rotate-0'
             }`}
           />
@@ -51,7 +51,7 @@ const DetailAccordion = () => {
       </div>
 
       {/* 드롭다운 항목들 */}
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-black">
         {items.map((label, index) => (
           <div key={index} className="py-4">
             <div
@@ -62,14 +62,13 @@ const DetailAccordion = () => {
               <img
                 src={toggleDownIcon}
                 alt={`${label} 토글`}
-                className={`w-[16px] h-[16px] transition-transform duration-200 ${
+                className={`w-[16px] h-[16px] transition-transform duration-200 align-middle ${
                   expandedItems[label] ? 'rotate-180' : 'rotate-0'
                 }`}
               />
             </div>
             {expandedItems[label] && (
               <div className="mt-4 text-gray-700 body-small font-300">
-                {/* 실제 내용 들어갈 자리 */}
                 {label}에 대한 상세한 내용입니다.
               </div>
             )}
