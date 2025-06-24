@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import useIsMobile from '../../../hooks/useIsMobile';
 
 const baseTransition = {
   repeat: Infinity,
@@ -22,30 +23,37 @@ const bubbles = [
 ];
 
 const BackgroundWrapper = ({ children }) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-white)_30%,var(--color-purple-200)_58%] bg-fixed bg-cover bg-center min-h-[calc(100vh-var(--header-height))]">
+    <div className="px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-white)_55%,var(--color-purple-200)] bg-white md:bg-linear-[to_bottom,var(--color-white)_30%,var(--color-purple-200)_58%] bg-fixed bg-cover bg-center">
       <div className="fixed inset-0 pointer-events-none">
-        {bubbles.map((bubble, i) => (
-          <motion.span
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: bubble.size,
-              height: bubble.size,
-              backgroundColor: bubble.color,
-              left: bubble.left,
-              top: bubble.top,
-            }}
-            variants={bubbleVariants}
-            initial="initial"
-            animate="float"
-            transition={{
-              ...baseTransition,
-              delay: bubble.delay,
-              duration: 6 + i,
-            }}
-          />
-        ))}
+        {bubbles.map((bubble, i) => {
+          const scaleFactor = isMobile ? 0.5 : 1;
+          const size = bubble.size * scaleFactor;
+
+          return (
+            <motion.span
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                width: size,
+                height: size,
+                backgroundColor: bubble.color,
+                left: bubble.left,
+                top: bubble.top,
+              }}
+              variants={bubbleVariants}
+              initial="initial"
+              animate="float"
+              transition={{
+                ...baseTransition,
+                delay: bubble.delay,
+                duration: 6 + i,
+              }}
+            />
+          );
+        })}
       </div>
 
       <div className="relative">{children}</div>

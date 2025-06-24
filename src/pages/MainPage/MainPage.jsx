@@ -4,9 +4,11 @@ import MainIntro from './components/MainIntro';
 import DiagnosisIntro from './components/DiagnosisIntro';
 import ChatbotIntro from './components/ChatbotIntro';
 import { useAutoScrollToSection } from '@/hooks/useAutoScroll';
+import useIsMobile from '../../hooks/useIsMobile';
 
 const MainPage = () => {
   const secondRef = useRef(null);
+  const isMobile = useIsMobile();
 
   useAutoScrollToSection(secondRef);
 
@@ -14,7 +16,7 @@ const MainPage = () => {
     <main>
       <MainIntro />
       <BackgroundWrapper>
-        <div ref={secondRef}>
+        <div ref={isMobile ? undefined : secondRef}>
           <DiagnosisIntro />
         </div>
         <ChatbotIntro />

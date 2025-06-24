@@ -356,7 +356,6 @@ const ComparePage = () => {
                   </div>
                 );
               })}
-            }
           </div>
         )}
       </div>
@@ -370,7 +369,7 @@ const ComparePage = () => {
 
     const sectionHeight = isMobile ? 'h-[80px]' : 'h-[120px]';
     const titleClass = isMobile ? 'm-body-medium font-700' : 'heading-3 font-700';
-    const contentClass = isMobile ? 'm-body-small font-500' : 'heading-3 font-500';
+    // const contentClass = isMobile ? 'm-body-small font-500' : 'heading-3 font-500';
     const priceContentClass = isMobile ? 'm-body-medium font-500' : 'heading-3 font-500';
     const largePriceClass = isMobile ? 'm-body-large font-500' : 'heading-1 font-500';
 

@@ -174,20 +174,27 @@ button {
 }
 
 /* 스와이퍼 커스텀 */
+.swiper-wrapper {
+  height: 100%;
+}
 .swiper-slide {
   padding: var(--spacing-xl);
   display: flex;
   justify-content: center;
+  height: 100%;
 }
 .swiper-button-prev,
 .swiper-button-next {
   color: var(--color-gray-700);
   opacity: 70%;
-  width: var(--spacing-md);
-  height: var(--spacing-xl);
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: var(--spacing-xl);
 }
 .swiper-pagination {
   text-align: left;
+  display: flex;
 }
 .swiper-pagination-bullet {
   width: var(--spacing-sm);
@@ -198,6 +205,26 @@ button {
 }
 .swiper-pagination-bullet-active {
   background-color: var(--color-pink-700);
+}
+
+@media (max-width: 768px) {
+  .swiper-slide {
+    padding: var(--spacing-lg);
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: var(--spacing-md);
+  }
+
+  .swiper-pagination {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .swiper-pagination-bullet {
+    width: var(--spacing-xs);
+    height: var(--spacing-xs);
+  }
 }
 
 @layer utilities {

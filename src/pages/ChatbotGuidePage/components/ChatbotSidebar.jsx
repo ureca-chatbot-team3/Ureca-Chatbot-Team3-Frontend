@@ -1,16 +1,28 @@
+import { useEffect, useMemo, useState } from 'react';
 import useScrollHashSync from '../../../hooks/useScrollHashSync';
 import { CHATBOT_GUIDE_SECTIONS } from '../../../constants/chatbotGuide';
 
 const ChatbotSidebar = () => {
-  const sectionIds = CHATBOT_GUIDE_SECTIONS.map((s) => s.id);
-  const activeId = useScrollHashSync(sectionIds);
+  const sectionIds = useMemo(() => CHATBOT_GUIDE_SECTIONS.map((s) => s.id), []);
+  const [enableScrollSync, setEnableScrollSync] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setEnableScrollSync(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const activeId = useScrollHashSync(sectionIds, 'intro', enableScrollSync);
 
   const handleSectionScroll = (id) => (e) => {
     e.preventDefault();
     const target = document.getElementById(id);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
-      window.history.replaceState(null, '', `#${id}`);
+
+      // 스크롤 후 해시 변경을 약간 지연
+      setTimeout(() => {
+        window.history.replaceState(null, '', `#${id}`);
+      }, 500);
     }
   };
 
@@ -23,7 +35,9 @@ const ChatbotSidebar = () => {
           <li key={id}>
             <button
               onClick={handleSectionScroll(id)}
-              className={`heading-3 transition-colors duration-200 ${activeId === id ? 'text-pink-700' : 'hover:text-pink-700'}`}
+              className={`heading-3 transition-colors duration-200 ${
+                activeId === id ? 'text-pink-700' : 'hover:text-pink-700'
+              }`}
             >
               {label}
             </button>

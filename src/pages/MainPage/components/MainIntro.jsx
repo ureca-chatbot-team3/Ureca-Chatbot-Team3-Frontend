@@ -14,14 +14,14 @@ const MainIntro = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="relative z-10 px-[20px] md:px-[40px] bg-linear-[to_bottom,var(--color-pink-300),var(--color-white)] h-[calc(100vh-var(--header-height))]">
+    <section className="relative z-10 px-[20px] h-full md:px-[40px] bg-linear-[to_bottom,var(--color-pink-300),var(--color-white)] min-h-[330px] md:h-[calc(100vh-var(--header-height))]">
       <div className="content-max-width mx-auto flex flex-col items-center h-full gap-3 relative">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
             delay: 4000,
-            disableOnInteraction: false,
+            disableOnInteraction: true,
           }}
           pagination={{
             clickable: true,
@@ -29,7 +29,7 @@ const MainIntro = () => {
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-          className="w-full h-full mb-[100px]"
+          className="w-full h-full md:mb-[100px]"
         >
           <SwiperSlide>
             <IntroSection1 isActive={activeIndex === 0} />
@@ -43,7 +43,7 @@ const MainIntro = () => {
         </Swiper>
 
         <motion.div
-          className="absolute bottom-0"
+          className="hidden md:block absolute bottom-0"
           style={{ aspectRatio: '16/102' }}
           animate={{ y: [0, -10, 0] }} // 위로 갔다가 다시 제자리
           transition={{
