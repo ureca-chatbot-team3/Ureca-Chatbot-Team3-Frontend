@@ -154,10 +154,7 @@ const Header = () => {
             </div>
           </div>
 
-          <Link
-            to="/chatbotGuide"
-            className="body-medium font-500 text-black hover:text-pink-700 transition"
-          >
+          <Link to="/chatbot-guide" className="body-medium font-500 text-black">
             챗봇 안내
           </Link>
           <Link

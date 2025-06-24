@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
 import PlanListPage from '../pages/PlanListPage/PlanListPage';
+import DetailPage from '../pages/DetailPage/DetailPage';
 import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import { BookmarkProvider } from '../contexts/BookmarkContext';
@@ -14,7 +15,7 @@ import MyPage from '../pages/MyPage/MyPage';
 import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
 import BookmarkPage from '../pages/MyPage/BookmarkPage';
 import ChatHistoryPage from '../pages/MyPage/ChatHistoryPage';
-import ChatbotGuide from '../pages/ChatbotGuide/ChatbotGuide';
+import ChatbotGuidePage from '../pages/ChatbotGuidePage/ChatbotGuidePage';
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
         element: <PlanListPage />,
       },
       {
+        path: '/plans/:id',
+        element: <DetailPage />,
+      },
+      {
         path: 'diagnosis',
         element: <DiagnosisPage />,
       },
@@ -52,8 +57,8 @@ export const router = createBrowserRouter([
         element: <ComparePage />,
       },
       {
-        path: 'chatbotGuide',
-        element: <ChatbotGuide />,
+        path: 'chatbot-guide',
+        element: <ChatbotGuidePage />,
       },
       {
         path: 'mypage',

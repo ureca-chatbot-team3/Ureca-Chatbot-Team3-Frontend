@@ -278,7 +278,9 @@ const MobilePlanCard = ({
         <button
           className={`${cardStyles.buttons.cart} rounded-[4px] bg-gray-700 flex items-center justify-center cursor-pointer`}
         >
+
           <img src={cart2Icon} alt="장바구니" className={`${cardStyles.buttons.icon} h-auto`} />
+
         </button>
       </div>
 

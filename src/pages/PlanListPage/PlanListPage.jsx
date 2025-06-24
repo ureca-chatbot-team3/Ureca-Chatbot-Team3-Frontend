@@ -228,13 +228,17 @@ const PlanListPage = () => {
         <>
           <div className="hidden md:grid grid-cols-4 gap-x-6 gap-y-12">
             {plans.map((plan) => (
+
               <PlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
+
             ))}
           </div>
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-4 md:hidden">
             {plans.map((plan) => (
+
               <MobilePlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
+
             ))}
           </div>
         </>
