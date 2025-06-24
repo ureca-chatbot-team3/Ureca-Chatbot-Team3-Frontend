@@ -36,13 +36,8 @@ export default function ChatbotModal({ onClose }) {
 
   const handleResetMessages = () => {
     socketRef.current?.emit('force-end-session');
-    const greeting = {
-      role: 'assistant',
-      content: getGreetingText(),
-      type: 'bot',
-      timestamp: new Date(),
-    };
-    setMessages([greeting]);
+    setMessages([]); // 클라이언트 상태만 초기화됨
+    initializeGreetingAndFAQ(); // DB에도 인사말 + 추천질문 저장됨
     setIsChatEnded(false);
   };
 
@@ -68,35 +63,29 @@ export default function ChatbotModal({ onClose }) {
       const greetingText = getGreetingText();
       const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
 
-      socketRef.current?.emit('stream-start', { role: 'assistant', content: greetingText });
-      socketRef.current?.emit('stream-end', {
-        message: { role: 'assistant', content: greetingText, type: 'text' },
-      });
-
-      setTimeout(() => {
-        socketRef.current?.emit('stream-start', { role: 'assistant', content: quickText });
-        socketRef.current?.emit('stream-end', {
-          message: { role: 'assistant', content: quickText, type: 'text' },
-        });
-      }, 300);
-
+      // DB 저장 없이 UI에만 보여주기
       setMessages([
-        { id: 'greeting', type: 'bot', content: greetingText, role: 'assistant' },
+        {
+          id: 'greeting',
+          type: 'bot',
+          role: 'assistant',
+          content: greetingText,
+        },
         {
           id: 'quick-questions',
           type: 'bot',
-          content: (
-            <ChatbotQuickQuestionBubble onSelect={handleQuickQuestion} questions={selected} />
-          ),
           role: 'assistant',
+          content: (
+            <ChatbotQuickQuestionBubble questions={selected} onSelect={handleQuickQuestion} />
+          ),
         },
       ]);
+
       setIsChatEnded(false);
     } catch (err) {
       console.error('❌ 초기 인사말 구성 실패:', err);
     }
   };
-
   useEffect(() => {
     const lastMsg = messages.at(-1);
     console.log('📦 마지막 메시지:', lastMsg);
