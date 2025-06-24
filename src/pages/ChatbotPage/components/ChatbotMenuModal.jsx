@@ -28,7 +28,7 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
   };
 
   const handleGoToGuide = () => {
-    navigate('/chatbotGuide');
+    navigate('/chatbot-guide');
     handleClose();
   };
 

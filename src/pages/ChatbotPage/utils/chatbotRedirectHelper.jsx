@@ -19,7 +19,7 @@ const REDIRECT_KEYWORDS = [
   },
   {
     keywords: ['챗봇 안내', '챗봇', '도움말', '넌 누구니'],
-    route: '/chatbotGuide',
+    route: '/chatbot-guide',
     label: '챗봇 안내 페이지 보기',
   },
 ];
