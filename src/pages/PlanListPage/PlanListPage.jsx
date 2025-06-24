@@ -4,7 +4,6 @@ import FilterIcon from '@/assets/svg/filterIcon.svg';
 import ToggleDownIcon from '@/assets/svg/toggleDownIcon.svg';
 import ToggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
 import SearchOff from '@/assets/svg/SearchOff.svg';
-import FilterOff from '@/assets/svg/FilterOff.svg';
 import Notice from '@/assets/svg/notice.svg';
 import Filter from './Filter';
 import PlanCard from '@/components/PlanCard';
@@ -23,24 +22,19 @@ const getDailyDataGB = (infos) => {
 const PlanListPage = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
-
   const [plans, setPlans] = useState([]);
   const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({});
-
   const [sortBy, setSortBy] = useState('popular');
   const [sortOrder, setSortOrder] = useState('asc');
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [search, setSearch] = useState('');
   const [emptyReason, setEmptyReason] = useState('');
 
   useEffect(() => {
     const params = new URLSearchParams();
     params.append('category', 'all');
-
     params.append('sortBy', 'price_value');
     params.append('sortOrder', sortOrder);
     params.append('customSort', sortBy);
@@ -52,37 +46,6 @@ const PlanListPage = () => {
     } else {
       params.append('page', 1);
       params.append('limit', 100);
-    }
-
-    (filter['요금범위'] || []).forEach((r) => {
-      if (r === '~5만원대') {
-        params.append('minPrice', 0);
-        params.append('maxPrice', 50000);
-      } else if (r === '6~8만원대') {
-        params.append('minPrice', 60000);
-        params.append('maxPrice', 80000);
-      } else if (r === '9만원대~') {
-        params.append('minPrice', 90000);
-      }
-    });
-
-    if (filter['데이터']?.length) {
-      params.append('dataOption', filter['데이터'].join(','));
-    }
-
-    if (filter['연령대']?.length) {
-      const ages = filter['연령대'].filter((age) => age !== '전체대상');
-      if (ages.length > 0) {
-        params.append('ageRange', ages.join(','));
-      }
-    }
-
-    if (filter['혜택']?.length) {
-      params.append('brands', filter['혜택'].join(','));
-    }
-
-    if (filter.quickTag && filter.quickTag !== '#전체') {
-      params.append('quickTag', filter.quickTag.replace('#', ''));
     }
 
     fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
@@ -148,11 +111,12 @@ const PlanListPage = () => {
   const handleFilter = (selectedFilter) => {
     setFilter(selectedFilter);
     setPage(1);
-    setEmptyReason('filter');
+    // emptyReason는 따로 안 씀!
   };
 
   return (
     <div className="min-h-screen p-0 text-black">
+      {/* 헤더 */}
       <div className="flex items-center justify-between mb-[18px] mt-[18px]">
         <h2 className="m-heading-2 md:heading-2 font-500 text-black border-b-2 border-pink-600 inline-block">
           5G/LTE 요금제
@@ -166,7 +130,7 @@ const PlanListPage = () => {
               if (e.key === 'Enter') handleSearch();
             }}
             placeholder="검색어를 입력하세요."
-            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
+            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] md:w-[344px] md:h-[52px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
           />
           <div
             className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"
@@ -177,6 +141,7 @@ const PlanListPage = () => {
         </div>
       </div>
 
+      {/* 필터 + 정렬 */}
       <div className="flex flex-row justify-between items-center mb-[18px] gap-2">
         <div className="relative inline-block text-left text-black m-body-medium md: font-500">
           <button onClick={() => setOpen(!open)} className="flex items-center gap-2 cursor-pointer">
@@ -238,42 +203,44 @@ const PlanListPage = () => {
         />
       </div>
 
-      <div className="hidden md:grid grid-cols-4 gap-6">
-        {plans.map((plan) => (
-          <PlanCard
-            key={plan._id}
-            imagePath={plan.imagePath}
-            name={plan.name}
-            infos={plan.infos}
-            plan_speed={plan.plan_speed}
-            price={plan.price}
-            sale_price={plan.sale_price}
-            price_value={plan.price_value}
-            sale_price_value={plan.sale_price_value}
-            benefits={Object.entries(plan.benefits)}
-            id={plan._id}
-          />
-        ))}
-      </div>
+      {/* 컨텐츠 영역 */}
+      {plans.length === 0 && emptyReason === 'search' ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center text-black">
+          <img src={SearchOff} alt="결과 없음" className="w-[150px] h-auto mb-6" />
+          <p className="m-heading-2 mb-2">‘{search}’ 에 대한 검색 결과가 없습니다.</p>
+          <p className="body-medium text-black mb-8">
+            검색어를 확인하고 입력했는지 다시 확인해 주세요.
+          </p>
+          <div className="text-left border bg-white border-gray-400 rounded-[12px] p-6 w-full max-w-[830px] h-auto flex flex-col justify-center">
+            <p className="font-500 text-gray-700 flex items-center mb-2">
+              <img src={Notice} alt="이용안내" className="w-5 h-5 mr-2" />
+              이용안내
+            </p>
+            <ul className="list-disc pl-5 space-y-1 text-gray-700 text-[14px] leading-[20px]">
+              <li>검색어는 초성이 아닌 단어를 정확히 입력해 주세요.</li>
+              <li>철자가 맞는지 확인해 주세요.</li>
+              <li>다른 키워드나 단어로 다시 검색해보세요.</li>
+              <li>띄어쓰기나 특수문자를 제거해보세요.</li>
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="hidden md:grid grid-cols-4 gap-x-6 gap-y-12">
+            {plans.map((plan) => (
+              <PlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
+            ))}
+          </div>
 
-      <div className="grid grid-cols-2 gap-6 px-4 md:hidden ">
-        {plans.map((plan) => (
-          <MobilePlanCard
-            key={plan._id}
-            imagePath={plan.imagePath}
-            name={plan.name}
-            infos={plan.infos}
-            plan_speed={plan.plan_speed}
-            price={plan.price}
-            sale_price={plan.sale_price}
-            price_value={plan.price_value}
-            sale_price_value={plan.sale_price_value}
-            benefits={Object.entries(plan.benefits)}
-            id={plan._id}
-          />
-        ))}
-      </div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-4 md:hidden">
+            {plans.map((plan) => (
+              <MobilePlanCard key={plan._id} {...plan} benefits={Object.entries(plan.benefits)} />
+            ))}
+          </div>
+        </>
+      )}
 
+      {/* 페이지네이션 */}
       <div className="flex justify-center mt-10">
         <nav className="flex items-center space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (
