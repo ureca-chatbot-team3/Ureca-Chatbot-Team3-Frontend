@@ -12,7 +12,6 @@ const ChatbotSidebar = () => {
   }, []);
 
   const activeId = useScrollHashSync(sectionIds, 'intro', enableScrollSync);
-  console.log(activeId);
 
   const handleSectionScroll = (id) => (e) => {
     e.preventDefault();
