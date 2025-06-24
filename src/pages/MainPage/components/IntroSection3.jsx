@@ -1,7 +1,10 @@
 import AskHelpImage from '@/assets/images/AskHelpImage.png';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
 export const IntroSection3 = ({ isActive }) => {
+  const navigate = useNavigate();
+
   return (
     <section className="max-w-[306px] md:max-w-[1114px] min-h-[210px] flex w-full gap-5 flex-col items-center md:items-start h-full md:px-xl justify-between">
       <h1 className="text-center md:text-left m-heading-3 font-700 md:heading-1 md:font-500">
@@ -41,7 +44,10 @@ export const IntroSection3 = ({ isActive }) => {
             <br />
             <span className="hidden md:inline font-500">이 페이지에서 자세히 안내해드려요!</span>
           </p>
-          <button className="bg-linear-[135deg,var(--color-pink-700),var(--color-purple-700)] px-sm py-xs m-body-add font-400 md:px-md md:py-sm md:body-medium md:font-500 rounded-[12px] md:rounded-(--spacing-sm) text-white w-fit">
+          <button
+            className="bg-linear-[135deg,var(--color-pink-700),var(--color-purple-700)] px-sm py-xs m-body-add font-400 md:px-md md:py-sm md:body-medium md:font-500 rounded-[12px] md:rounded-(--spacing-sm) text-white w-fit"
+            onClick={() => navigate('/chatbot-guide')}
+          >
             챗봇 안내 페이지로 이동
           </button>
         </div>
