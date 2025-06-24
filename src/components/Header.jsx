@@ -154,7 +154,7 @@ const Header = () => {
             </div>
           </div>
 
-          <Link to="/chatbot-guide" className="body-medium font-500 text-black">
+          <Link to="/chatbot-guide#intro" className="body-medium font-500 text-black">
             챗봇 안내
           </Link>
           <Link

@@ -4,7 +4,7 @@ const useScrollHashSync = (sectionIds) => {
   const [activeId, setActiveId] = useState(sectionIds[0] || '');
 
   useEffect(() => {
-    function handleScroll() {
+    const handleScroll = () => {
       const viewportHeight = window.innerHeight;
       const visibleSections = sectionIds.map((id) => {
         const elem = document.getElementById(id);
@@ -31,7 +31,7 @@ const useScrollHashSync = (sectionIds) => {
         setActiveId(maxSection.id);
         window.history.replaceState(null, '', `#${maxSection.id}`);
       }
-    }
+    };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
