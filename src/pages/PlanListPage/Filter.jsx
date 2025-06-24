@@ -21,6 +21,11 @@ const filterSections = {
     '삼성팩',
     '폰교체',
     '멀티팩',
+    '밀리의서재',
+    '유플레이',
+    '아이들나라',
+    '바이브',
+    '지니뮤직',
   ],
 };
 
@@ -51,7 +56,8 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
     }
 
     const params = new URLSearchParams();
-    params.append('category', activeCategory);
+    params.append('category', activeCategory || 'all');
+
     params.append('page', 1);
     params.append('limit', 0);
 
@@ -76,7 +82,9 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
     }
 
     if (selected['혜택']?.length) {
-      params.append('brands', selected['혜택'].join(','));
+      selected['혜택'].forEach((r) => {
+        params.append('brands[]', r);
+      });
     }
 
     if (activeQuick && activeQuick !== '#전체') {
@@ -125,16 +133,18 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
       bodyOpenClassName="overflow-hidden"
     >
       {/* 헤더 */}
-      <div className="flex items-center justify-between mb-4 border-b border-gray-500 pb-[35px]">
-        <h2 className="heading-2 font-semibold text-black">어떤 요금제를 찾으시나요?</h2>
+      <div className="flex items-center justify-between md:mb-4 border-b border-gray-500 pb-[2px] md:pb-[35px]">
+        <h2 className="m-heading-2 md:heading-2 font-semibold text-black">
+          어떤 요금제를 찾으시나요?
+        </h2>
         <button onClick={onClose} className="text-gray-500 hover:text-black">
           <img src={CloseIcon} alt="닫기" className="w-5 h-5" />
         </button>
       </div>
 
-      <div className="flex-grow overflow-y-auto space-y-px-[30px] py-[35px]">
+      <div className="flex-grow overflow-y-auto space-y-px-[30px] md:py-[35px]">
         {/* 퀵태그 행 */}
-        <div className="grid grid-cols-3 md:flex md:gap-[25px] mb-[90px] gap-[10px]">
+        <div className="grid grid-cols-3 mt-2 md:grid-cols-5 md:gap-[25px] mb-[13px] md:mb-[90px] gap-[10px]">
           {quickTags.map((tag) => {
             const isActive = activeQuick === tag;
             return (
@@ -142,8 +152,7 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
                 key={tag}
                 type="button"
                 onClick={() => toggleQuick(tag)}
-                className={`cursor-pointer 
-                  w-full md:w-[124px] h-[45px] px-[20px] border rounded-[16px] body-large font-500 
+                className={`cursor-pointer w-[106px] h-[34px] gap-[13px] text-[13px] md:w-[123px] md:h-[45px] md:px-[0px] border rounded-[16px] md:body-large md:font-[500] 
                   ${
                     isActive
                       ? 'border-pink-600 text-pink-600'
@@ -158,11 +167,11 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
         </div>
 
         {/* 섹션별 옵션 */}
-        <div className="flex flex-col space-y-[90px] [&>*:last-child]:mb-0">
+        <div className="flex flex-col space-y-[13px] md:space-y-[90px] [&>*:last-child]:mb-0">
           {Object.entries(filterSections).map(([section, options]) => (
             <div key={section}>
-              <h3 className="heading-3 font-700 text-black mb-3">{section}</h3>
-              <div className="grid grid-cols-3 md:flex md:flex-wrap gap-[10px] md:gap-[25px]">
+              <h3 className="m-heading-3 md:heading-3 font-700 text-black mb-3">{section}</h3>
+              <div className="grid grid-cols-3  md:grid-cols-5  md:flex-wrap gap-[10px] md:gap-[20px]">
                 {options.map((opt) => {
                   const isActive = selected[section].includes(opt);
                   return (
@@ -170,8 +179,7 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
                       key={opt}
                       type="button"
                       onClick={() => toggleOption(section, opt)}
-                      className={`cursor-pointer 
-                        w-full md:w-[124px] h-[45px] px-[5px] border rounded-[16px] body-large font-500 
+                      className={`cursor-pointer w-[106px] h-[34px] gap-[13px] text-[13px] md:w-[123px] md:h-[45px] border rounded-[16px] md:body-large md:font-[500] 
                         ${
                           isActive
                             ? 'border-pink-600 text-pink-600'
@@ -191,32 +199,31 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
         {/* 푸터 */}
         <div className="flex flex-row justify-end items-center gap-4 mt-[35px]">
           <button
-            onClick={() =>
-              setSelected(Object.fromEntries(Object.keys(filterSections).map((key) => [key, []])))
-            }
+            onClick={() => {
+              setSelected(Object.fromEntries(Object.keys(filterSections).map((key) => [key, []])));
+              setActiveQuick(''); // quickTag 도 초기화!
+            }}
             className="
-              cursor-pointer
-             w-[141px] md:w-[201px] h-[45px]
-              flex items-center justify-center
-              text-gray-600
-              border border-gray-500
-              rounded-full
-              body-large font-500
-            "
+ cursor-pointer w-[106px] h-[34px] gap-[13px] text-[13px] md:w-[140px] md:h-[45px]  md:body-large md:font-[500]
+ flex items-center justify-center
+ text-gray-600
+ border border-gray-500
+ rounded-full
+ md:body-large md:font-500
+"
           >
             전체해제
           </button>
 
           <button
             onClick={applyFilter}
-            className="
-              cursor-pointer
-              w-[141px] md:w-[201px] h-[45px]
-              flex items-center justify-center
-              bg-pink-600 text-white
-              rounded-full
-              body-large font-500
-            "
+            disabled={count === 0}
+            className={`
+    cursor-pointer w-[106px] h-[34px] gap-[13px] text-[13px] md:w-[140px] md:h-[45px] md:body-large md:font-[500]
+    flex items-center justify-center
+    rounded-full
+    ${count === 0 ? 'bg-gray-300 text-white cursor-not-allowed' : 'bg-pink-600 text-white'}
+  `}
           >
             {count > 0 ? `${count}개 요금제 보기` : '요금제 보기'}
           </button>
