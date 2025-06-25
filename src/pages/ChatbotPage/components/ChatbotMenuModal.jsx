@@ -66,7 +66,6 @@ export default function ChatbotMenuModal({ onClose, onClearConversation }) {
           <li className="py-5 cursor-pointer" onClick={handleGoToChatHistory}>
             챗봇 상담 내역
           </li>
-          <li className="py-5">이전 질문에서 찾아보기</li>
           <li
             className="py-5 cursor-pointer hover:text-red-600 transition-colors duration-200"
             onClick={handleClearConversation}

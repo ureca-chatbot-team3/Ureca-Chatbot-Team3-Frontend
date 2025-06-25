@@ -317,8 +317,8 @@ export default function ChatbotModal({ onClose }) {
     <div className="fixed inset-0 z-50 pointer-events-auto" onClick={handleClose}>
       <div className="max-w-[1440px] w-full h-full mx-auto relative">
         <div
-          className={`absolute right-8 top-1/2 -translate-y-1/2
-            w-[360px] max-h-[90vh] h-full
+          className={`absolute  left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-8 top-1/2 -translate-y-1/2
+           w-[90%] max-w-[360px] sm:w-[360px] max-h-[90vh] h-full 
             bg-[var(--color-gray-200)] border-[3px] border-[var(--color-gray-700)]
             rounded-[20px] shadow-xl pointer-events-auto
             overflow-hidden flex flex-col
