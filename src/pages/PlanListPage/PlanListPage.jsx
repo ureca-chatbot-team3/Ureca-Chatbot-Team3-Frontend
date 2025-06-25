@@ -151,7 +151,7 @@ const PlanListPage = () => {
     <div className="min-h-screen p-0 text-black">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-[18px] mt-[18px]">
-        <h2 className="m-heading-2 md:heading-2 font-500 text-black border-b-2 border-pink-600 inline-block">
+        <h2 className="m-heading-3 md:heading-2 font-500 text-black border-b-2 border-pink-600 inline-block">
           5G/LTE 요금제
         </h2>
         <div className="relative flex items-center rounded-full w-[182px] h-[28px] md:w-70">
@@ -236,6 +236,34 @@ const PlanListPage = () => {
         />
       </div>
 
+      {(filter.quickTag || Object.values(filter).some((v) => Array.isArray(v) && v.length > 0)) && (
+        <div className="flex flex-wrap items-center gap-2 mb-4 md:px-0">
+          {filter.quickTag && (
+            <span className="px-2 py-1 bg-pink-100 text-pink-600 rounded-full text-sm">
+              {filter.quickTag}
+            </span>
+          )}
+          {Object.entries(filter).map(([key, value]) =>
+            Array.isArray(value) && value.length > 0
+              ? value.map((v) => (
+                  <span
+                    key={`${key}-${v}`}
+                    className="px-2 py-1 bg-gray-500 text-gray-800 rounded-full text-sm"
+                  >
+                    {v}
+                  </span>
+                ))
+              : null
+          )}
+          <button
+            onClick={() => setFilter({})}
+            className=" px-3 py-1 text-sm text-gray-700 border border-gray-700 rounded-full hover:text-black"
+          >
+            전체 해제
+          </button>
+        </div>
+      )}
+
       {/* 컨텐츠 영역 */}
       {plans.length === 0 && emptyReason === 'search' ? (
         <div className="flex flex-col items-center justify-center py-20 text-center text-black">
@@ -259,7 +287,7 @@ const PlanListPage = () => {
         </div>
       ) : (
         <>
-          <div className="hidden md:grid grid-cols-4 gap-x-6 gap-y-12">
+          <div className="hidden items-center  md:grid grid-cols-4 gap-x-6 gap-y-12">
             {plans.map((plan) => (
               <PlanCard
                 key={plan._id}
@@ -270,7 +298,7 @@ const PlanListPage = () => {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-4 md:hidden">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4  md:hidden">
             {plans.map((plan) => (
               <MobilePlanCard
                 key={plan._id}
