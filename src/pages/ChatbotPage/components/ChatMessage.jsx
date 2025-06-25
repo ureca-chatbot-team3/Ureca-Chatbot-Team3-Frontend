@@ -10,16 +10,15 @@ import PlanCardSlider from './PlanCardSlider';
 
 export default function ChatMessages({ messages, onQuickQuestionSelect, onResetMessages }) {
   const scrollRef = useRef(null);
+  const userEndRef = useRef(null); // ✅ 사용자 말풍선 위치 ref
   const [matchedPlansMap, setMatchedPlansMap] = useState({});
 
-  // ✅ 자동 스크롤
+  // ✅ 사용자 말풍선 기준 자동 스크롤
   useEffect(() => {
-    requestAnimationFrame(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      }
-    });
-  }, [messages, matchedPlansMap]);
+    if (userEndRef.current) {
+      userEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   // ✅ 메시지에서 요금제 추출
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
         }
       }
 
-      setMatchedPlansMap(newMap); // ✅ 완전히 덮어쓰기
+      setMatchedPlansMap(newMap);
     };
 
     updateMatchedPlans();
@@ -142,6 +141,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           return (
             <div key={idx} className="mb-3 flex justify-end">
               <UserBubble message={msg.content} />
+              <div ref={userEndRef} /> {/* ✅ 사용자 말풍선 기준 자동 스크롤 */}
             </div>
           );
         }
