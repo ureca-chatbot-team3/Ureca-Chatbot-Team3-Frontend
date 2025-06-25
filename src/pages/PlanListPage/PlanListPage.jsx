@@ -94,15 +94,12 @@ const PlanListPage = () => {
     })
       .then((res) => {
         if (!res.ok) {
-          console.log('📡 응답 상태:', res.status);
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         return res.json();
       })
       .then((data) => {
-        console.log('📦 응답 데이터:', data);
         let loadedPlans = data.data.plans;
-        console.log('🎁 불러온 plans:', loadedPlans);
         if (sortBy === 'popular') {
           loadedPlans.sort((a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0));
         } else if (sortBy === 'data') {
