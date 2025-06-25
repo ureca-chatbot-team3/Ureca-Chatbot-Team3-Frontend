@@ -28,6 +28,10 @@ const Header = () => {
     }
   };
 
+  const handleGoToSearch = () => {
+    navigate('/plans?focusSearch=true');
+  };
+
   return (
     <header className="bg-white relative">
       {/* 윗섹션 */}
@@ -161,7 +165,10 @@ const Header = () => {
 
         {/* 오른쪽 아이콘 버튼 */}
         <div className="flex gap-[28px] items-center">
-          <button className="p-0 m-0 bg-transparent border-none cursor-pointer">
+          <button
+            onClick={handleGoToSearch}
+            className="p-0 m-0 bg-transparent border-none cursor-pointer"
+          >
             <img src={searchIcon} alt="검색" className="h-6 w-6" />
           </button>
           <button className="p-0 m-0 bg-transparent border-none cursor-pointer">

@@ -10,8 +10,6 @@ const MobilePlanCard = ({
   name,
   infos,
   plan_speed,
-  price,
-  sale_price,
   price_value,
   sale_price_value,
   benefits = [],
@@ -24,7 +22,7 @@ const MobilePlanCard = ({
   // 크기에 따른 스타일 설정
   const cardStyles = isLarge
     ? {
-        container: 'w-[220px] h-[437px]',
+        container: 'w-[220px] h-auto',
         spacing: {
           top: 'h-[15px]',
           afterImage: 'h-[16px]',
@@ -51,7 +49,7 @@ const MobilePlanCard = ({
         },
       }
     : {
-        container: 'w-[164px] h-[370px]',
+        container: 'w-[164px] h-auto',
         spacing: {
           top: 'h-[12px]',
           afterImage: 'h-[12px]',
@@ -116,7 +114,7 @@ const MobilePlanCard = ({
 
   return (
     <div
-      className={`${cardStyles.container} bg-white rounded-[16px] flex flex-col items-center p-3 box-border shadow-soft-black`}
+      className={`${cardStyles.container} bg-white rounded-[16px] flex flex-col items-center px-3 py-1 box-border shadow-soft-black overflow-visible`}
     >
       <div className={cardStyles.spacing.top} />
 
@@ -169,6 +167,7 @@ const MobilePlanCard = ({
             <img
               src={imageUrl}
               alt={name}
+              loading="lazy"
               className={`${cardStyles.image} object-cover transition-opacity duration-200`}
               style={{
                 opacity: imageLoading ? 0 : 1,
@@ -181,7 +180,7 @@ const MobilePlanCard = ({
                 setImageLoading(false);
                 setImageError(false);
               }}
-              onError={(e) => {
+              onError={() => {
                 setImageLoading(false);
                 if (!imageError) {
                   setImageError(true);
@@ -194,9 +193,13 @@ const MobilePlanCard = ({
       <div className={cardStyles.spacing.afterImage} />
 
       {/* 이름 */}
-      <h2 className={`${cardStyles.text.title} font-700 text-black text-center leading-tight`}>
+      <h2
+        className={`${cardStyles.text.title} font-700 text-black text-center line-clamp-2`}
+        style={{ whiteSpace: 'normal', minHeight: '2.2rem' }}
+      >
         {name}
       </h2>
+
       <div className={cardStyles.spacing.afterTitle} />
       <div className="w-full border-t border-gray-500" />
       <div className={cardStyles.spacing.afterInfo} />
@@ -205,7 +208,9 @@ const MobilePlanCard = ({
       <div className="flex flex-col items-start w-full px-1">
         <span className={`${cardStyles.text.info} font-500 text-black`}>{infosText}</span>
         {plan_speed && (
-          <span className={`${cardStyles.text.info} font-500 text-black`}>{plan_speed}</span>
+          <span className={`${cardStyles.text.info} body-medium font-400 text-pink-700 mt-[2px]`}>
+            {plan_speed}
+          </span>
         )}
       </div>
       <div className={cardStyles.spacing.afterInfo} />
@@ -232,29 +237,19 @@ const MobilePlanCard = ({
       <div className={cardStyles.spacing.afterPrice} />
 
       {/* benefits */}
-      <div className="flex flex-col items-start w-full px-1">
+      <div className="flex flex-col items-start w-full px-1 min-h-[68px] justify-start">
         {benefitsList.slice(0, 3).map((benefit, index) => (
-          <div key={index} className="w-full py-[1px] mb-[1px] last:mb-0">
+          <div key={index} className="w-full py-[1px] h-[22px] mb-[1px] last:mb-0">
             <span
-              className={`${cardStyles.text.benefit} font-400 text-black`}
-              style={{
-                display: '-webkit-box',
-                WebkitLineClamp: 1,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
+              className={`${cardStyles.text.benefit} font-400 text-black block w-full overflow-hidden whitespace-nowrap text-ellipsis`}
+              title={benefit}
             >
-              {benefit}
+              {benefit || '\u00A0'}
             </span>
           </div>
         ))}
-        {benefitsList.length > 3 && (
-          <div className="py-[1px]">
-            <span className={`${cardStyles.text.benefit} font-300 text-gray-500`}>...</span>
-          </div>
-        )}
       </div>
+
       <div className={cardStyles.spacing.afterBenefits} />
 
       {/* 버튼 영역 */}

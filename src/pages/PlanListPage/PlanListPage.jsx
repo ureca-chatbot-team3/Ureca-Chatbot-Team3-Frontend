@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import SearchIcon from '@/assets/svg/searchIcon.svg';
 import FilterIcon from '@/assets/svg/filterIcon.svg';
 import ToggleDownIcon from '@/assets/svg/toggleDownIcon.svg';
@@ -13,7 +14,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 const getDailyDataGB = (infos) => {
   for (const info of infos) {
-    const m = info.match(/데이터\s*일\s*(\d+)GB/i);
+    const m = info.match(/(\d+)\s*GB/i);
     if (m) return parseInt(m[1], 10);
   }
   return 0;
@@ -23,7 +24,7 @@ const PlanListPage = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [plans, setPlans] = useState([]);
-  const [limit, setLimit] = useState(20);
+  const [limit] = useState(20);
   const [filter, setFilter] = useState({});
   const [sortBy, setSortBy] = useState('popular');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -32,6 +33,11 @@ const PlanListPage = () => {
   const [search, setSearch] = useState('');
   const [emptyReason, setEmptyReason] = useState('');
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldFocusSearch = searchParams.get('focusSearch') === 'true';
+  const searchInputRef = useRef(null);
+
   useEffect(() => {
     const params = new URLSearchParams();
     params.append('category', 'all');
@@ -39,6 +45,10 @@ const PlanListPage = () => {
     params.append('sortOrder', sortOrder);
     params.append('customSort', sortBy);
     params.append('search', search);
+
+    if (shouldFocusSearch && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
 
     if (sortBy === 'price_value') {
       params.append('page', page);
@@ -116,7 +126,7 @@ const PlanListPage = () => {
         }
       })
       .catch(console.error);
-  }, [sortBy, sortOrder, page, limit, filter, search]);
+  }, [sortBy, sortOrder, page, limit, filter, search, shouldFocusSearch]);
 
   const handleSort = (sortField, order) => {
     setSortBy(sortField);
@@ -148,7 +158,7 @@ const PlanListPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-0 text-black">
+    <div className="min-h-screen py-[32px] md:py-[60px] px-0 text-black">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-[18px] mt-[18px]">
         <h2 className="m-heading-3 md:heading-2 font-500 text-black border-b-2 border-pink-600 inline-block">
@@ -156,6 +166,7 @@ const PlanListPage = () => {
         </h2>
         <div className="relative flex items-center rounded-full w-[182px] h-[28px] md:w-70">
           <input
+            ref={searchInputRef}
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -163,7 +174,7 @@ const PlanListPage = () => {
               if (e.key === 'Enter') handleSearch();
             }}
             placeholder="검색어를 입력하세요."
-            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] md:w-[344px] md:h-[52px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
+            className="border border-gray-500 bg-white text-black rounded-lg md:rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] md:w-[344px] md:h-[52px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
           />
           <div
             className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"

@@ -38,17 +38,19 @@ const ChatbotUsage = () => {
       viewport={{ once: false, amount: 0.3 }}
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
     >
-      <div className="flex gap-md text-center items-center">
-        <h2 className="heading-1 font-700">
+      <div className="flex md:gap-md items-center">
+        <h2 className="m-heading-3 md:heading-1 font-700">
           플밍이 어떻게 사용하시나요? <br /> 요플밍이 도와드릴게요!
         </h2>
-        <div className="self-end">
+        <div className="max-w-[90px] md:max-w-[223px] self-end">
           <img src={UsageYopleming} alt="챗봇 사용법" />
         </div>
       </div>
-      <div className="p-lg shadow-soft-black rounded-[20px] flex flex-col gap-lg max-w-[754px] w-full mx-auto bg-white">
-        <h3 className="heading-2 font-700">어떻게 사용하나요? (Step-by-step 가이드)</h3>
-        <div className="flex flex-col gap-md">
+      <div className="p-sm md:p-lg shadow-soft-black rounded-[20px] flex flex-col gap-sm md:gap-lg max-w-[754px] w-full mx-auto bg-white">
+        <h3 className="m-body-medium md:heading-2 font-700">
+          어떻게 사용하나요? (Step-by-step 가이드)
+        </h3>
+        <div className="flex flex-col gap-xs md:gap-md">
           {steps.map(({ numberBgColor, title, description }, index) => (
             <StepItem
               key={index}
@@ -66,15 +68,15 @@ const ChatbotUsage = () => {
 
 const StepItem = ({ number, numberBgColor, title, description }) => {
   return (
-    <div className="flex gap-3">
+    <div className="flex gap-2 md:gap-3">
       <span
-        className={`flex items-center justify-center w-6 h-6 rounded-full text-white body-large font-700 ${numberBgColor}`}
+        className={`flex items-center justify-center w-4 h-4 p-2 md:w-6 md:h-6 rounded-full text-white m-body-add md:body-large font-700 ${numberBgColor}`}
       >
         {number}
       </span>
-      <dl className="-translate-y-1">
-        <dt className="body-large font-700">{title}</dt>
-        <dd>{description}</dd>
+      <dl className="-translate-y-[5%] md:-translate-y-1">
+        <dt className="m-body-add md:body-large font-700">{title}</dt>
+        <dd className="m-body-add md:body-medium">{description}</dd>
       </dl>
     </div>
   );

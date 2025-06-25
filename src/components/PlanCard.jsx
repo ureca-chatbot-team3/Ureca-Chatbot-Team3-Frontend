@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { formatter } from '../utils/formatter';
@@ -13,8 +13,6 @@ const PlanCard = ({
   name,
   infos,
   plan_speed,
-  price,
-  sale_price,
   price_value,
   sale_price_value,
   benefits = [],
@@ -27,44 +25,35 @@ const PlanCard = ({
   const [imageLoading, setImageLoading] = useState(!!imagePath);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // benefits가 객체인 경우 배열로 변환
-  const benefitsList = React.useMemo(() => {
+  const benefitsList = (() => {
     if (Array.isArray(benefits)) {
+      // 내부가 이중 배열인지 확인
+      if (benefits.length > 0 && Array.isArray(benefits[0])) {
+        return benefits.map(([k, v]) => `${k}: ${v}`);
+      }
       return benefits;
-    }
-    if (typeof benefits === 'object' && benefits !== null) {
-      return Object.entries(benefits).map(([key, value]) => `${key}: ${value}`);
+    } else if (typeof benefits === 'object' && benefits !== null) {
+      return Object.entries(benefits).map(([k, v]) => `${k}: ${v}`);
     }
     return [];
-  }, [benefits]);
+  })();
 
-  // infos가 배열인 경우 문자열로 변환
+  console.log('🧩 최종 benefitsList:', benefitsList);
+
   const infosText = Array.isArray(infos) ? infos.join(', ') : infos;
+  const imageUrl = getImageUrl(imagePath);
 
-  // 비교 페이지로 이동하는 함수
   const handleCompareClick = () => {
-    if (id) {
-      navigate(`/compare?planId=${id}`);
-    }
+    if (id) navigate(`/compare?planId=${id}`);
   };
 
-  // 장바구니 버튼 클릭 핸들러
   const handleBookmarkClick = async () => {
-    // 인증 로딩 중이면 대기
-    if (authLoading) {
-      return;
-    }
-
-    if (!isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
+    if (authLoading) return;
+    if (!isAuthenticated) return setShowLoginModal(true);
 
     const result = await toggleBookmark();
-
     if (result.success) {
       toast.success(result.message);
-      // 보관함에서 제거된 경우 콜백 호출
       if (result.action === 'removed' && onBookmarkRemoved) {
         onBookmarkRemoved(id);
       }
@@ -75,18 +64,14 @@ const PlanCard = ({
     }
   };
 
-  // 이미지 URL 처리
-  const imageUrl = getImageUrl(imagePath);
-
   return (
     <>
-      <div className="w-[300px] h-[592px] bg-white rounded-[20px] flex flex-col items-center p-4 box-border shadow-soft-black relative">
-        <div className="h-[24px]" />
+      <div className="w-full max-w-[300px] bg-white rounded-2xl flex flex-col items-center p-4 sm:p-5 box-border shadow-soft-black relative">
+        <div className="h-1" />
 
         {/* 이미지 */}
-        <div className="w-[246px] h-[224px] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center flex-shrink-0">
+        <div className="w-full aspect-[246/224] rounded-[20px] overflow-hidden bg-gray-100 flex items-center justify-center">
           {!imagePath || imageError ? (
-            // 이미지 경로가 없거나 에러 상태일 때 대체 UI 표시
             <div className="w-full h-full flex items-center justify-center bg-gray-50">
               <div className="text-center text-gray-400">
                 <svg className="w-16 h-16 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
@@ -111,18 +96,19 @@ const PlanCard = ({
                       r="10"
                       stroke="currentColor"
                       strokeWidth="4"
-                    ></circle>
+                    />
                     <path
                       className="opacity-75"
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
+                    />
                   </svg>
                 </div>
               )}
               <img
                 src={imageUrl}
                 alt={name}
+                loading="lazy"
                 className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
                 style={{
                   opacity: imageLoading ? 0 : 1,
@@ -135,32 +121,39 @@ const PlanCard = ({
                   setImageLoading(false);
                   setImageError(false);
                 }}
-                onError={(e) => {
+                onError={() => {
                   setImageLoading(false);
-                  if (!imageError) {
-                    setImageError(true);
-                  }
+                  if (!imageError) setImageError(true);
                 }}
               />
             </>
           )}
         </div>
-        <div className="h-[22px]" />
+
+        <div className="h-4" />
 
         {/* 이름 */}
-        <h2 className="heading-3 font-700 text-black">{name}</h2>
-        <div className="h-[25px]" />
+        <h2 className="heading-3 font-700 text-black text-center w-full h-[48px] overflow-hidden text-ellipsis break-words line-clamp-2">
+          {name || '\u00A0'}
+        </h2>
+
+        <div className="h-5" />
         <div className="w-full border-t border-gray-500" />
-        <div className="h-[10px]" />
+        <div className="h-2.5" />
 
         {/* infos, plan_speed */}
-        <div className="flex flex-col items-start w-full px-1">
-          <span className="heading-3 font-500 text-black">{infosText}</span>
-          {plan_speed && <span className="heading-3 font-500 text-black">{plan_speed}</span>}
+        <div className="flex flex-col items-start w-full px-1 space-y-1">
+          <div className="w-full h-[24px] overflow-hidden text-ellipsis whitespace-nowrap break-words heading-3 font-500 text-black">
+            {infosText}
+          </div>
+          <div className="w-full h-[24px] overflow-hidden text-ellipsis whitespace-nowrap break-words heading-3 font-500 text-black">
+            {plan_speed || '\u00A0'}
+          </div>
         </div>
-        <div className="h-[20px]" />
 
-        {/* price, sale_price */}
+        <div className="h-5" />
+
+        {/* 가격 */}
         <div className="flex flex-col w-full space-y-2 px-1">
           <div className="flex justify-between items-center w-full">
             <span className="body-large font-500 text-gray-700">월정액</span>
@@ -177,59 +170,46 @@ const PlanCard = ({
           </div>
         </div>
 
-        <div className="h-[10px]" />
+        <div className="h-2.5" />
         <div className="w-full border-t border-gray-500" />
-        <div className="h-[10px]" />
+        <div className="h-2.5" />
 
         {/* benefits */}
-        <div className="flex flex-col items-start w-full px-1">
-          {benefitsList.slice(0, 3).map((benefit, index) => (
-            <div key={index} className="w-full py-[2px] mb-[2px] last:mb-0">
+        <div className="flex flex-col items-start w-full px-1 min-h-[88px] justify-start">
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="w-full py-[1px] h-[22px]">
               <span
-                className="body-small font-400 text-black"
-                style={{
-                  display: '-webkit-box',
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
+                className="body-small font-400 text-black block w-full overflow-hidden text-ellipsis whitespace-nowrap break-words"
+                title={benefitsList[i]}
               >
-                {benefit}
+                {benefitsList[i] || '\u00A0'}
               </span>
             </div>
           ))}
-          {benefitsList.length > 3 && (
-            <div className="py-[2px]">
-              <span className="body-small font-300 text-gray-500">...</span>
-            </div>
-          )}
         </div>
-        <div className="h-[25px]" />
+
+        <div className="h-4" />
 
         {/* 버튼 영역 */}
-        <div className="flex items-center justify-center gap-[8px]">
-          {/* 자세히 보기 버튼 */}
+        <div className="flex flex-nowrap justify-center gap-2 w-full overflow-hidden">
           <button
             onClick={() => navigate(`/plans/${encodeURIComponent(id)}`)}
-            className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors"
+            className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors"
           >
             자세히 보기
           </button>
 
-          {/* 비교하기 버튼 */}
           <button
             onClick={handleCompareClick}
-            className="w-[78px] h-[38px] rounded-[5px] border border-pink-700 bg-white body-medium font-500 text-pink-700 cursor-pointer hover:bg-pink-50 transition-colors"
+            className="w-[78px] h-[38px] rounded-[5px] border border-pink-700 bg-white body-medium font-500 text-pink-700 hover:bg-pink-50 transition-colors"
           >
             비교하기
           </button>
 
-          {/* 장바구니 버튼 */}
           <button
             onClick={handleBookmarkClick}
             disabled={bookmarkLoading || authLoading}
-            className={`w-[45px] h-[38px] rounded-[5px] flex items-center justify-center cursor-pointer transition-all duration-200 ${
+            className={`w-[45px] h-[38px] rounded-[5px] flex items-center justify-center transition-all duration-200 ${
               isBookmarked ? 'bg-pink-700 hover:bg-pink-500' : 'bg-gray-700 hover:bg-pink-700'
             } ${bookmarkLoading || authLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
@@ -250,7 +230,6 @@ const PlanCard = ({
                 />
               </svg>
             ) : isBookmarked ? (
-              // X 아이콘 (제거)
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -265,16 +244,12 @@ const PlanCard = ({
                 />
               </svg>
             ) : (
-              // 장바구니 아이콘 (cart2Icon.svg 사용)
               <img src="/cart2Icon.svg" alt="장바구니" className="w-[20px] h-[20px] mr-[2px]" />
             )}
           </button>
         </div>
-
-        <div className="h-[24px]" />
       </div>
 
-      {/* 로그인 필요 모달 */}
       <LoginRequiredModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </>
   );

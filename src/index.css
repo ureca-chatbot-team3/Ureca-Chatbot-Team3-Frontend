@@ -42,6 +42,7 @@
 
   /* 헤더 높이 */
   --header-height: 112px;
+  --m-header-height: 41px;
 }
 
 @layer utilities {
@@ -146,6 +147,13 @@
     .md\:body-add {
       font-size: 11px !important;
       line-height: 14px !important;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .text-md-range {
+      font-size: 12px !important;
+      line-height: 13px !important;
     }
   }
 

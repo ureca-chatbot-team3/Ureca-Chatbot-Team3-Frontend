@@ -22,7 +22,6 @@ const DiagnosisPage = () => {
     isComplete,
     answers,
     sessionId,
-    result,
 
     // 액션
     loadQuestions,
@@ -193,7 +192,7 @@ const DiagnosisPage = () => {
   }
 
   return (
-    <main className="flex justify-center py-[40px] px-[20px] md:px-0">
+    <main className="flex justify-center py-[32px] md:py-[60px] px-[20px] md:px-0">
       {/* 모바일: 최대 430px 너비 제한, 자동 높이 / 데스크탑: 720px 최대 크기 */}
       <div className="w-full max-w-[430px] bg-white rounded-[20px] shadow-sm md:max-w-[720px] md:h-auto">
         {/* 진행 표시바 */}
