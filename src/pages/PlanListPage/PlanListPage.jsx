@@ -13,7 +13,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 const getDailyDataGB = (infos) => {
   for (const info of infos) {
-    const m = info.match(/데이터\s*일\s*(\d+)GB/i);
+    const m = info.match(/(\d+)\s*GB/i);
     if (m) return parseInt(m[1], 10);
   }
   return 0;
