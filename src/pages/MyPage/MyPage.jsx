@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { authApi } from '../../apis/authApi';
 import MyPageSidebar from './components/MyPageSidebar';
 import toast from 'react-hot-toast';
 
@@ -152,7 +151,6 @@ const MyPage = () => {
       }
 
       // API 호출
-      const response = await authApi.updateProfile(updateData);
       toast.success('정보가 성공적으로 업데이트되었습니다.');
       await checkAuth();
     } catch (error) {
@@ -176,7 +174,7 @@ const MyPage = () => {
     <>
       {/* 모바일 레이아웃 (md 미만) */}
       <div className="md:hidden">
-        <main className="min-h-screen bg-gray-200 py-[20px]">
+        <main className="min-h-screen bg-gray-200 py-[32px] md:py-[60px]">
           <div className="max-w-[430px] mx-auto">
             {/* 마이페이지 타이틀과 드롭다운 화살표 */}
             <div className="flex items-center justify-between pb-[16px]">
@@ -326,7 +324,7 @@ const MyPage = () => {
 
       {/* 데스크톱 레이아웃 (md 이상) */}
       <div className="hidden md:block">
-        <main className="max-w-[1440px] mx-auto py-[60px]">
+        <main className="max-w-[1440px] mx-auto py-[32px] md:py-[60px]">
           <div className="flex">
             <MyPageSidebar />
 

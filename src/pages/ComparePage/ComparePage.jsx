@@ -533,7 +533,7 @@ const ComparePage = () => {
   return (
     <div className="bg-gray-200 min-h-screen">
       {/* 모바일 레이아웃 */}
-      <div className="md:hidden px-[20px] py-[30px] max-w-[430px] mx-auto">
+      <div className="md:hidden px-[20px] py-[32px] md:py-[60px] max-w-[430px] mx-auto">
         {/* 모바일 제목 */}
         <div className="mb-[20px]">
           <h1 className="m-heading-2 font-700 text-black text-center">요금제를 비교해보세요</h1>
@@ -557,7 +557,7 @@ const ComparePage = () => {
 
       {/* 데스크톱 레이아웃 */}
       <div className="hidden md:block">
-        <div className="max-w-[1440px] mx-auto px-0 py-8">
+        <div className="max-w-[1440px] mx-auto px-0 py-[32px] md:py-[60px]">
           {/* 데스크톱 제목 */}
           <div className="mb-8">
             <h1 className="heading-1 font-700 text-black">요금제를 비교해보세요</h1>

@@ -137,7 +137,7 @@ const SignupPage = () => {
               <div className="relative">
                 <input
                   type="email"
-                  placeholder="이메일 입력"
+                  placeholder="이메일 주소 입력"
                   value={values.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   className={`w-full pb-2 border-b ${

@@ -9,9 +9,11 @@ import callImg from '@/assets/images/call.png';
 import messageImg from '@/assets/images/message.png';
 import giftImg from '@/assets/images/gift.png';
 import PlanCard from '@/components/PlanCard';
-import toggleDownIcon from '@/assets/svg/upIcon.svg';
-import toggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
 import DetailAccordion from './DetailAccordion';
+import { useAuth } from '@/contexts/AuthContext';
+import { useBookmark } from '@/hooks/useBookmark';
+import { toast } from 'react-hot-toast';
+import LoginRequiredModal from '@/components/modals/LoginRequiredModal';
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -19,7 +21,9 @@ const DetailPage = () => {
   const [recommendPlans, setRecommendPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [isHovered, setIsHovered] = useState(false);
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isBookmarked, isLoading: bookmarkLoading, toggleBookmark } = useBookmark(id);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -54,6 +58,20 @@ const DetailPage = () => {
     if (id) fetchRecommendations();
   }, [id]);
 
+  const handleBookmarkClick = async () => {
+    if (authLoading) return;
+    if (!isAuthenticated) return setShowLoginModal(true);
+
+    const result = await toggleBookmark();
+    if (result.success) {
+      toast.success(result.message);
+    } else if (result.needsLogin) {
+      setShowLoginModal(true);
+    } else {
+      toast.error(result.message);
+    }
+  };
+
   if (loading) {
     return <div className="text-center py-10">로딩 중...</div>;
   }
@@ -71,7 +89,7 @@ const DetailPage = () => {
   ];
 
   return (
-    <div className="p-10 pt-15 pb-30">
+    <div className="px-10 py-[32px] md:py-[60px]">
       {/* 상단 박스 */}
       <div className="w-full h-[174px] bg-white rounded-[20px] px-[22px] flex items-center justify-between shadow-soft-black">
         <div className="flex items-center gap-[22px]">
@@ -85,11 +103,31 @@ const DetailPage = () => {
           <div className="flex flex-col justify-center gap-y-6">
             <div className="heading-1 font-500 text-black mb-[12px]">{plan.name}</div>
             <div className="flex gap-2">
-              <button className="px-4 py-2 rounded-[16px] bg-pink-700 text-white body-small font-500">
+              {/* 신청 사이트 이동 버튼 */}
+              <a
+                href="https://www.lguplus.com/mobile/plan/mplan/plan-all"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-[16px] bg-pink-700 text-white body-small font-500 inline-flex items-center justify-center"
+              >
                 신청 사이트 이동
-              </button>
-              <button className="px-4 py-2 rounded-[16px] bg-gray-500 text-black body-small font-500">
-                보관함 추가
+              </a>
+
+              {/* 보관함 추가/삭제 버튼 */}
+              <button
+                onClick={handleBookmarkClick}
+                disabled={bookmarkLoading || authLoading}
+                className={`px-4 py-2 rounded-[16px] body-small font-500 transition-colors duration-200 ${
+                  isBookmarked
+                    ? 'bg-pink-700 text-white hover:bg-pink-500'
+                    : 'bg-gray-500 text-black hover:bg-pink-700'
+                } ${bookmarkLoading || authLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {bookmarkLoading || authLoading
+                  ? '로딩중...'
+                  : isBookmarked
+                    ? '보관함 삭제'
+                    : '보관함 추가'}
               </button>
             </div>
           </div>
@@ -114,7 +152,7 @@ const DetailPage = () => {
         {infoItems.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center justify-center bg-white rounded-[20px] py-[20px] shadow-soft-black gap-y-3"
+            className="flex flex-col items-center justify-center bg-white rounded-[20px] px-6 py-[20px] shadow-soft-black gap-y-3"
           >
             <img src={item.img} alt={item.label} className="w-[48px] h-[48px]" />
             <span className="heading-3 text-black font-500">{item.label}</span>
@@ -127,22 +165,7 @@ const DetailPage = () => {
 
       {/* 추천 요금제 */}
       <div className="mt-20">
-        <div className="flex items-center justify-between mb-10">
-          <h2 className="heading-1 font-500 text-black">비슷한 요금제 추천</h2>
-          <button
-            className="flex items-center gap-1.5 text-gray-700 hover:text-black heading-3 font-500 leading-none"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            전체 보기
-            <img
-              src={isHovered ? toggleUpIcon : toggleDownIcon}
-              alt="화살표 아이콘"
-              className="w-[16px] h-[16px] transform rotate-90 translate-y-[1px]"
-            />
-          </button>
-        </div>
-
+        <h2 className="heading-1 font-500 text-black mb-10">비슷한 요금제 추천</h2>
         <div className="grid grid-cols-4 gap-6">
           {recommendPlans.map((item) => (
             <PlanCard
@@ -164,6 +187,9 @@ const DetailPage = () => {
 
       {/* 상세정보 아코디언 */}
       <DetailAccordion />
+
+      {/* 로그인 필요 모달 */}
+      <LoginRequiredModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
 };
