@@ -30,6 +30,7 @@ const faqs = [
       '드물지만 서버 접속량이 급증할 경우 응답이 지연될 수 있습니다. 이 경우 잠시 후 다시 시도해 주세요.',
   },
 ];
+
 const FAQ = () => {
   return (
     <motion.div
@@ -40,11 +41,11 @@ const FAQ = () => {
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
     >
       <div className="flex gap-md text-center items-center">
-        <div className="flex gap-md text-center items-end">
-          <div className="">
+        <div className="flex gap-xs md:gap-md text-center items-end">
+          <div className="max-w-[100px] md:max-w-[247px]">
             <img src={FAQYopleming} alt="챗봇 사용법" />
           </div>
-          <h2 className="heading-1 font-700 -translate-y-4">자주 묻는 질문 (FAQ)</h2>
+          <h2 className="m-heading-3 md:heading-1 font-700 -translate-y-4">자주 묻는 질문 (FAQ)</h2>
         </div>
       </div>
 
@@ -59,37 +60,25 @@ const FAQ = () => {
 
 const FQAItem = ({ question, answer }) => {
   return (
-    <div className="flex flex-col body-medium">
+    <div className="flex flex-col m-body-add md:body-medium">
       {/* 질문 */}
-      <div
-        className="grid gap-1 font-500"
-        style={{
-          gridTemplateColumns: '15px auto',
-          gridTemplateRows: '15px auto',
-        }}
-      >
+      <div className="grid gap-1 font-500 grid-cols-[12px_auto] grid-rows-[12px_auto] md:grid-cols-[15px_auto] md:grid-rows-[15px_auto]">
         <div className="col-start-1 row-start-1">
           <img src={QIcon} alt="질문" />
         </div>
         <div className="col-start-2 row-start-2">
-          <div className="w-fit p-3 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl bg-[#2BB3CD50]">
+          <div className="w-fit py-2 px-3 md:p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl md:rounded-tr-2xl md:rounded-br-2xl md:rounded-bl-2xl bg-[#2BB3CD50]">
             {question}
           </div>
         </div>
       </div>
       {/* 답변 */}
-      <div
-        className="grid gap-1 justify-end"
-        style={{
-          gridTemplateColumns: 'auto 15px',
-          gridTemplateRows: '17px auto',
-        }}
-      >
+      <div className="grid gap-1 justify-end grid-cols-[auto_12px] grid-rows-[15px_auto] md:grid-cols-[auto_15px] md:grid-rows-[17px_auto]">
         <div className="col-start-2 row-start-1">
           <img src={AIcon} alt="답변" />
         </div>
         <div className="col-start-1 row-start-2">
-          <div className="w-fit p-3 rounded-tl-2xl rounded-br-2xl rounded-bl-2xl bg-pink-300">
+          <div className="w-fit py-2 px-3 md:p-3 rounded-tl-xl rounded-br-xl rounded-bl-xl md:rounded-tl-2xl md:rounded-br-2xl md:rounded-bl-2xl bg-pink-300">
             {answer}
           </div>
         </div>

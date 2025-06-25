@@ -42,9 +42,11 @@ const ChatbotNotice = () => {
       viewport={{ once: false, amount: 0.3 }}
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
     >
-      <div className="flex flex-col gap-sm text-center">
-        <h2 className="heading-1 font-700">유의사항 안내</h2>
-        <img src={NoticeYopleming} alt="유의사항 안내" />
+      <div className="flex flex-col gap-xs md:gap-sm text-center">
+        <h2 className="m-heading-3 md:heading-1 font-700">유의사항 안내</h2>
+        <div className="max-w-[109px] md:max-w-[246px]">
+          <img src={NoticeYopleming} alt="유의사항 안내" />
+        </div>
       </div>
       <div className="p-md shadow-soft-black rounded-[20px] max-w-[640px] w-full flex flex-col gap-1 bg-white">
         {notices.map(({ title, descriptions }, index) => (
@@ -57,7 +59,7 @@ const ChatbotNotice = () => {
 
 const NoticeItem = ({ number, title, descriptions }) => {
   return (
-    <div className="flex flex-col body-medium">
+    <div className="flex flex-col m-body-add gap-[2px] md:body-medium">
       <span className="font-700">
         {number}. {title}
       </span>

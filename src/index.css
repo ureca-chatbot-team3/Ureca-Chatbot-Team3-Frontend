@@ -149,6 +149,13 @@
     }
   }
 
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .text-md-range {
+      font-size: 12px !important;
+      line-height: 13px !important;
+    }
+  }
+
   /* 그림자 */
   .shadow-soft-black {
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
