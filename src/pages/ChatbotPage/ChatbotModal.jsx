@@ -10,6 +10,7 @@ import ChatMessages from './components/ChatMessage';
 import ChatbotQuickQuestionBubble from './components/ChatbotQuickQuestionBubble';
 import { getRedirectResponse } from './utils/chatbotRedirectHelper';
 import { getSocket, resetSocket } from '../../utils/socket';
+import { extractPlanNamesFromText } from './utils/extractPlanNames';
 
 export default function ChatbotModal({ onClose }) {
   const [message, setMessage] = useState('');
@@ -30,14 +31,14 @@ export default function ChatbotModal({ onClose }) {
 
   const getGreetingText = () => {
     return nickname
-      ? `반가워요, ${nickname}님! 🤹\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
-      : `반가워요! 🤹 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`;
+      ? `반가워요, ${nickname}님! 🦩\n저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨`
+      : `반가워요! 🦩 저는 요플랜의 AI 챗봇, 요플밍이에요.\n데이터, 통화, 예산까지 딱 맞는 요금제를 똑똑하게 찾아드릴게요.\n궁금한 걸 채팅창에 말씀해주세요! ✨ \n 저희 플랫폼은 로그인 후 서비스를 이용하시기를 권장드립니다!`;
   };
 
   const handleResetMessages = () => {
     socketRef.current?.emit('force-end-session');
-    setMessages([]); // 클라이언트 상태만 초기화됨
-    initializeGreetingAndFAQ(); // DB에도 인사말 + 추천질문 저장됨
+    setMessages([]);
+    initializeGreetingAndFAQ();
     setIsChatEnded(false);
   };
 
@@ -60,24 +61,18 @@ export default function ChatbotModal({ onClose }) {
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
 
-      const greetingText = getGreetingText();
-      const quickText = `이런 질문은 어떠세요?\n- ${selected.join('\n- ')}`;
-
-      // DB 저장 없이 UI에만 보여주기
       setMessages([
         {
           id: 'greeting',
           type: 'bot',
           role: 'assistant',
-          content: greetingText,
+          content: getGreetingText(),
         },
         {
-          id: 'quick-questions',
-          type: 'bot',
+          id: 'faq-recommend',
+          type: 'faq-recommend',
           role: 'assistant',
-          content: (
-            <ChatbotQuickQuestionBubble questions={selected} onSelect={handleQuickQuestion} />
-          ),
+          content: selected,
         },
       ]);
 
@@ -86,19 +81,16 @@ export default function ChatbotModal({ onClose }) {
       console.error('❌ 초기 인사말 구성 실패:', err);
     }
   };
+
   useEffect(() => {
     const lastMsg = messages.at(-1);
-    console.log('📦 마지막 메시지:', lastMsg);
-
     if (
       (lastMsg?.role === 'system' || lastMsg?.type === 'notice') &&
       typeof lastMsg.content === 'string' &&
       lastMsg.content.includes('대화는 종료되었습니다')
     ) {
-      console.log('🔒 입력창 비활성화 조건 통과');
       setIsChatEnded(true);
     } else {
-      console.log('🔓 입력창 활성화');
       setIsChatEnded(false);
     }
   }, [messages]);
@@ -144,14 +136,30 @@ export default function ChatbotModal({ onClose }) {
         );
       });
 
-      socket.on('stream-end', ({ message }) => {
+      socket.on('stream-end', async ({ message }) => {
         const finalMessage = {
           ...(message || { content: '응답을 완료했어요.' }),
           id: message?.id || tempMessageIdRef.current,
           type: message?.role === 'assistant' ? 'bot' : 'user',
+          role: message?.role || 'assistant',
           isLoading: false,
         };
+
+        if (typeof finalMessage.content !== 'string') {
+          console.warn('❌ AI 응답 content가 문자열이 아님:', finalMessage.content);
+          finalMessage.content = '⚠️ 알 수 없는 응답 형식입니다.';
+        }
+
         setMessages((prev) => prev.map((msg) => (msg.id === finalMessage.id ? finalMessage : msg)));
+
+        const matchedPlans = await extractPlanNamesFromText(finalMessage.content);
+        if (matchedPlans.length > 0) {
+          const alreadyHasSamePlans = messages.some(
+            (msg) =>
+              msg.type === 'plans' && JSON.stringify(msg.content) === JSON.stringify(matchedPlans)
+          );
+        }
+
         tempMessageIdRef.current = null;
         tempContentRef.current = '';
       });
@@ -169,7 +177,7 @@ export default function ChatbotModal({ onClose }) {
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
           .map((msg) => ({
             id: msg._id,
-            type: msg.role === 'user' ? 'user' : 'bot',
+            type: msg.type || (msg.role === 'user' ? 'user' : 'bot'),
             content: msg.content,
             timestamp: msg.timestamp,
             role: msg.role,
@@ -223,16 +231,19 @@ export default function ChatbotModal({ onClose }) {
     setMessages((prev) =>
       prev.map((msg) =>
         msg.isLoading
-          ? {
-              ...msg,
-              isLoading: false,
-              content: msg.content + '❗요청이 중단되었어요.',
-            }
+          ? { ...msg, isLoading: false, content: msg.content + '❗요청이 중단되었어요.' }
           : msg
       )
     );
 
-    const userMsg = { type: 'user', content: trimmedText };
+    const userMsg = {
+      id: `user-${Date.now()}`,
+      type: 'user',
+      content: trimmedText,
+      role: 'user',
+      timestamp: new Date().toISOString(),
+    };
+
     setMessages((prev) => [...prev, userMsg]);
     setMessage('');
 
@@ -243,7 +254,7 @@ export default function ChatbotModal({ onClose }) {
         ...prev,
         {
           id: redirectId,
-          type: 'bot',
+          type: 'redirect',
           role: 'assistant',
           content: redirectMsg.content,
           label: redirectMsg.label,
@@ -259,12 +270,7 @@ export default function ChatbotModal({ onClose }) {
           label: redirectMsg.label,
           route: redirectMsg.route,
         },
-        userMessage: {
-          role: 'user',
-          content: trimmedText,
-          type: 'text',
-          timestamp: new Date().toISOString(),
-        },
+        userMessage: userMsg,
       });
 
       return;
