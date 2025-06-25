@@ -240,7 +240,6 @@ const PlanListPage = () => {
           onFilter={handleFilter}
           activeCategory="all"
         />
-        ㄴㄴㄴ
       </div>
 
       {(filter.quickTag || Object.values(filter).some((v) => Array.isArray(v) && v.length > 0)) && (
