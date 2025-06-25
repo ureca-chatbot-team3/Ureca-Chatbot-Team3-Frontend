@@ -158,7 +158,7 @@ const PlanCard = ({
         <div className="flex flex-col items-start w-full px-1">
           <span className="heading-3 font-500 text-black">{infosText}</span>
           {plan_speed && (
-            <span className="body-medium font-400 text-gray-600 mt-[2px]">+다 쓰면 최대 5Mbps</span>
+            <span className="body-medium font-400 text-gray-600 mt-[2px]">{plan_speed}</span>
           )}
         </div>
         <div className="h-[20px]" />
