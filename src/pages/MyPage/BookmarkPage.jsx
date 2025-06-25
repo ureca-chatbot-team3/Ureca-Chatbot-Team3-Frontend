@@ -316,7 +316,7 @@ const BookmarkPage = () => {
                   <div className="flex justify-center mb-[20px]">
                     <button
                       onClick={handleViewPlans}
-                      className="py-[16px] px-[24px] border border-pink-700 bg-white text-pink-700 rounded-[8px] m-body-medium font-500 hover:bg-pink-50 transition-colors"
+                      className="py-[16px] px-[24px] border border-pink-700 bg-white text-pink-700 rounded-[16px] m-body-medium font-500 hover:bg-pink-50 transition-colors"
                     >
                       더 많은 요금제 보기
                     </button>

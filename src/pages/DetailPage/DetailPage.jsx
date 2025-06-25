@@ -120,7 +120,7 @@ const DetailPage = () => {
                 className={`px-4 py-2 rounded-[16px] body-small font-500 transition-colors duration-200 ${
                   isBookmarked
                     ? 'bg-pink-700 text-white hover:bg-pink-500'
-                    : 'bg-gray-500 text-black hover:bg-pink-700'
+                    : 'bg-gray-500 text-black hover:bg-pink-700 hover:text-white'
                 } ${bookmarkLoading || authLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {bookmarkLoading || authLoading

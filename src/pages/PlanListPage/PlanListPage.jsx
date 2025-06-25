@@ -100,9 +100,7 @@ const PlanListPage = () => {
         return res.json();
       })
       .then((data) => {
-        console.log('📦 응답 데이터:', data);
         let loadedPlans = data.data.plans;
-        console.log('🎁 불러온 plans:', loadedPlans);
         if (sortBy === 'popular') {
           loadedPlans.sort((a, b) => (b.badge === '인기' ? 1 : 0) - (a.badge === '인기' ? 1 : 0));
         } else if (sortBy === 'data') {
@@ -230,21 +228,20 @@ const PlanListPage = () => {
             </div>
           )}
         </div>
-
         <div
-          className="ml-auto flex gap-2 text-black m-body-medium font-700 md:body-large md:font-500 cursor-pointer"
+          className="ml-auto flex gap-2 text-black m-body-medium font-700 md:body-large md:font-500 cursor-pointer items-center"
           onClick={() => setFilterOpen(true)}
         >
-          <img src={FilterIcon} alt="필터 아이콘" className="w-5 h-5" />
+          <img src={FilterIcon} alt="필터 아이콘" className="w-5 h-5 inline-block align-middle" />
           필터
         </div>
-
         <Filter
           isOpen={isFilterOpen}
           onClose={() => setFilterOpen(false)}
           onFilter={handleFilter}
           activeCategory="all"
         />
+        ㄴㄴㄴ
       </div>
 
       {(filter.quickTag || Object.values(filter).some((v) => Array.isArray(v) && v.length > 0)) && (

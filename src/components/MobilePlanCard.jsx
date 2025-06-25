@@ -212,7 +212,7 @@ const MobilePlanCard = ({
           {infosText}
         </span>
         <span
-          className={`${cardStyles.text.info} font-500 text-pink-700 overflow-hidden whitespace-nowrap text-ellipsis block w-full mt-[2px]`}
+          className={`${cardStyles.text.info} font-500 text-pink-black overflow-hidden whitespace-nowrap text-ellipsis block w-full mt-[2px]`}
         >
           {plan_speed || '\u00A0'}
         </span>
@@ -240,10 +240,10 @@ const MobilePlanCard = ({
       <div className="w-full border-t border-gray-500" />
       <div className={cardStyles.spacing.afterPrice} />
 
-      {/* benefits */}
-      <div className="flex flex-col items-start w-full px-1 min-h-[68px] justify-start">
+      {/* 혜택 */}
+      <div className="flex flex-col items-start w-full px-1 min-h-[50px] justify-start">
         {benefitsList.slice(0, 3).map((benefit, index) => (
-          <div key={index} className="w-full py-[1px] h-[22px] mb-[1px] last:mb-0">
+          <div key={index} className="w-full h-[18px] mb-[1px] last:mb-0">
             <span
               className={`${cardStyles.text.benefit} font-400 text-black block w-full overflow-hidden whitespace-nowrap text-ellipsis`}
               title={benefit}
@@ -257,28 +257,28 @@ const MobilePlanCard = ({
       <div className={cardStyles.spacing.afterBenefits} />
 
       {/* 버튼 영역 */}
-      <div className={`flex items-center justify-center ${cardStyles.buttons.gap}`}>
+      <div className={`w-full flex items-center justify-between ${cardStyles.buttons.gap}`}>
         {/* 자세히 보기 버튼 */}
         <button
           onClick={() => navigate(`/plans/${id}`)}
-          className={`${cardStyles.buttons.detail} rounded-[4px] border border-gray-700 bg-white ${cardStyles.text.button} font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors`}
+          className={`flex-1 h-[28px] rounded-[4px] border border-gray-700 bg-white ${cardStyles.text.button} font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors`}
         >
-          자세히 보기
+          자세히
         </button>
 
         {/* 비교하기 버튼 */}
         <button
           onClick={handleCompareClick}
-          className={`${cardStyles.buttons.compare} rounded-[4px] border border-pink-600 bg-white ${cardStyles.text.button} font-500 text-pink-600 cursor-pointer hover:bg-pink-50 transition-colors`}
+          className={`flex-1 h-[28px] rounded-[4px] border border-pink-600 bg-white ${cardStyles.text.button} font-500 text-pink-600 cursor-pointer hover:bg-pink-50 transition-colors`}
         >
-          비교하기
+          비교
         </button>
 
         {/* 장바구니 버튼 */}
         <button
-          className={`${cardStyles.buttons.cart} rounded-[4px] bg-gray-700 flex items-center justify-center cursor-pointer`}
+          className={`w-[34px] h-[28px] rounded-[4px] bg-gray-700 flex items-center justify-center cursor-pointer`}
         >
-          <img src={cart2Icon} alt="장바구니" className={`${cardStyles.buttons.icon} h-auto`} />
+          <img src={cart2Icon} alt="장바구니" className="w-[14px] h-auto" />
         </button>
       </div>
 
