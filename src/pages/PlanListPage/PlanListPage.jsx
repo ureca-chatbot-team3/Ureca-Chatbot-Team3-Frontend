@@ -13,7 +13,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 const getDailyDataGB = (infos) => {
   for (const info of infos) {
-    const m = info.match(/데이터\s*일\s*(\d+)GB/i);
+    const m = info.match(/(\d+)\s*GB/i);
     if (m) return parseInt(m[1], 10);
   }
   return 0;
@@ -163,7 +163,7 @@ const PlanListPage = () => {
               if (e.key === 'Enter') handleSearch();
             }}
             placeholder="검색어를 입력하세요."
-            className="border border-gray-500 bg-white text-black rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] md:w-[344px] md:h-[52px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
+            className="border border-gray-500 bg-white text-black rounded-lg md:rounded-2xl pl-3 pr-10 py-3 w-[182px] h-[28px] md:w-[344px] md:h-[52px] focus:outline-none focus:border-black placeholder:text-[10px] md:placeholder:text-[16px] placeholder:leading-[20px] placeholder:font-500"
           />
           <div
             className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-gray-400 hover:text-black transition-colors duration-200"
