@@ -123,6 +123,7 @@ const PlanCard = ({
               <img
                 src={imageUrl}
                 alt={name}
+                loading="lazy"
                 className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
                 style={{
                   opacity: imageLoading ? 0 : 1,
