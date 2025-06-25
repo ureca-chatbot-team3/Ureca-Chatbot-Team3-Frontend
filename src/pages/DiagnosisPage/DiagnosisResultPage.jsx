@@ -160,7 +160,7 @@ const DiagnosisResultPage = () => {
   const navigate = useNavigate();
   const { sessionId } = useParams();
   const { result, isLoading, error, getResult, resetDiagnosis } = useDiagnosis();
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [, setShowConfetti] = useState(false);
   const mobileScrollRef = useRef(null);
 
   useEffect(() => {
@@ -241,7 +241,7 @@ const DiagnosisResultPage = () => {
           <div className="flex justify-center mt-[20px]">
             <button
               onClick={handleRetryDiagnosis}
-              className="h-[48px] px-[32px] border-[2px] border-gray-500 bg-white rounded-[12px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
+              className="h-[48px] px-[32px] border-[2px] border-gray-500 bg-white rounded-[16px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
             >
               다시 진단하기
             </button>
@@ -294,7 +294,7 @@ const DiagnosisResultPage = () => {
           <div className="flex justify-center mt-[30px]">
             <button
               onClick={handleRetryDiagnosis}
-              className="h-[48px] border-[2px] border-gray-500 bg-white rounded-[12px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
+              className="h-[48px] border-[2px] border-gray-500 bg-white rounded-[16px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
             >
               다시 진단하기
             </button>
@@ -343,7 +343,7 @@ const DiagnosisResultPage = () => {
           {/* 다시 진단하기 버튼 - 데스크톱에서만 오른쪽 상단 */}
           <button
             onClick={handleRetryDiagnosis}
-            className="hidden md:block absolute top-0 right-0 h-[48px] px-[24px] border-[2px] border-gray-500 bg-white rounded-[12px] body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
+            className="hidden md:block absolute top-0 right-0 h-[48px] px-[24px] border-[2px] border-gray-500 bg-white rounded-[16px] body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
           >
             다시 진단하기
           </button>
@@ -572,7 +572,7 @@ const DiagnosisResultPage = () => {
           <div className="flex justify-center px-[20px] mt-[30px]">
             <button
               onClick={handleRetryDiagnosis}
-              className="w-full max-w-[300px] h-[48px] border-[2px] border-gray-500 bg-white rounded-[12px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
+              className="w-full max-w-[300px] h-[48px] border-[2px] border-gray-500 bg-white rounded-[16px] m-body-medium font-500 text-black hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-all"
             >
               다시 진단하기
             </button>

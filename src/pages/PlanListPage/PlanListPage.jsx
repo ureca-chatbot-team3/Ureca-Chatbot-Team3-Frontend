@@ -158,7 +158,7 @@ const PlanListPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-0 text-black">
+    <div className="min-h-screen py-[32px] md:py-[60px] px-0 text-black">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-[18px] mt-[18px]">
         <h2 className="m-heading-3 md:heading-2 font-500 text-black border-b-2 border-pink-600 inline-block">
