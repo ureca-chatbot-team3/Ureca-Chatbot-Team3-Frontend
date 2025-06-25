@@ -12,10 +12,10 @@ const MyPageSidebar = () => {
   return (
     <div className="w-[280px] mr-[60px]">
       {/* 1. 마이페이지 제목 - heading-1 font-500 */}
-      <h1 className="heading-1 font-500 text-black mb-[20px]">마이페이지</h1>
+      <h1 className="heading-1 font-700 text-black mb-[20px]">마이페이지</h1>
 
-      {/* 2. 구분선 */}
-      <div className="w-full h-[1px] bg-gray-500 mb-[20px]"></div>
+      {/* 2. 구분선 - 상하 26px 간격 위해 margin 위아래 적용 */}
+      <div className="w-full h-[1px] bg-gray-500 my-[26px]"></div>
 
       {/* 3. 메뉴 - heading-3 font-500, gap 16px, 패딩 없음 */}
       <nav className="space-y-[16px]">
