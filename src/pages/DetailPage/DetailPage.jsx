@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { planApi } from '../../apis/planApi';
 import { formatter } from '@/utils/formatter';
@@ -10,6 +10,8 @@ import messageImg from '@/assets/images/message.png';
 import giftImg from '@/assets/images/gift.png';
 import PlanCard from '@/components/PlanCard';
 import toggleDownIcon from '@/assets/svg/upIcon.svg';
+import toggleUpIcon from '@/assets/svg/toggleUpIcon.svg';
+import DetailAccordion from './DetailAccordion';
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -17,7 +19,7 @@ const DetailPage = () => {
   const [recommendPlans, setRecommendPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [expandedItems, setExpandedItems] = useState({});
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -68,23 +70,6 @@ const DetailPage = () => {
     { img: giftImg, label: '추가혜택', value: plan.benefits?.['기본혜택'] || '-' },
   ];
 
-  const dropdownItems = [
-    '데이터',
-    '공유데이터',
-    '음성통화',
-    '문자메세지',
-    '현역 병사 혜택',
-    '유쓰 5G 공유데이터 혜택',
-    '청소년 보호 정책',
-  ];
-
-  const toggleItem = (label) => {
-    setExpandedItems((prev) => ({
-      ...prev,
-      [label]: !prev[label],
-    }));
-  };
-
   return (
     <div className="p-10 pt-15 pb-30">
       {/* 상단 박스 */}
@@ -124,7 +109,7 @@ const DetailPage = () => {
         </div>
       </div>
 
-      {/* 하단 정보 박스 */}
+      {/* 하단 정보 박스 5개 */}
       <div className="h-[220px] mt-10 grid grid-cols-5 gap-x-10">
         {infoItems.map((item, index) => (
           <div
@@ -144,12 +129,16 @@ const DetailPage = () => {
       <div className="mt-20">
         <div className="flex items-center justify-between mb-10">
           <h2 className="heading-1 font-500 text-black">비슷한 요금제 추천</h2>
-          <button className="flex items-center gap-1.5 text-gray-700 hover:text-black heading-3 font-500">
+          <button
+            className="flex items-center gap-1.5 text-gray-700 hover:text-black heading-3 font-500 leading-none"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             전체 보기
             <img
-              src={toggleDownIcon}
+              src={isHovered ? toggleUpIcon : toggleDownIcon}
               alt="화살표 아이콘"
-              className="w-[16px] h-[16px] transform rotate-90"
+              className="w-[16px] h-[16px] transform rotate-90 translate-y-[1px]"
             />
           </button>
         </div>
@@ -173,44 +162,8 @@ const DetailPage = () => {
         </div>
       </div>
 
-      {/* 드롭다운 상세 정보 */}
-      <div className="w-full bg-white rounded-[20px] mt-20 p-6 shadow-soft-black">
-        <div className="flex justify-end mb-2">
-          <button className="flex items-center gap-1.5 text-gray-700 hover:text-black body-large font-500">
-            전체 펼치기
-            <img
-              src={toggleDownIcon}
-              alt="전체 펼치기"
-              className="w-[16px] h-[16px] transform rotate-90"
-            />
-          </button>
-        </div>
-
-        <div className="divide-y divide-gray-200">
-          {dropdownItems.map((label, index) => (
-            <div key={index} className="py-4">
-              <div
-                className="flex items-center justify-between cursor-pointer"
-                onClick={() => toggleItem(label)}
-              >
-                <span className="text-black body-medium font-500">{label}</span>
-                <img
-                  src={toggleDownIcon}
-                  alt="펼치기"
-                  className={`w-[16px] h-[16px] transition-transform duration-200 ${
-                    expandedItems[label] ? 'rotate-180' : 'rotate-0'
-                  }`}
-                />
-              </div>
-              {expandedItems[label] && (
-                <div className="mt-4 text-gray-700 body-small font-300">
-                  {label}에 대한 상세한 내용입니다.
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* 상세정보 아코디언 */}
+      <DetailAccordion />
     </div>
   );
 };
