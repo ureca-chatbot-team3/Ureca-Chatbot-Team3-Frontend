@@ -32,11 +32,23 @@ const MobileHeader = () => {
 
         {/* 오른쪽 아이콘 */}
         <div className="flex items-center gap-4">
-          <button className="p-0 m-0 bg-transparent border-none">
+          <button
+            className="p-0 m-0 bg-transparent border-none"
+            onClick={() => {
+              navigate('/plans?focusSearch=true', { replace: false });
+              setMenuOpen(false);
+            }}
+          >
             <img src={searchIcon} alt="검색" className="w-5 h-5" />
           </button>
-          <button className="p-0 m-0 bg-transparent border-none">
-            <img src={cartIcon} alt="장바구니" className="w-5 h-5" />
+          <button
+            className="p-0 m-0 bg-transparent border-none"
+            onClick={() => {
+              navigate('/mypage/bookmarks', { replace: false });
+              setMenuOpen(false);
+            }}
+          >
+            <img src={cartIcon} alt="보관함" className="w-5 h-5" />
           </button>
           <button onClick={() => setMenuOpen(true)} className="p-0 m-0 bg-transparent border-none">
             <img src={menuIcon} alt="메뉴" className="w-5 h-5" />
@@ -78,27 +90,19 @@ const MobileHeader = () => {
             </Link>
           )}
 
-          <Link to="/mypage" className="m-body-large font-700" onClick={() => setMenuOpen(false)}>
+          <Link to="/mypage" className="m-body-large font-700">
             마이페이지
           </Link>
-          <Link to="/plans" className="m-body-large font-700" onClick={() => setMenuOpen(false)}>
+          <Link to="/plans" className="m-body-large font-700">
             요금제
           </Link>
-          <Link
-            to="/diagnosis"
-            className="m-body-large font-700"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/diagnosis" className="m-body-large font-700">
             요금제 진단 <span className="text-pink-700 relative -top-2">•</span>
           </Link>
-          <Link to="/compare" className="m-body-large font-700" onClick={() => setMenuOpen(false)}>
+          <Link to="/compare" className="m-body-large font-700">
             요금제 비교
           </Link>
-          <Link
-            to="/chatbot-guide"
-            className="m-body-large font-700"
-            onClick={() => setMenuOpen(false)}
-          >
+          <Link to="/chatbot-guide" className="m-body-large font-700">
             챗봇 안내
           </Link>
         </nav>
