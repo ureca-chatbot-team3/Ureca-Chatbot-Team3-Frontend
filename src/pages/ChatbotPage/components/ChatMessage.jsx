@@ -1,24 +1,72 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BotBubble from './BotBubble';
 import UserBubble from './UserBubble';
 import ChatbotQuickQuestionBubble from './ChatbotQuickQuestionBubble';
 import ChatbotRedirectBubble from './ChatbotRedirectBubble';
 import chatEndIcon from '../../../assets/svg/chatEndIcon.svg';
+import PlanCard from '../../../components/PlanCard';
+import { extractPlanNamesFromText } from '../utils/extractPlanNames';
+import PlanCardSlider from './PlanCardSlider'; // ✅ 추가
 
 export default function ChatMessages({ messages, onQuickQuestionSelect, onResetMessages }) {
   const scrollRef = useRef(null);
+  const [matchedPlansMap, setMatchedPlansMap] = useState({});
 
+  // ✅ 렌더 후 항상 스크롤 최하단 유지
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    requestAnimationFrame(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
+    });
+  }, [messages, matchedPlansMap]);
+
+  // ✅ 메시지별로 요금제 자동 추출
+  useEffect(() => {
+    const updateMatchedPlans = async () => {
+      const newMap = {};
+
+      for (let idx = 0; idx < messages.length; idx++) {
+        const msg = messages[idx];
+        const isBotText =
+          (msg.role === 'assistant' || ['bot', 'faq', 'text'].includes(msg.type)) &&
+          msg.role !== 'user' &&
+          typeof msg.content === 'string';
+
+        if (isBotText && !matchedPlansMap[idx]) {
+          const plans = await extractPlanNamesFromText(msg.content);
+          const plansWithId = plans.filter((plan) => plan._id);
+          if (plansWithId.length > 0) {
+            newMap[idx] = plansWithId;
+          }
+        }
+      }
+
+      if (Object.keys(newMap).length > 0) {
+        setMatchedPlansMap((prev) => ({ ...prev, ...newMap }));
+      }
+    };
+
+    updateMatchedPlans();
   }, [messages]);
 
   return (
     <div ref={scrollRef} className="p-4 pb-[66px] overflow-y-auto h-[calc(100%-66px-45px-66px)]">
       {messages.map((msg, idx) => {
-        // ✅ 시스템 메시지 (대화 종료 안내)
-        if (msg.role === 'system' || msg.type === 'notice') {
+        const isSystemMessage = msg.role === 'system' || msg.type === 'notice';
+        const isQuickQuestionRecommend = msg.type === 'faq-recommend' && Array.isArray(msg.content);
+        const isTextWithQuickQuestions =
+          msg.type === 'bot' &&
+          typeof msg.content === 'string' &&
+          msg.content.startsWith('이런 질문은 어떠세요?');
+        const isRedirect =
+          msg.role === 'assistant' && msg.type === 'redirect' && msg.label && msg.route;
+        const isPlanCards = msg.type === 'plans' && Array.isArray(msg.content);
+        const isUserMessage = msg.role === 'user' || msg.type === 'user';
+        const isBotText =
+          (msg.role === 'assistant' || ['bot', 'faq', 'text'].includes(msg.type)) && !isUserMessage;
+
+        if (isSystemMessage) {
           return (
             <div key={idx} className="mb-3">
               <BotBubble
@@ -31,13 +79,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
                     {'\n'}마이페이지 → 챗봇 상담 내역에서 언제든 확인 가능합니다.
                     <button
                       onClick={onResetMessages}
-                      className=" w-full px-3 py-2 mb-3 mt-3
-                  body-medium font-500
-                  text-[var(--color-black)]
-                  border border-[rgba(217,218,219,0.5)]
-                  rounded-[16px] 
-                  bg-white hover:bg-[var(--color-gray-400)]
-                  transition-colors"
+                      className="w-full px-3 py-2 mb-3 mt-3 body-medium font-500 text-[var(--color-black)] border border-[rgba(217,218,219,0.5)] rounded-[16px] bg-white hover:bg-[var(--color-gray-400)] transition-colors"
                     >
                       대화 새로 시작하기
                     </button>
@@ -48,8 +90,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           );
         }
 
-        // ✅ 추천 질문 배열로 명시된 경우 (저장된 메시지)
-        if (msg.type === 'faq-recommend' && Array.isArray(msg.content)) {
+        if (isQuickQuestionRecommend) {
           return (
             <div key={idx} className="mb-3">
               <BotBubble
@@ -64,13 +105,8 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           );
         }
 
-        // ✅ 일반 텍스트 메시지이지만 추천 질문 포맷인 경우
-        if (
-          msg.type === 'bot' &&
-          typeof msg.content === 'string' &&
-          msg.content.startsWith('이런 질문은 어떠세요?')
-        ) {
-          const lines = msg.content.split('\n').slice(1); // 첫 줄 제거
+        if (isTextWithQuickQuestions) {
+          const lines = msg.content.split('\n').slice(1);
           const questions = lines.map((line) => line.replace(/^- /, '').trim());
 
           return (
@@ -87,14 +123,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           );
         }
 
-        // ✅ 리디렉션 응답일 경우
-        if (
-          msg.type === 'bot' &&
-          msg.role === 'assistant' &&
-          msg.type !== 'faq-recommend' &&
-          msg.label &&
-          msg.route
-        ) {
+        if (isRedirect) {
           return (
             <div key={idx} className="mb-3">
               <BotBubble message={<ChatbotRedirectBubble label={msg.label} route={msg.route} />} />
@@ -102,21 +131,39 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           );
         }
 
-        // ✅ 일반 봇 메시지 (텍스트 or 로딩)
-        if (msg.type === 'bot') {
+        if (isPlanCards) {
           return (
-            <div key={idx} className="mb-3">
-              <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
+            <div key={msg.id || idx} className="flex flex-col gap-4 px-4 py-2">
+              {msg.content.map((plan, i) => (
+                <PlanCard key={plan._id || i} {...plan} id={plan._id} />
+              ))}
             </div>
           );
         }
 
-        // ✅ 유저 메시지
-        return (
-          <div key={idx} className="mb-3 flex justify-end">
-            <UserBubble message={msg.content} />
-          </div>
-        );
+        if (isUserMessage) {
+          return (
+            <div key={idx} className="mb-3 flex justify-end">
+              <UserBubble message={msg.content} />
+            </div>
+          );
+        }
+
+        if (isBotText) {
+          const matchedPlans = matchedPlansMap[idx] || [];
+          return (
+            <div key={idx} className="mb-3">
+              <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
+              {matchedPlans.length > 0 && (
+                <div className="mt-2">
+                  <PlanCardSlider plans={matchedPlans} />
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        return null;
       })}
     </div>
   );

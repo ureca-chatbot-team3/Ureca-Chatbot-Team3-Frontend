@@ -250,3 +250,51 @@ button {
     animation-delay: 0.4s;
   }
 }
+
+
+
+/* 챗봇 요금제 슬라이더 전용 스타일 */
+.chatbot-plan-swiper .swiper-slide {
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.chatbot-plan-swiper .swiper-wrapper {
+  height: auto;
+}
+
+.chatbot-plan-swiper .swiper-button-prev,
+.chatbot-plan-swiper .swiper-button-next {
+  color: var(--color-gray-700);
+  opacity: 0.7;
+}
+
+.chatbot-plan-swiper .swiper-button-prev::after,
+.chatbot-plan-swiper .swiper-button-next::after {
+  font-size: var(--spacing-xl);
+   top: 35%;
+  transform: translateY(-50%);
+}
+
+.chatbot-plan-swiper .swiper-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-xs);
+  text-align: center;
+}
+
+.chatbot-plan-swiper .swiper-pagination-bullet {
+  width: var(--spacing-xs);
+  height: var(--spacing-xs);
+  background-color: transparent;
+  border: 1px solid var(--color-pink-700);
+  opacity: 1;
+  margin: 0 var(--spacing-xs);
+}
+
+.chatbot-plan-swiper .swiper-pagination-bullet-active {
+  background-color: var(--color-pink-700);
+}
