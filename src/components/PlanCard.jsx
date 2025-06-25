@@ -108,8 +108,15 @@ const PlanCard = ({
               <img
                 src={imageUrl}
                 alt={name}
-                className="w-full h-full object-cover transition-opacity duration-200"
-                style={{ opacity: imageLoading ? 0 : 1 }}
+                loading="lazy"
+                className="w-[246px] h-[224px] object-cover transition-opacity duration-200"
+                style={{
+                  opacity: imageLoading ? 0 : 1,
+                  minWidth: '246px',
+                  minHeight: '224px',
+                  maxWidth: '246px',
+                  maxHeight: '224px',
+                }}
                 onLoad={() => {
                   setImageLoading(false);
                   setImageError(false);

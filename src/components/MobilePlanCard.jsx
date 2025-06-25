@@ -167,6 +167,7 @@ const MobilePlanCard = ({
             <img
               src={imageUrl}
               alt={name}
+              loading="lazy"
               className={`${cardStyles.image} object-cover transition-opacity duration-200`}
               style={{
                 opacity: imageLoading ? 0 : 1,
@@ -204,19 +205,13 @@ const MobilePlanCard = ({
       <div className={cardStyles.spacing.afterInfo} />
 
       {/* infos, plan_speed */}
-      <div className="flex flex-col items-start w-full px-1 space-y-1">
-        <span
-          className={`${cardStyles.text.info} font-500 text-black overflow-hidden whitespace-nowrap text-ellipsis`}
-          style={{ maxWidth: '100%' }}
-        >
-          {infosText}
-        </span>
-        <span
-          className={`${cardStyles.text.info} font-500 text-black overflow-hidden whitespace-nowrap text-ellipsis`}
-          style={{ maxWidth: '100%' }}
-        >
-          {plan_speed || '\u00A0'}
-        </span>
+      <div className="flex flex-col items-start w-full px-1">
+        <span className={`${cardStyles.text.info} font-500 text-black`}>{infosText}</span>
+        {plan_speed && (
+          <span className={`${cardStyles.text.info} body-medium font-400 text-pink-700 mt-[2px]`}>
+            {plan_speed}
+          </span>
+        )}
       </div>
       <div className={cardStyles.spacing.afterInfo} />
 
