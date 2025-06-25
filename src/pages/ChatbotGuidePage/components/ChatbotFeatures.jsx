@@ -40,29 +40,29 @@ const ChatbotFeatures = () => {
       viewport={{ once: false, amount: 0.3 }}
       transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
     >
-      <div className="flex gap-md text-center items-center">
-        <div className="self-end">
+      <div className="flex md:gap-md text-center items-center">
+        <div className="max-w-[80px] md:max-w-[183px] self-end">
           <img src={FeaturesYopleming} alt="챗봇 기능" />
         </div>
-        <div className="flex flex-col gap-sm">
-          <h2 className="heading-1 font-700">어떤 기능을 하나요?</h2>
-          <h3 className="heading-3">
+        <div className="flex flex-col gap-xs md:gap-sm">
+          <h2 className="m-heading-3 md:heading-1 font-700">어떤 기능을 하나요?</h2>
+          <h3 className="pb-xs body-medium md:heading-3">
             요플랜 AI 챗봇은 통신 요금제 선택을
             <br /> 더 쉽고 똑똑하게 도와주는 서비스입니다.
           </h3>
         </div>
       </div>
 
-      <div className="relative flex flex-col gap-md max-w-[710px] w-full">
+      <div className="relative flex flex-col gap-xs md:gap-md max-w-[710px] w-full">
         {features.map(({ title, description }, index) => (
           <FeautureItem key={index} title={title} description={description} />
         ))}
 
         {/* 깃털 이미지 */}
-        <div className="absolute bottom-2 -left-50 ">
+        <div className="hidden md:block absolute bottom-2 -left-50 ">
           <img src={FeatherLeft} alt="왼쪽 깃털" />
         </div>
-        <div className="absolute -top-20 -right-50 ">
+        <div className="hidden md:block absolute -top-20 -right-50 ">
           <img src={FeatherRight} alt="오른쪽 깃털" />
         </div>
       </div>
@@ -72,9 +72,9 @@ const ChatbotFeatures = () => {
 
 const FeautureItem = ({ title, description }) => {
   return (
-    <dl className="px-md py-sm body-medium rounded-[20px] shadow-soft-black bg-white z-10">
+    <dl className="px-sm md:px-md py-sm m-body-small md:body-medium rounded-[20px] shadow-soft-black bg-white z-10 space-y-1">
       <dt className="font-700">{title}</dt>
-      <dd className="font-300 whitespace-pre-line">{description}</dd>
+      <dd className="text-[12px] md:body-medium font-300 whitespace-pre-line">{description}</dd>
     </dl>
   );
 };
