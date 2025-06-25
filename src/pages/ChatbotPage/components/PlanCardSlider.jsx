@@ -10,13 +10,12 @@ export default function PlanCardSlider({ plans }) {
   return (
     <div className="w-full py-2 overflow-x-visible">
       <Swiper
-        className="chatbot-plan-swiper"
+        className="chatbot-plan-swiper pb-6"
         modules={[Navigation, Pagination]}
         slidesPerView={1}
         spaceBetween={10}
         pagination={{ clickable: true }}
-        navigation
-        style={{ overflow: 'visible' }}
+        style={{ width: '100%', overflow: 'hidden' }}
       >
         {plans.map((plan, i) => (
           <SwiperSlide key={plan._id || i}>
