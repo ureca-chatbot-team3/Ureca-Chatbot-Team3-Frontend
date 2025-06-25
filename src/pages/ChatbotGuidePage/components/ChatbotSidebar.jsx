@@ -35,7 +35,10 @@ const ChatbotSidebar = () => {
       <div className="hidden md:block w-full h-[1px] bg-gray-500"></div>
       <ul className="grid grid-cols-3 gap-x-sm gap-y-xs md:inline-block md:space-y-2">
         {CHATBOT_GUIDE_SECTIONS.map(({ id, label }) => (
-          <li key={id} className="border border-gray-500 rounded-[12px] md:border-none">
+          <li
+            key={id}
+            className="border border-gray-500 rounded-[12px] md:border-none bg-white md:bg-transparent"
+          >
             <button
               onClick={handleSectionScroll(id)}
               className={`m-body-small font-500 w-full py-2 md:py-0 md:w-fit md:heading-3 transition-colors duration-200 ${
