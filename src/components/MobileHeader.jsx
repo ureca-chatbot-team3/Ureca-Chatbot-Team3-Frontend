@@ -47,7 +47,7 @@ const MobileHeader = () => {
       {/* 슬라이드 메뉴 */}
       <div
         className={`
-          fixed top-0 right-0 w-[65%] h-full bg-white shadow-lg z-50 px-4 py-3
+          fixed top-0 right-0 w-[70%] h-full bg-white shadow-lg z-50 px-4 py-3
           transform transition-transform duration-300 ease-in-out
           ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
@@ -62,7 +62,7 @@ const MobileHeader = () => {
         {/* 메뉴 항목 */}
         <nav className="flex flex-col items-center gap-4">
           {isAuthenticated ? (
-            <div className="flex w-full justify-start items-center gap-2">
+            <div className="flex w-full justify-start items-center">
               <span className="m-body-large font-700 text-pink-700">{user?.nickname}</span>
               <span className="m-body-large font-700 text-black">님 환영합니다.</span>
 
