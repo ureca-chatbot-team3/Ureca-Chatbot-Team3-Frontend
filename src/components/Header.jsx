@@ -171,8 +171,13 @@ const Header = () => {
           >
             <img src={searchIcon} alt="검색" className="h-6 w-6" />
           </button>
-          <button className="p-0 m-0 bg-transparent border-none cursor-pointer">
-            <img src={cartIcon} alt="장바구니" className="h-6 w-6" />
+          <button
+            className="p-0 m-0 bg-transparent border-none"
+            onClick={() => {
+              navigate('/mypage/bookmarks', { replace: false });
+            }}
+          >
+            <img src={cartIcon} alt="보관함" className="w-5 h-5" />
           </button>
           <button
             onClick={handleUserMenuClick}
