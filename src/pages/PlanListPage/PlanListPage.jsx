@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import SearchIcon from '@/assets/svg/searchIcon.svg';
 import FilterIcon from '@/assets/svg/filterIcon.svg';
 import ToggleDownIcon from '@/assets/svg/toggleDownIcon.svg';
@@ -23,7 +24,7 @@ const PlanListPage = () => {
   const [isFilterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [plans, setPlans] = useState([]);
-  const [limit, setLimit] = useState(20);
+  const [limit] = useState(20);
   const [filter, setFilter] = useState({});
   const [sortBy, setSortBy] = useState('popular');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -32,6 +33,11 @@ const PlanListPage = () => {
   const [search, setSearch] = useState('');
   const [emptyReason, setEmptyReason] = useState('');
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldFocusSearch = searchParams.get('focusSearch') === 'true';
+  const searchInputRef = useRef(null);
+
   useEffect(() => {
     const params = new URLSearchParams();
     params.append('category', 'all');
@@ -39,6 +45,10 @@ const PlanListPage = () => {
     params.append('sortOrder', sortOrder);
     params.append('customSort', sortBy);
     params.append('search', search);
+
+    if (shouldFocusSearch && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
 
     if (sortBy === 'price_value') {
       params.append('page', page);
@@ -116,7 +126,7 @@ const PlanListPage = () => {
         }
       })
       .catch(console.error);
-  }, [sortBy, sortOrder, page, limit, filter, search]);
+  }, [sortBy, sortOrder, page, limit, filter, search, shouldFocusSearch]);
 
   const handleSort = (sortField, order) => {
     setSortBy(sortField);
@@ -156,6 +166,7 @@ const PlanListPage = () => {
         </h2>
         <div className="relative flex items-center rounded-full w-[182px] h-[28px] md:w-70">
           <input
+            ref={searchInputRef}
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
