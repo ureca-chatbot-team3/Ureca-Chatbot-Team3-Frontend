@@ -206,7 +206,7 @@ const MobilePlanCard = ({
       <div className="flex flex-col items-start w-full px-1">
         <span className={`${cardStyles.text.info} font-500 text-black`}>{infosText}</span>
         {plan_speed && (
-          <span className={`${cardStyles.text.info} m-body-add font-400 text-gray-600 mt-[2px]`}>
+          <span className={`${cardStyles.text.info} body-medium font-400 text-pink-700 mt-[2px]`}>
             {plan_speed}
           </span>
         )}
