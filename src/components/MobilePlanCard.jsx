@@ -206,12 +206,16 @@ const MobilePlanCard = ({
 
       {/* infos, plan_speed */}
       <div className="flex flex-col items-start w-full px-1">
-        <span className={`${cardStyles.text.info} font-500 text-black`}>{infosText}</span>
-        {plan_speed && (
-          <span className={`${cardStyles.text.info} body-medium font-400 text-pink-700 mt-[2px]`}>
-            {plan_speed}
-          </span>
-        )}
+        <span
+          className={`${cardStyles.text.info} font-500 text-black overflow-hidden whitespace-nowrap text-ellipsis block w-full`}
+        >
+          {infosText}
+        </span>
+        <span
+          className={`${cardStyles.text.info} font-500 text-pink-700 overflow-hidden whitespace-nowrap text-ellipsis block w-full mt-[2px]`}
+        >
+          {plan_speed || '\u00A0'}
+        </span>
       </div>
       <div className={cardStyles.spacing.afterInfo} />
 
