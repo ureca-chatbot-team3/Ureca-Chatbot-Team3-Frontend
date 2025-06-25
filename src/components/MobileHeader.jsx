@@ -21,11 +21,6 @@ const MobileHeader = () => {
     }
   };
 
-  const handleGoToSearch = () => {
-    navigate('/plans?focusSearch=true');
-    setMenuOpen(false);
-  };
-
   return (
     <header className="bg-white border-b border-gray-300 fixed top-0 left-0 w-full z-50">
       {/* 상단바 */}
@@ -36,7 +31,7 @@ const MobileHeader = () => {
         </Link>
 
         {/* 오른쪽 아이콘 */}
-        <div onClick={handleGoToSearch} className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <button className="p-0 m-0 bg-transparent border-none">
             <img src={searchIcon} alt="검색" className="w-5 h-5" />
           </button>

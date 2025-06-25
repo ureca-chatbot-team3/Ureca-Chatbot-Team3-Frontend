@@ -94,7 +94,6 @@ const PlanListPage = () => {
     })
       .then((res) => {
         if (!res.ok) {
-          console.log('📡 응답 상태:', res.status);
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         return res.json();
