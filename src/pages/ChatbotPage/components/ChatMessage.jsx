@@ -6,13 +6,13 @@ import ChatbotRedirectBubble from './ChatbotRedirectBubble';
 import chatEndIcon from '../../../assets/svg/chatEndIcon.svg';
 import PlanCard from '../../../components/PlanCard';
 import { extractPlanNamesFromText } from '../utils/extractPlanNames';
-import PlanCardSlider from './PlanCardSlider'; // ✅ 추가
+import PlanCardSlider from './PlanCardSlider';
 
 export default function ChatMessages({ messages, onQuickQuestionSelect, onResetMessages }) {
   const scrollRef = useRef(null);
   const [matchedPlansMap, setMatchedPlansMap] = useState({});
 
-  // ✅ 렌더 후 항상 스크롤 최하단 유지
+  // ✅ 자동 스크롤
   useEffect(() => {
     requestAnimationFrame(() => {
       if (scrollRef.current) {
@@ -21,7 +21,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
     });
   }, [messages, matchedPlansMap]);
 
-  // ✅ 메시지별로 요금제 자동 추출
+  // ✅ 메시지에서 요금제 추출
   useEffect(() => {
     const updateMatchedPlans = async () => {
       const newMap = {};
@@ -30,10 +30,9 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
         const msg = messages[idx];
         const isBotText =
           (msg.role === 'assistant' || ['bot', 'faq', 'text'].includes(msg.type)) &&
-          msg.role !== 'user' &&
           typeof msg.content === 'string';
 
-        if (isBotText && !matchedPlansMap[idx]) {
+        if (isBotText) {
           const plans = await extractPlanNamesFromText(msg.content);
           const plansWithId = plans.filter((plan) => plan._id);
           if (plansWithId.length > 0) {
@@ -42,9 +41,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
         }
       }
 
-      if (Object.keys(newMap).length > 0) {
-        setMatchedPlansMap((prev) => ({ ...prev, ...newMap }));
-      }
+      setMatchedPlansMap(newMap); // ✅ 완전히 덮어쓰기
     };
 
     updateMatchedPlans();
