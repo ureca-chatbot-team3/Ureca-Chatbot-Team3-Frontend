@@ -30,7 +30,7 @@ const ChatbotSidebar = () => {
   };
 
   return (
-    <div className="md:w-[280px] bg-gray-200 sticky top-[calc(var(--header-height))] py-md md:py-0 md:top-[calc(var(--header-height)+var(--spacing-2xl))] md:h-fit flex flex-col gap-md z-20">
+    <div className="md:w-[280px] bg-gray-200 sticky top-[calc(var(--m-header-height))] py-md md:py-0 md:top-[calc(var(--header-height)+var(--spacing-2xl))] md:h-fit flex flex-col gap-md z-20">
       <h1 className="m-heading-3 font-700 md:heading-1 md:font-500">챗봇 안내</h1>
       <div className="hidden md:block w-full h-[1px] bg-gray-500"></div>
       <ul className="grid grid-cols-3 gap-x-sm gap-y-xs md:inline-block md:space-y-2">

@@ -4,7 +4,7 @@ import ChatbotSidebar from './components/ChatbotSidebar';
 
 const ChatbotGuidePage = () => {
   const sectionClass =
-    'scroll-mt-[calc(var(--header-height)+174px)] md:scroll-mt-[var(--header-height)] py-sm md:py-[60px] w-full';
+    'scroll-mt-[calc(var(--m-header-height)+174px)] md:scroll-mt-[var(--header-height)] py-sm md:py-[60px] w-full';
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

@@ -42,6 +42,7 @@
 
   /* 헤더 높이 */
   --header-height: 112px;
+  --m-header-height: 41px;
 }
 
 @layer utilities {
