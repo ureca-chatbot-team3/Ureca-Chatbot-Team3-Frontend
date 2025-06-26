@@ -150,7 +150,11 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           const matchedPlans = matchedPlansMap[idx] || [];
           return (
             <div key={idx} className="mb-3">
-              <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
+              {/* 텍스트를 요금제 매칭이 없을 때만 보여줌 */}
+              {matchedPlans.length === 0 && (
+                <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
+              )}
+              {/* 카드가 있다면 카드만 보여줌 */}
               {matchedPlans.length > 0 && (
                 <div className="mt-2">
                   <PlanCardSlider plans={matchedPlans} />
