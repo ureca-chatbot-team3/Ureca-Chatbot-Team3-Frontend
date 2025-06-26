@@ -21,7 +21,7 @@ const MainIntro = () => {
           centeredSlides={true}
           autoplay={{
             delay: 4000,
-            disableOnInteraction: true,
+            disableOnInteraction: false,
           }}
           pagination={{
             clickable: true,

@@ -25,12 +25,14 @@ const MainPage = () => {
       { threshold: 0.5 }
     );
 
-    if (chatbotRef.current) {
-      observer.observe(chatbotRef.current);
+    const target = chatbotRef.current;
+
+    if (target) {
+      observer.observe(target);
     }
 
     return () => {
-      if (chatbotRef.current) observer.unobserve(chatbotRef.current);
+      if (target) observer.unobserve(target);
     };
   }, [setIsArrowVisible]);
 
