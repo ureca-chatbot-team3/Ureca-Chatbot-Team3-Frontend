@@ -152,7 +152,7 @@ const ComparePage = () => {
   const renderDropdown = (index, isMobile = false) => {
     const plan = selectedPlans[index];
     const isOpen = openDropdownIndex === index;
-    const textColor = index === 0 ? 'text-black' : 'text-pink-700';
+    const textColor = index === 0 || index === 2 ? 'text-black' : 'text-pink-700';
 
     return (
       <div className="relative w-full">
@@ -167,10 +167,11 @@ const ComparePage = () => {
               {/* 텍스트와 화살표 그룹 */}
               <div className="flex items-center flex-1 min-w-0">
                 <span
-                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 ${index === 0 ? 'text-black' : 'text-pink-700'} truncate`}
+                  className={`${isMobile ? 'm-body-medium' : 'heading-3'} font-500 ${textColor} truncate`}
                 >
                   {plan.name}
                 </span>
+
                 {!isMobile && (
                   <svg
                     className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''} ${textColor} ml-2`}
@@ -364,7 +365,8 @@ const ComparePage = () => {
 
   // 요금제 상세 정보 렌더링
   const renderPlanDetails = (plan, index, isMobile = false) => {
-    const textColor = index === 0 ? 'text-black' : 'text-pink-600';
+    const textColor = index === 0 || index === 2 ? 'text-black' : 'text-pink-700';
+
     const benefits = plan ? formatBenefits(plan.benefits) : {};
 
     const sectionHeight = isMobile ? 'h-[80px]' : 'h-[120px]';
