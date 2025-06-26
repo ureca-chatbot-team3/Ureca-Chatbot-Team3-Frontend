@@ -177,7 +177,7 @@ const Header = () => {
               navigate('/mypage/bookmarks', { replace: false });
             }}
           >
-            <img src={cartIcon} alt="보관함" className="w-5 h-5" />
+            <img src={cartIcon} alt="보관함" className="w-6 h-6" />
           </button>
           <button
             onClick={handleUserMenuClick}
