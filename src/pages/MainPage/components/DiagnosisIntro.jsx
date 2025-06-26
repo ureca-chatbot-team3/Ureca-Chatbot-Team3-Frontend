@@ -44,7 +44,7 @@ const SecondSection = () => {
           <div className="flex justify-between max-w-[410px] w-full m-body-small font-500 md:body-medium">
             <div className="flex gap-2 items-center">
               <img src={QuestionICon} alt="질문 수" />
-              <span>질문 수: 10개</span>
+              <span>질문 수: 7개</span>
             </div>
             <div className="flex gap-2 items-center">
               <img src={TimeIcon} alt="예상 소요시간" />

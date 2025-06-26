@@ -42,7 +42,7 @@ const DiagnosisIntroSection = ({ onStartDiagnosis }) => {
               <div className="flex gap-[8px] items-center justify-center">
                 <img src={QuestionICon} alt="질문 수" />
                 <span className="m-body-medium text-gray-700 md:body-large font-500">
-                  질문 수: 10개
+                  질문 수: 7개
                 </span>
               </div>
               <div className="flex gap-[8px] items-center justify-center">
