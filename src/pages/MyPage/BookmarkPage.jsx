@@ -5,6 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useBookmarkContext } from '../../contexts/BookmarkContext';
 import MyPageSidebar from './components/MyPageSidebar';
 import PlanCard from '../../components/PlanCard';
+import MobilePlanCard from '../../components/MobilePlanCard';
 
 import EmptyImage from '@/assets/svg/empty.svg';
 import NoticeIcon from '@/assets/svg/notice.svg';
@@ -292,25 +293,23 @@ const BookmarkPage = () => {
                     </div>
                   )}
 
-                  {/* 모바일 카드 그리드 - 1줄에 2개, 0.55배 크기 */}
+                  {/* 모바일 카드 그리드 - 1줄에 2개 */}
                   <div className="flex flex-wrap justify-between gap-y-[10px] mb-[30px]">
                     {bookmarks.map((bookmark) => (
-                      <div key={bookmark.plan._id} className="w-[165px] h-[330px] overflow-hidden">
-                        <div className="transform scale-[0.55] origin-top-left">
-                          <PlanCard
-                            id={bookmark.plan._id}
-                            imagePath={bookmark.plan.imagePath}
-                            name={bookmark.plan.name}
-                            infos={bookmark.plan.infos}
-                            plan_speed={bookmark.plan.plan_speed}
-                            price={bookmark.plan.price}
-                            sale_price={bookmark.plan.sale_price}
-                            price_value={bookmark.plan.price_value}
-                            sale_price_value={bookmark.plan.sale_price_value}
-                            benefits={bookmark.plan.benefits}
-                            onBookmarkRemoved={() => handleBookmarkRemoved(bookmark.plan._id)}
-                          />
-                        </div>
+                      <div key={bookmark.plan._id} className="w-[calc(50%-5px)]">
+                        <MobilePlanCard
+                          id={bookmark.plan._id}
+                          imagePath={bookmark.plan.imagePath}
+                          name={bookmark.plan.name}
+                          infos={bookmark.plan.infos}
+                          plan_speed={bookmark.plan.plan_speed}
+                          price={bookmark.plan.price}
+                          sale_price={bookmark.plan.sale_price}
+                          price_value={bookmark.plan.price_value}
+                          sale_price_value={bookmark.plan.sale_price_value}
+                          benefits={bookmark.plan.benefits}
+                          onBookmarkRemoved={() => handleBookmarkRemoved(bookmark.plan._id)}
+                        />
                       </div>
                     ))}
                   </div>
