@@ -162,7 +162,7 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
               {matchedPlans.length > 0 && (
                 <div className="mt-2">
                   <BotBubble
-                    message={`추천 요금제를 카드로 보여줄게!\n 카드가 완성될 때까지 조금만 기다려줘!`}
+                    message={`추천 요금제를 카드로 보여줄게요!\n 카드가 완성될 때까지 조금만 기다려주세요!`}
                   />
                   <PlanCardSlider plans={matchedPlans} />
                 </div>
