@@ -228,14 +228,6 @@ export default function ChatbotModal({ onClose }) {
 
     socketRef.current?.emit('force-end');
 
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.isLoading
-          ? { ...msg, isLoading: false, content: msg.content + '❗요청이 중단되었어요.' }
-          : msg
-      )
-    );
-
     const userMsg = {
       id: `user-${Date.now()}`,
       type: 'user',
