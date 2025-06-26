@@ -15,16 +15,15 @@ export async function extractPlanNamesFromText(text) {
     if (!cachedPlans) {
       const res = await axios.get(`${API_BASE_URL}/plans`);
 
-      console.log('🔍 API 응답 구조:', res.data);
+
 
       cachedPlans = res?.data?.data?.plans;
 
       if (!Array.isArray(cachedPlans)) {
-        console.error('❌ 요금제 데이터가 배열이 아님:', res.data);
         return [];
       }
 
-      console.log('📦 요금제 데이터 캐싱 완료');
+
     }
 
     const normalizedText = normalize(text);
@@ -32,7 +31,6 @@ export async function extractPlanNamesFromText(text) {
 
     return matched;
   } catch (err) {
-    console.error('❌ 요금제 추출 실패:', err.message);
     return [];
   }
 }

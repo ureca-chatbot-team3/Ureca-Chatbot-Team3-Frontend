@@ -35,7 +35,6 @@ const DetailPage = () => {
         setPlan(onlyPlan);
       } catch (err) {
         setError('요금제 정보를 불러오지 못했습니다.');
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -48,10 +47,9 @@ const DetailPage = () => {
     const fetchRecommendations = async () => {
       try {
         const res = await planApi.getRecommendedPlans({ baseId: id });
-        console.log('추천 요금제 응답:', res);
         setRecommendPlans(res?.data?.recommendedPlans || []);
       } catch (err) {
-        console.error('추천 요금제 조회 실패:', err);
+        // 추천 요금제 조회 실패
       }
     };
 

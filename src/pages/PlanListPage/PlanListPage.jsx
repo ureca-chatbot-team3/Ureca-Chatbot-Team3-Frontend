@@ -122,7 +122,9 @@ const PlanListPage = () => {
           setEmptyReason('');
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        // 오류 처리
+      });
   }, [sortBy, sortOrder, page, limit, filter, search, shouldFocusSearch]);
 
   const handleSort = (sortField, order) => {

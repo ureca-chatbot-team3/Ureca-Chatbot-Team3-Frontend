@@ -42,17 +42,15 @@ class ApiClient {
     } catch (error) {
       // 네트워크 연결 실패 (CORS, 서버 미실행 등)
       if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-        console.warn('서버 연결 실패:', url);
         throw new Error('서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.');
       }
 
       // CORS 에러
       if (error.message.includes('CORS')) {
-        console.warn('CORS 에러:', url);
         throw new Error('서버 설정 오류입니다. 관리자에게 문의해주세요.');
       }
 
-      console.error('API Request Error:', error);
+      // API Request Error
       throw error;
     }
   }

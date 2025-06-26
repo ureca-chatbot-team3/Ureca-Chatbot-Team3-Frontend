@@ -21,7 +21,7 @@ export const askChatbot = async (message) => {
     const data = await response.json();
     return data.reply;
   } catch (err) {
-    console.error('챗봇 API 호출 실패:', err);
+    // 챗봇 API 호출 실패
     throw new Error('요청 실패');
   }
 };

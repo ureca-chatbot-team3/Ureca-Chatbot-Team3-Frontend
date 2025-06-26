@@ -61,13 +61,13 @@ export default function ChatbotModal({ onClose }) {
       const allFaqs = Array.isArray(res.data) ? res.data : [];
 
       if (!Array.isArray(allFaqs) || allFaqs.length === 0) {
-        console.warn('⚠️ FAQ 데이터 없음 또는 형식 오류:', res.data);
+
         return;
       }
 
       const shuffled = [...allFaqs].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
-      console.log('✅ selected FAQ:', selected);
+
 
       setFaqList(allFaqs);
       setMessages([
@@ -86,7 +86,7 @@ export default function ChatbotModal({ onClose }) {
       ]);
       setIsChatEnded(false);
     } catch (err) {
-      console.error('❌ 초기 인사말 구성 실패:', err);
+
     }
   };
 
@@ -157,7 +157,6 @@ export default function ChatbotModal({ onClose }) {
         };
 
         if (typeof finalMessage.content !== 'string') {
-          console.warn('❌ AI 응답 content가 문자열이 아님:', finalMessage.content);
           finalMessage.content = '⚠️ 알 수 없는 응답 형식입니다.';
         }
 
@@ -206,8 +205,6 @@ export default function ChatbotModal({ onClose }) {
         if (err.response?.status === 404 && !initializedRef.current) {
           initializedRef.current = true;
           initializeGreetingAndFAQ();
-        } else {
-          console.warn('대화 불러오기 실패:', err.message);
         }
       }
     };
@@ -307,7 +304,7 @@ export default function ChatbotModal({ onClose }) {
       setIsChatEnded(false);
       initializeGreetingAndFAQ();
     } catch (err) {
-      console.error('❌ 대화 초기화 실패:', err);
+
     }
   };
 

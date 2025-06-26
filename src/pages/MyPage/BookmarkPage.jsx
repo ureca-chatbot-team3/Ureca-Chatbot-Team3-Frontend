@@ -43,7 +43,6 @@ const BookmarkPage = () => {
       const response = await planApi.getBookmarkedPlans();
       setBookmarks(response.data.bookmarks || []);
     } catch (err) {
-      console.error('보관함 조회 오류:', err);
       setError('보관함을 불러오는 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);

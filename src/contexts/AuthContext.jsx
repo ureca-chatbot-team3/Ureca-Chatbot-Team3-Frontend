@@ -119,7 +119,6 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: actionTypes.LOGOUT });
       return { success: true };
     } catch (error) {
-      console.error('로그아웃 오류:', error);
       dispatch({ type: actionTypes.LOGOUT }); // 에러가 있어도 로컬 상태는 리셋
       return { success: true }; // 로그아웃은 항상 성공으로 처리
     }
@@ -135,7 +134,6 @@ export const AuthProvider = ({ children }) => {
       });
     } catch (error) {
       // 서버가 연결되지 않았거나 인증 실패 시 로그아웃 상태로 설정
-      console.warn('인증 상태 확인 실패:', error.message);
       dispatch({ type: actionTypes.AUTH_FAILURE, payload: null });
     }
   }, []);

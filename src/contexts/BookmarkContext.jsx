@@ -24,7 +24,6 @@ export const BookmarkProvider = ({ children }) => {
       setBookmarkedPlanIds(new Set(planIds));
       setHasLoaded(true);
     } catch (error) {
-      console.warn('보관함 목록 조회 실패:', error.message);
       setBookmarkedPlanIds(new Set());
       setHasLoaded(true);
     } finally {
@@ -44,7 +43,6 @@ export const BookmarkProvider = ({ children }) => {
         setBookmarkedPlanIds((prev) => new Set([...prev, planId]));
         return { success: true, action: 'added', message: '보관함에 추가되었습니다.' };
       } catch (error) {
-        console.error('북마크 추가 오류:', error);
         const errorMessage = error?.response?.data?.message || error.message || '';
 
         if (errorMessage.includes('이미 보관함에 추가된')) {
@@ -77,7 +75,6 @@ export const BookmarkProvider = ({ children }) => {
         });
         return { success: true, action: 'removed', message: '보관함에서 제거되었습니다.' };
       } catch (error) {
-        console.error('북마크 제거 오류:', error);
         const errorMessage = error?.response?.data?.message || error.message || '';
         return {
           success: false,

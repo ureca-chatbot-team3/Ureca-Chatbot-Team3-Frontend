@@ -13,7 +13,7 @@ export default function usePlansSummary() {
           setSummary(res.data.data.join('\n'));
         }
       } catch (err) {
-        console.error('요금제 요약 로딩 실패:', err);
+        // 요금제 요약 로딩 실패
       } finally {
         setLoading(false);
       }
