@@ -6,6 +6,9 @@ import { useBookmarkContext } from '../../contexts/BookmarkContext';
 import MyPageSidebar from './components/MyPageSidebar';
 import PlanCard from '../../components/PlanCard';
 
+import EmptyImage from '@/assets/svg/empty.svg';
+import NoticeIcon from '@/assets/svg/notice.svg';
+
 const BookmarkPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -259,7 +262,7 @@ const BookmarkPage = () => {
                 <div className="flex flex-col items-center justify-center min-h-[400px]">
                   {/* Empty 이미지 */}
                   <img
-                    src="/src/assets/svg/empty.svg"
+                    src={EmptyImage}
                     alt="보관함이 비어있습니다"
                     className="mb-[20px] w-[150px] h-[150px]"
                   />
@@ -410,7 +413,7 @@ const BookmarkPage = () => {
               <div className="mt-[80px] p-[24px] bg-white rounded-[12px] border border-gray-700">
                 <div className="flex items-center mb-[12px]">
                   <img
-                    src="/src/assets/svg/notice.svg"
+                    src={NoticeIcon}
                     alt="이용안내"
                     className="w-5 h-5 mr-2 mt-[2px] flex-shrink-0"
                   />
