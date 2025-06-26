@@ -354,7 +354,7 @@ const BookmarkPage = () => {
                 <div className="flex flex-col items-center justify-center min-h-[400px]">
                   {/* Empty 이미지 */}
                   <img
-                    src="/src/assets/svg/empty.svg"
+                    src={NoticeIcon}
                     alt="보관함이 비어있습니다"
                     className="mb-[20px] w-[200px] h-[200px]"
                   />
