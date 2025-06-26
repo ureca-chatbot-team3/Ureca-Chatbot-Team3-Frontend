@@ -72,36 +72,44 @@ Ureca-Chatbot-Team3-Frontend/
 ### 개발 환경 설정
 
 1. **Node.js 설치**
+
    - Node.js 16.0.0 이상 버전 필요
 
 2. **의존성 설치**
+
    ```bash
    npm install
    ```
 
 3. **환경 변수 설정**
+
    ```bash
    # .env 파일 생성
    VITE_API_BASE_URL=백엔드 서버 URL (예: http://localhost:5000/api)
    ```
 
 4. **개발 서버 실행**
+
    ```bash
    npm run dev
    ```
+
    - 개발 서버가 http://localhost:5173에서 실행됩니다.
 
 5. **빌드**
+
    ```bash
    npm run build
    ```
 
 6. **프리뷰 (빌드된 결과물 미리보기)**
+
    ```bash
    npm run preview
    ```
 
 7. **코드 포맷팅**
+
    ```bash
    npm run format
    ```
@@ -114,8 +122,9 @@ Ureca-Chatbot-Team3-Frontend/
 ## 6. 주요 기능 소개
 
 ### 6.1 메인 페이지 (MainPage/)
+
 - **주요 기능**: 서비스 소개 및 주요 기능 안내
-- **핵심 컴포넌트**: 
+- **핵심 컴포넌트**:
   - `MainIntro.jsx`: 서비스 메인 소개 섹션
   - `DiagnosisIntro.jsx`: 진단 서비스 소개
   - `ChatbotIntro.jsx`: 챗봇 서비스 소개
@@ -123,6 +132,7 @@ Ureca-Chatbot-Team3-Frontend/
 - **특징**: 반응형 디자인, 스크롤 애니메이션, 자동 스크롤 기능
 
 ### 6.2 AI 챗봇 상담 (ChatbotPage/)
+
 - **주요 기능**: 실시간 대화형 요금제 상담
 - **핵심 컴포넌트**:
   - `ChatbotModal.jsx`: 챗봇 모달 메인 컴포넌트
@@ -133,6 +143,7 @@ Ureca-Chatbot-Team3-Frontend/
 - **특징**: 실시간 스트리밍 응답, 소켓 통신, FAQ 추천, 대화 이력 관리
 
 ### 6.3 요금제 진단 시스템 (DiagnosisPage/)
+
 - **주요 기능**: 단계별 질문을 통한 사용 패턴 분석 및 개인화된 요금제 추천
 - **핵심 컴포넌트**:
   - `DiagnosisPage.jsx`: 진단 메인 페이지
@@ -140,6 +151,7 @@ Ureca-Chatbot-Team3-Frontend/
 - **특징**: 단일/복수 선택 지원, 진행률 표시, 응답 검증, 세션 관리
 
 ### 6.4 요금제 목록 (PlanListPage/)
+
 - **주요 기능**: 통신사별 요금제 정보 조회 및 필터링
 - **핵심 컴포넌트**:
   - `PlanListPage.jsx`: 요금제 목록 메인 페이지
@@ -147,12 +159,14 @@ Ureca-Chatbot-Team3-Frontend/
 - **특징**: 검색 기능, 다양한 정렬 옵션, 필터링, 페이지네이션, 반응형 카드 레이아웃
 
 ### 6.5 요금제 비교 (ComparePage/)
+
 - **주요 기능**: 최대 3개(데스크톱) / 2개(모바일) 요금제 상세 비교
 - **핵심 컴포넌트**:
   - `ComparePage.jsx`: 요금제 비교 메인 페이지
 - **특징**: 드롭다운 선택, 북마크 요금제 우선 표시, 상세 정보 비교, 반응형 레이아웃
 
 ### 6.6 마이페이지 (MyPage/)
+
 - **주요 기능**: 개인정보 관리, 요금제 보관함, 상담 내역
 - **핵심 컴포넌트**:
   - `MyPage.jsx`: 개인정보 수정 페이지
@@ -164,10 +178,12 @@ Ureca-Chatbot-Team3-Frontend/
 - **특징**: 실시간 입력 검증, 모바일 드롭다운 메뉴, 카카오 로그인 사용자 구분
 
 ### 6.7 인증 시스템 (AuthPage/)
+
 - **주요 기능**: 로그인/회원가입 및 소셜 로그인
 - **특징**: 일반 로그인, 카카오 소셜 로그인, 보호된 라우트 관리
 
 ### 6.8 공통 컴포넌트 (components/)
+
 - **Header.jsx / MobileHeader.jsx**: 반응형 헤더
 - **PlanCard.jsx / MobilePlanCard.jsx**: 요금제 카드 컴포넌트
 - **ChatbotLauncher.jsx**: 챗봇 실행 버튼
@@ -178,63 +194,74 @@ Ureca-Chatbot-Team3-Frontend/
 ## 7. 기술 스택
 
 ### Frontend Framework & Language
+
 - **React 19.1.0**: 사용자 인터페이스 구축을 위한 메인 프레임워크
 - **JavaScript (ES6+)**: 프로그래밍 언어
 - **JSX**: React 컴포넌트 마크업
 
 ### 빌드 도구 & 개발 환경
+
 - **Vite 6.2.0**: 빠른 빌드 도구 및 개발 서버
 - **ESLint**: 코드 품질 및 스타일 검사
 - **Prettier**: 코드 포맷팅
 - **PostCSS**: CSS 후처리
 
 ### UI & 스타일링
+
 - **Tailwind CSS 4.1.10**: 유틸리티 퍼스트 CSS 프레임워크
 - **Motion 12.18.1**: 애니메이션 라이브러리
 - **Canvas Confetti**: 효과 애니메이션
 - **React Responsive**: 반응형 디자인 지원
 
 ### 상태 관리 & 라우팅
+
 - **React Router DOM 7.6.2**: 클라이언트 사이드 라우팅
 - **React Context API**: 전역 상태 관리
 
 ### 통신 & API
+
 - **Axios 1.10.0**: HTTP 클라이언트
 - **Socket.io Client 4.8.1**: 실시간 통신 (챗봇)
 - **REST API**: 백엔드 서버와의 데이터 통신
 
 ### UI 컴포넌트 & 라이브러리
+
 - **React Modal 3.16.3**: 모달 컴포넌트
 - **React Hot Toast 2.5.2**: 토스트 알림
 - **React Markdown 10.1.0**: 마크다운 렌더링
 - **Swiper 11.2.8**: 슬라이더/캐러셀 컴포넌트
 
 ### 개발 도구
+
 - **npm**: 패키지 관리
 - **Git**: 버전 관리
 - **VS Code**: 개발 환경 (설정 포함)
 
 ### 배포
+
 - **Vercel**: 프론트엔드 배포 및 호스팅 플랫폼
 - **환경 변수**: Vite 환경 변수 시스템 활용
 
 ## 8. 팀원 소개
 
 ### 👨‍💼 유동석 (팀장)
-**기획 및 UI / UX**
+
+- 기획 및 UI / UX
 - 챗봇 기능
 - 챗봇 대화창 모달
 - 챗봇 상담 내역 페이지
 - 모바일 반응형
 
 ### 👩‍💻 김소은
-**기획 및 UI / UX**
+
+- 기획 및 UI / UX
 - 메인 페이지
 - 챗봇 안내 페이지
 - 모바일 반응형
 
 ### 👨‍💻 김준서
-**기획 및 UI / UX**
+
+- 기획 및 UI / UX
 - 요금제 진단 페이지
 - 요금제 비교 페이지
 - 마이페이지
@@ -242,13 +269,15 @@ Ureca-Chatbot-Team3-Frontend/
 - 모바일 반응형
 
 ### 👨‍💻 양세현
-**기획 및 UI / UX**
+
+- 기획 및 UI / UX
 - 데이터 정제 및 정규화
 - 요금제 리스트 페이지
 - 모바일 반응형
 
 ### 👨‍💻 홍석준
-**기획 및 UI / UX**
+
+- 기획 및 UI / UX
 - 로그인/회원가입
 - 요금제 상세 페이지
 - 모바일 반응형
@@ -258,25 +287,29 @@ Ureca-Chatbot-Team3-Frontend/
 ## 9. 프로젝트 특징
 
 ### 반응형 디자인
+
 - 모바일 퍼스트 접근 방식
 - 데스크톱/태블릿/모바일 대응
 - Tailwind CSS를 활용한 효율적인 스타일링
 
 ### 사용자 경험 (UX)
+
 - 직관적인 인터페이스 디자인
 - 부드러운 애니메이션 및 전환 효과
 - 접근성 고려한 UI 컴포넌트
 
 ### 성능 최적화
+
 - Vite 기반 빠른 개발 및 빌드
 - 코드 스플리팅 및 지연 로딩
 - 최적화된 이미지 및 리소스 관리
 
 ### 개발 환경
+
 - ESLint + Prettier 코드 품질 관리
 - Git 기반 협업 워크플로우
 - 모듈화된 컴포넌트 아키텍처
 
 ---
 
-*이 README는 YoPlan 프론트엔드 프로젝트의 개요와 사용법을 안내합니다. 추가 질문이나 기술 지원이 필요한 경우 팀원에게 문의해주세요.*
+_이 README는 YoPlan 프론트엔드 프로젝트의 개요와 사용법을 안내합니다. 추가 질문이나 기술 지원이 필요한 경우 팀원에게 문의해주세요._
