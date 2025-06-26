@@ -7,6 +7,7 @@ import chatEndIcon from '../../../assets/svg/chatEndIcon.svg';
 import PlanCard from '../../../components/PlanCard';
 import { extractPlanNamesFromText } from '../utils/extractPlanNames';
 import PlanCardSlider from './PlanCardSlider';
+import ReactMarkdown from 'react-markdown';
 
 export default function ChatMessages({ messages, onQuickQuestionSelect, onResetMessages }) {
   const scrollRef = useRef(null);
@@ -154,7 +155,10 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
           const matchedPlans = matchedPlansMap[idx] || [];
           return (
             <div key={idx} className="mb-3">
-              <BotBubble message={msg.content} isLoading={msg.isLoading || msg.isStreaming} />
+              <BotBubble
+                message={msg.content.replace(/\*\*/g, '')}
+                isLoading={msg.isLoading || msg.isStreaming}
+              />
               {/* 카드가 있다면 카드도 보여줌 */}
               {matchedPlans.length > 0 && (
                 <div className="mt-2">
