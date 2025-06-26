@@ -2,7 +2,7 @@ import flamingo from '../assets/images/chatbot.gif';
 
 export default function ChatbotLauncher({ onClick }) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 z-10 pointer-events-none">
       <div className="max-w-[1440px] mx-auto relative h-0">
         <button
           onClick={onClick}
