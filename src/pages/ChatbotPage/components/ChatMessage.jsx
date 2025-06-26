@@ -87,12 +87,16 @@ export default function ChatMessages({ messages, onQuickQuestionSelect, onResetM
         }
 
         if (isQuickQuestionRecommend) {
+          const questions = msg.content.map((faq) =>
+            typeof faq === 'string' ? faq : faq.question
+          );
+
           return (
             <div key={idx} className="mb-3">
               <BotBubble
                 message={
                   <ChatbotQuickQuestionBubble
-                    questions={msg.content}
+                    questions={questions}
                     onSelect={onQuickQuestionSelect}
                   />
                 }
