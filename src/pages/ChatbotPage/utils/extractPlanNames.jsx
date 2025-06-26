@@ -7,19 +7,24 @@ function normalize(str) {
 }
 
 export async function extractPlanNamesFromText(text) {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
   if (!text) return [];
 
   try {
     if (!cachedPlans) {
-      const res = await axios.get('/api/plans');
-      cachedPlans = res?.data?.plans || res?.data?.data?.plans;
+      const res = await axios.get(`${API_BASE_URL}/plans`);
+
+      console.log('🔍 API 응답 구조:', res.data);
+
+      cachedPlans = res?.data?.data?.plans;
 
       if (!Array.isArray(cachedPlans)) {
-        console.error('❌ 요금제 데이터가 배열이 아님:', cachedPlans);
+        console.error('❌ 요금제 데이터가 배열이 아님:', res.data);
         return [];
       }
 
-      console.log('📦 요금제 데이터 캐싱 완료 (API 요청)');
+      console.log('📦 요금제 데이터 캐싱 완료');
     }
 
     const normalizedText = normalize(text);
