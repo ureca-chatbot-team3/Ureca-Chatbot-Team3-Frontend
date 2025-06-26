@@ -13,6 +13,8 @@ import downIcon from '../../assets/svg/downIcon.svg';
 import EmptyImage from '@/assets/svg/empty.svg';
 import NoticeIcon from '@/assets/svg/notice.svg';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 const ChatHistoryPage = () => {
   const navigate = useNavigate();
   const [conversationList, setConversationList] = useState([]);
@@ -23,13 +25,17 @@ const ChatHistoryPage = () => {
   useEffect(() => {
     const fetchChatHistory = async () => {
       try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+        const profileRes = await axios.get(`${API_BASE_URL}/auth/profile`, {
+          withCredentials: true,
+        });
         const userId = profileRes.data?.data?._id;
         const nick = profileRes.data?.data?.nickname || '나';
         setNickname(nick);
 
         if (userId) {
-          const res = await axios.get(`/api/conversations?userId=${userId}&full=true`);
+          const res = await axios.get(`${API_BASE_URL}/conversations?userId=${userId}&full=true`, {
+            withCredentials: true,
+          });
           const fullConversations = res.data;
 
           const splitSessions = Array.isArray(fullConversations)
