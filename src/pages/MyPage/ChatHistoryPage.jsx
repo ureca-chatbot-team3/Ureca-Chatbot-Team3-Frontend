@@ -10,6 +10,8 @@ import { splitIntoSessions } from '../../utils/splitConversationSessions';
 
 import upIcon from '../../assets/svg/upIcon.svg';
 import downIcon from '../../assets/svg/downIcon.svg';
+import EmptyImage from '@/assets/svg/empty.svg';
+import NoticeIcon from '@/assets/svg/notice.svg';
 
 const ChatHistoryPage = () => {
   const navigate = useNavigate();
@@ -70,7 +72,7 @@ const ChatHistoryPage = () => {
     conversationList.length === 0 ? (
       <div className="flex flex-col items-center justify-center min-h-[400px]">
         <img
-          src="/src/assets/svg/empty.svg"
+          src={EmptyImage}
           alt="보관함이 비어있습니다"
           className="mb-[20px] w-[200px] h-[200px]"
         />
@@ -215,7 +217,7 @@ const ChatHistoryPage = () => {
               <div className="mt-[80px] p-[24px] bg-white rounded-[12px] border border-gray-700">
                 <div className="flex items-center mb-[12px]">
                   <img
-                    src="/src/assets/svg/notice.svg"
+                    src={NoticeIcon}
                     alt="이용안내"
                     className="w-5 h-5 mr-2 mt-[2px] flex-shrink-0"
                   />
