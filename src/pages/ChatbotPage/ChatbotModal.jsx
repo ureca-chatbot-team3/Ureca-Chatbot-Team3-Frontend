@@ -12,6 +12,8 @@ import { getRedirectResponse } from './utils/chatbotRedirectHelper';
 import { getSocket, resetSocket } from '../../utils/socket';
 import { extractPlanNamesFromText } from './utils/extractPlanNames';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+
 export default function ChatbotModal({ onClose }) {
   const [message, setMessage] = useState('');
   const [isVisible, setIsVisible] = useState(false);
@@ -54,7 +56,8 @@ export default function ChatbotModal({ onClose }) {
 
   const initializeGreetingAndFAQ = async () => {
     try {
-      const res = await axios.get('/api/faq');
+      const res = await axios.get(`${API_BASE_URL}/faq`);
+
       const allFaqs = Array.isArray(res.data) ? res.data : [];
 
       if (!Array.isArray(allFaqs) || allFaqs.length === 0) {
@@ -106,7 +109,10 @@ export default function ChatbotModal({ onClose }) {
 
     const fetchUserAndConnectSocket = async () => {
       try {
-        const profileRes = await axios.get('/api/auth/profile', { withCredentials: true });
+        const profileRes = await axios.get(`${API_BASE_URL}/auth/profile`, {
+          withCredentials: true,
+        });
+
         tempUserId = profileRes.data?.data?._id || null;
         setUserId(tempUserId);
         setNickname(profileRes.data?.data?.nickname || '');
@@ -175,8 +181,8 @@ export default function ChatbotModal({ onClose }) {
 
       try {
         const res = tempUserId
-          ? await axios.get(`/api/conversations?userId=${tempUserId}`)
-          : await axios.get(`/api/conversations/${sessionId}`);
+          ? await axios.get(`${API_BASE_URL}/conversations?userId=${tempUserId}`)
+          : await axios.get(`${API_BASE_URL}/conversations/${sessionId}`);
 
         const loadedMessages = (res.data.messages || [])
           .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
@@ -296,7 +302,7 @@ export default function ChatbotModal({ onClose }) {
     try {
       const sessionId = sessionIdRef.current;
       const params = userId ? { userId } : { sessionId };
-      await axios.delete('/api/conversations', { params });
+      await axios.delete(`${API_BASE_URL}/conversations`, { params });
       setMessages([]);
       setIsChatEnded(false);
       initializeGreetingAndFAQ();
