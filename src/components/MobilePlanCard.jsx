@@ -266,7 +266,17 @@ const MobilePlanCard = ({
       <div className={`w-full flex items-center justify-between ${cardStyles.buttons.gap}`}>
         {/* 자세히 보기 버튼 */}
         <button
-          onClick={() => navigate(`/plans/${id}`)}
+          type="button"
+          onClick={() => {
+            const currentPath = window.location.pathname;
+            const targetPath = `/plans/${id}`;
+
+            if (currentPath === targetPath) {
+              window.location.reload(); // 같은 페이지면 새로고침
+            } else {
+              navigate(targetPath); // 다른 요금제면 이동
+            }
+          }}
           className={`flex-1 h-[28px] rounded-[4px] border border-gray-700 bg-white ${cardStyles.text.button} font-500 text-gray-700 cursor-pointer hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors`}
         >
           자세히

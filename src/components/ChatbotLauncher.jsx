@@ -5,7 +5,7 @@ export default function ChatbotLauncher({ onClick }) {
   const { isArrowVisible } = useChatbotContext();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 z-10 pointer-events-none">
       <div className="max-w-[1440px] mx-auto relative h-0">
         {/* 챗봇 버튼 */}
         <button

@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DefaultLayout from '../layout/DefaultLayout';
 import PlanListPage from '../pages/PlanListPage/PlanListPage';
-import DetailPage from '../pages/DetailPage/DetailPage';
 import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute';
 import { AuthProvider } from '../contexts/AuthContext';
 import { BookmarkProvider } from '../contexts/BookmarkContext';
@@ -16,6 +15,7 @@ import PasswordChangePage from '../pages/MyPage/PasswordChangePage';
 import BookmarkPage from '../pages/MyPage/BookmarkPage';
 import ChatHistoryPage from '../pages/MyPage/ChatHistoryPage';
 import ChatbotGuidePage from '../pages/ChatbotGuidePage/ChatbotGuidePage';
+import ResponsiveDetailPage from '../pages/DetailPage/ResponsiveDetailPage';
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/plans/:id',
-        element: <DetailPage />,
+        element: <ResponsiveDetailPage />,
       },
       {
         path: 'diagnosis',

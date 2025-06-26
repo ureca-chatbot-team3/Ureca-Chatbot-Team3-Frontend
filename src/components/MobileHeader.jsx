@@ -58,8 +58,7 @@ const MobileHeader = () => {
 
       {/* 슬라이드 메뉴 */}
       <div
-        className={`
-          fixed top-0 right-0 w-[70%] h-full bg-white shadow-lg z-50 px-4 py-3
+        className={`  bg-white fixed top-0 right-0 w-[70%] h-full  shadow-lg z-110 px-4 py-3
           transform transition-transform duration-300 ease-in-out
           ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
@@ -90,19 +89,27 @@ const MobileHeader = () => {
             </Link>
           )}
 
-          <Link to="/mypage" className="m-body-large font-700">
+          <Link to="/mypage" onClick={() => setMenuOpen(false)} className="m-body-large font-700">
             마이페이지
           </Link>
-          <Link to="/plans" className="m-body-large font-700">
+          <Link to="/plans" onClick={() => setMenuOpen(false)} className="m-body-large font-700">
             요금제
           </Link>
-          <Link to="/diagnosis" className="m-body-large font-700">
+          <Link
+            to="/diagnosis"
+            onClick={() => setMenuOpen(false)}
+            className="m-body-large font-700"
+          >
             요금제 진단 <span className="text-pink-700 relative -top-2">•</span>
           </Link>
-          <Link to="/compare" className="m-body-large font-700">
+          <Link to="/compare" onClick={() => setMenuOpen(false)} className="m-body-large font-700">
             요금제 비교
           </Link>
-          <Link to="/chatbot-guide" className="m-body-large font-700">
+          <Link
+            to="/chatbot-guide"
+            onClick={() => setMenuOpen(false)}
+            className="m-body-large font-700"
+          >
             챗봇 안내
           </Link>
         </nav>

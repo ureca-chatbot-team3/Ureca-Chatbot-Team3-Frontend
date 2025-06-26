@@ -149,7 +149,17 @@ const PlanCard = ({
         {/* 버튼 영역 */}
         <div className="flex flex-nowrap justify-center gap-2 w-full overflow-hidden">
           <button
-            onClick={() => navigate(`/plans/${encodeURIComponent(id)}`)}
+            type="button"
+            onClick={(e) => {
+              const currentPath = window.location.pathname;
+              const targetPath = `/plans/${encodeURIComponent(id)}`;
+
+              if (currentPath === targetPath) {
+                window.location.reload();
+              } else {
+                navigate(targetPath);
+              }
+            }}
             className="w-[120px] h-[38px] rounded-[5px] border border-gray-700 bg-white body-medium font-500 text-gray-700 hover:border-pink-700 hover:bg-pink-200 hover:text-pink-700 transition-colors"
           >
             자세히 보기
