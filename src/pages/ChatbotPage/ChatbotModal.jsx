@@ -57,10 +57,14 @@ export default function ChatbotModal({ onClose }) {
       const res = await axios.get('/api/faq');
       const allFaqs = Array.isArray(res.data) ? res.data : [];
 
-      console.log('[FAQ 응답]', allFaqs); // 👈 디버깅용
+      if (!Array.isArray(allFaqs) || allFaqs.length === 0) {
+        console.warn('⚠️ FAQ 데이터 없음 또는 형식 오류:', res.data);
+        return;
+      }
 
-      const shuffled = allFaqs.sort(() => 0.5 - Math.random());
+      const shuffled = [...allFaqs].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
+      console.log('✅ selected FAQ:', selected);
 
       setFaqList(allFaqs);
       setMessages([
