@@ -55,12 +55,14 @@ export default function ChatbotModal({ onClose }) {
   const initializeGreetingAndFAQ = async () => {
     try {
       const res = await axios.get('/api/faq');
-      const allFaqs = res.data || [];
-      setFaqList(allFaqs);
+      const allFaqs = Array.isArray(res.data) ? res.data : [];
+
+      console.log('[FAQ 응답]', allFaqs); // 👈 디버깅용
 
       const shuffled = allFaqs.sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 4);
 
+      setFaqList(allFaqs);
       setMessages([
         {
           id: 'greeting',
@@ -75,7 +77,6 @@ export default function ChatbotModal({ onClose }) {
           content: selected,
         },
       ]);
-
       setIsChatEnded(false);
     } catch (err) {
       console.error('❌ 초기 인사말 구성 실패:', err);
