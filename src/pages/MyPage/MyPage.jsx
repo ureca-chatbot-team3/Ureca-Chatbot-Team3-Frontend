@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import MyPageSidebar from './components/MyPageSidebar';
 import toast from 'react-hot-toast';
+import { authApi } from '../../apis/authApi';
 
 const MyPage = () => {
   const { user, checkAuth } = useAuth();
@@ -151,6 +152,7 @@ const MyPage = () => {
       }
 
       // API 호출
+      const response = await authApi.updateProfile(updateData);
       toast.success('정보가 성공적으로 업데이트되었습니다.');
       await checkAuth();
     } catch (error) {
