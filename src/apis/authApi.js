@@ -1,6 +1,12 @@
 // 인증 관련 API
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
+// 쿠키에서 토큰 존재 여부 확인 함수
+const hasAuthToken = () => {
+  // 쿠키에서 auth token 또는 session id 확인
+  return document.cookie.includes('token') || document.cookie.includes('connect.sid');
+};
+
 // HTTP 클라이언트 설정
 class ApiClient {
   constructor() {
@@ -29,6 +35,13 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
+        // 401 에러의 경우 조용히 처리 (로그인하지 않은 상태는 정상적인 케이스)
+        if (response.status === 401 && endpoint === '/auth/profile') {
+          const error = new Error(data.message || 'Unauthorized');
+          error.status = response.status;
+          error.silent = true; // 조용한 에러 표시
+          throw error;
+        }
         throw new Error(data.message || `HTTP error! status: ${response.status}`);
       }
 
@@ -80,6 +93,10 @@ export const authApi = {
 
   // 프로필 조회
   getProfile: () => {
+    // 쿠키에 인증 토큰이 없으면 API 호출하지 않음
+    if (!hasAuthToken()) {
+      return Promise.reject(new Error('No authentication token found'));
+    }
     return apiClient.get('/auth/profile');
   },
 
