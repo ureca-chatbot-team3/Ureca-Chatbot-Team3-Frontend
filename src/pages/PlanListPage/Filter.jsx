@@ -66,10 +66,10 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
     selected['요금범위'].forEach((r) => {
       if (r === '~5만원대') {
         params.append('minPrice', 0);
-        params.append('maxPrice', 50000);
+        params.append('maxPrice', 59999);
       } else if (r === '6~8만원대') {
         params.append('minPrice', 60000);
-        params.append('maxPrice', 80000);
+        params.append('maxPrice', 89999);
       } else if (r === '9만원대~') {
         params.append('minPrice', 90000);
       }
@@ -84,16 +84,19 @@ const Filter = ({ isOpen, onClose, onFilter, activeCategory }) => {
     }
 
     if (selected['혜택']?.length) {
-      selected['혜택'].forEach((r) => {
-        params.append('brands[]', r);
-      });
+      params.append('brands', selected['혜택'].join(','));
     }
 
     if (activeQuick && activeQuick !== '#전체') {
       params.append('quickTag', activeQuick);
     }
 
-    fetch(`/api/plans?${params.toString()}`)
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/plans?${params.toString()}`,
+      {
+        credentials: 'include',
+      }
+    )
       .then((res) => res.json())
       .then(({ data }) => {
         setCount(data.pagination.totalCount);

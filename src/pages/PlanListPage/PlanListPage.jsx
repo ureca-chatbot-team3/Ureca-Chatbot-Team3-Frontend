@@ -61,10 +61,10 @@ const PlanListPage = () => {
     (filter['요금범위'] || []).forEach((r) => {
       if (r === '~5만원대') {
         params.append('minPrice', 0);
-        params.append('maxPrice', 50000);
+        params.append('maxPrice', 59999);
       } else if (r === '6~8만원대') {
         params.append('minPrice', 60000);
-        params.append('maxPrice', 80000);
+        params.append('maxPrice', 89999);
       } else if (r === '9만원대~') {
         params.append('minPrice', 90000);
       }
@@ -89,7 +89,9 @@ const PlanListPage = () => {
       params.append('quickTag', filter.quickTag.replace('#', ''));
     }
 
-    fetch(`${API_BASE_URL}/plans?${params.toString()}`, {
+    const apiUrl = `${API_BASE_URL}/plans?${params.toString()}`;
+
+    fetch(apiUrl, {
       credentials: 'include',
     })
       .then((res) => {
@@ -123,7 +125,9 @@ const PlanListPage = () => {
         }
       })
       .catch((error) => {
-        // 오류 처리
+        console.error('API 요청 오류:', error);
+        setPlans([]);
+        setTotalPages(1);
       });
   }, [sortBy, sortOrder, page, limit, filter, search, shouldFocusSearch]);
 

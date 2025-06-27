@@ -119,6 +119,7 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: actionTypes.LOGOUT });
       return { success: true };
     } catch (error) {
+      console.error('로그아웃 오류:', error);
       dispatch({ type: actionTypes.LOGOUT }); // 에러가 있어도 로컬 상태는 리셋
       return { success: true }; // 로그아웃은 항상 성공으로 처리
     }
@@ -133,18 +134,9 @@ export const AuthProvider = ({ children }) => {
         payload: response.data,
       });
     } catch (error) {
-      // 토큰이 없거나 401 에러 (인증되지 않은 상태)는 정상적인 케이스이므로 조용히 처리
-      if (
-        error.message === 'No authentication token found' ||
-        error.silent ||
-        error.status === 401
-      ) {
-        dispatch({ type: actionTypes.AUTH_FAILURE, payload: null });
-      } else {
-        // 다른 에러들은 로그 출력
-        console.error('인증 상태 확인 중 오류:', error.message);
-        dispatch({ type: actionTypes.AUTH_FAILURE, payload: error.message });
-      }
+      // 서버가 연결되지 않았거나 인증 실패 시 로그아웃 상태로 설정
+      console.warn('인증 상태 확인 실패:', error.message);
+      dispatch({ type: actionTypes.AUTH_FAILURE, payload: null });
     }
   }, []);
 
