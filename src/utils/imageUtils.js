@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 /**
- * 이미지 URL을 처리하는 유틸리티 함수
+ * PNG 이미지를 위한 최적화된 이미지 URL 생성 함수
  * @param {string} imagePath - 이미지 경로
  * @param {string} fallbackImage - 기본 이미지 경로
  * @returns {string} 처리된 이미지 URL
@@ -21,7 +21,12 @@ export const getImageUrl = (imagePath, fallbackImage = '/noImageImg.svg') => {
   const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000';
   const path = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
 
-  return `${baseUrl}${path}`;
+  // PNG 이미지 로딩 최적화
+  // 배포 환경에서는 캐시 버스팅 비활성화
+  const isDev = import.meta.env.DEV;
+  const cacheParam = isDev ? `?v=${Date.now()}` : '';
+
+  return `${baseUrl}${path}${cacheParam}`;
 };
 
 /**
