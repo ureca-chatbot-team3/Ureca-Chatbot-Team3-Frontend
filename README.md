@@ -55,14 +55,24 @@ YoPlan은 AI 기반 챗봇을 통해 사용자의 통신 사용 패턴을 분석
 </table>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/399a994a-b06d-468c-9925-f0251cbbeda5" alt="진단 결과" width="700"/>
-  <p><em><strong>📈 진단 결과</strong> - AI 기반 개인화 요금제 추천 결과</em></p>
+  <p><em><strong>📈 진단 결과</strong> - 개인화 요금제 추천 결과</em></p>
 </div>
 
 🤖 AI 챗봇 상담
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/a1143430-835b-45a4-9fbd-447498cf3498" alt="챗봇 안내" width="700"/>
-  <p><em><strong>💬 AI 챗봇</strong> - 실시간 요금제 상담 및 추천 서비스</em></p>
-</div>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/a1143430-835b-45a4-9fbd-447498cf3498" alt="챗봇 안내" width="400"/>
+      <br/><strong>💬 챗봇 시작</strong>
+      <br/>AI 상담 서비스 안내 화면
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/ccddd626-2b38-4ad6-95f6-1f8cc3c96279" alt="챗봇 대화" width="400"/>
+      <br/><strong>🗣️ 실시간 상담</strong>
+      <br/>AI와의 실시간 요금제 상담
+    </td>
+  </tr>
+</table>
 
 🔐 사용자 인증
 <table>
