@@ -15,6 +15,100 @@ YoPlan은 사용자 맞춤형 통신사 요금제 추천 서비스를 제공하�
 
 YoPlan은 AI 기반 챗봇을 통해 사용자의 통신 사용 패턴을 분석하고, 개인에게 최적화된 요금제를 추천하는 웹 서비스입니다. 복잡한 요금제 정보를 직관적인 대화형 인터페이스로 제공하여 사용자가 쉽게 이해하고 선택할 수 있도록 돕습니다.
 
+## 📱 주요 화면
+✨ 메인 화면
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/83d8dc5c-9837-4fed-92b7-44b40275e974" alt="메인화면" width="700"/>
+  <p><em>직관적인 메인 화면으로 요금제 찾기 시작</em></p>
+</div>
+
+🔍 요금제 탐색
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/9ecd1ea0-13d0-4e7e-9ad5-3866841c7e68" alt="요금제 목록" width="400"/>
+      <br/><strong>📋 요금제 목록</strong>
+      <br/>다양한 요금제를 한눈에 비교
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/ac5fb8b1-558d-42f5-8bd8-ce1dfccc89f7" alt="요금제 상세" width="400"/>
+      <br/><strong>📊 요금제 상세</strong>
+      <br/>상세한 요금제 정보 확인
+    </td>
+  </tr>
+</table>
+
+🔄 요금제 비교 & 진단
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/b84293d8-4f13-476d-84e9-27f4826051a0" alt="요금제 비교" width="400"/>
+      <br/><strong>⚖️ 요금제 비교</strong>
+      <br/>여러 요금제 동시 비교 분석
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/2d1b54ee-7e4b-4c33-8898-ce0d6b37819f" alt="요금제 진단" width="400"/>
+      <br/><strong>🔍 요금제 진단</strong>
+      <br/>개인 맞춤 요금제 추천
+    </td>
+  </tr>
+</table>
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/399a994a-b06d-468c-9925-f0251cbbeda5" alt="진단 결과" width="700"/>
+  <p><em><strong>📈 진단 결과</strong> - AI 기반 개인화 요금제 추천 결과</em></p>
+</div>
+
+🤖 AI 챗봇 상담
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/a1143430-835b-45a4-9fbd-447498cf3498" alt="챗봇 안내" width="700"/>
+  <p><em><strong>💬 AI 챗봇</strong> - 실시간 요금제 상담 및 추천 서비스</em></p>
+</div>
+
+🔐 사용자 인증
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/a0dbce8f-e88a-4708-b829-a9b690828627" alt="로그인" width="400"/>
+      <br/><strong>🔑 로그인</strong>
+      <br/>일반 로그인 & 카카오 소셜 로그인
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/9c0d11a7-00eb-45fa-bf6c-54b75fb55360" alt="회원가입" width="400"/>
+      <br/><strong>📝 회원가입</strong>
+      <br/>간편한 회원가입 프로세스
+    </td>
+  </tr>
+</table>
+
+👤 마이페이지
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="https://github.com/user-attachments/assets/ee874213-41f2-4130-ad7e-9151a7816f29" alt="마이페이지" width="300"/>
+      <br/><strong>⚙️ 개인정보 관리</strong>
+      <br/>프로필 수정 & 설정
+    </td>
+    <td align="center" width="33%">
+      <img src="https://github.com/user-attachments/assets/602d29a4-e43c-4515-97b5-5154a9e54324" alt="요금제 보관함" width="300"/>
+      <br/><strong>📚 요금제 보관함</strong>
+      <br/>관심 요금제 저장 & 관리
+    </td>
+    <td align="center" width="33%">
+      <img src="https://github.com/user-attachments/assets/115dd94d-d27a-4940-b911-3319312bdeaa" alt="챗봇 상담 내역" width="300"/>
+      <br/><strong>💬 상담 내역</strong>
+      <br/>이전 챗봇 상담 기록 확인
+    </td>
+  </tr>
+</table>
+
+🎨 디자인 특징
+
+📱 반응형 디자인: 모바일, 태블릿, 데스크톱 최적화
+🎯 직관적 UI/UX: 사용자 친화적 인터페이스
+🌈 모던한 디자인: 깔끔하고 세련된 비주얼
+⚡ 빠른 로딩: 최적화된 성능과 사용자 경험
+
+
 ## 3. YoPlan 관련 페이지
 
 - **YoPlan**: [YoPlan](https://yoplan.vercel.app/)
