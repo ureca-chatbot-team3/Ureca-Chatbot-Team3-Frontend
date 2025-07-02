@@ -142,7 +142,6 @@ YoPlan은 AI 기반 챗봇을 통해 사용자의 통신 사용 패턴을 분석
 
 <div align="center">
   <p><em><strong>📱 완벽한 반응형 웹</strong> - 모든 기기에서 최적화된 사용자 경험</em></p>
-  <p>✨ <strong>모바일 퍼스트 디자인</strong> | 🎯 <strong>터치 최적화</strong> | ⚡ <strong>빠른 로딩</strong></p>
 </div>
 
 
