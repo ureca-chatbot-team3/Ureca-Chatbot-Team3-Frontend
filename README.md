@@ -1,3 +1,6 @@
+
+![chatbot](https://github.com/user-attachments/assets/d4f8ac95-3a13-41a6-81b5-9c58243ba8f2)
+
 # YoPlan - 사용자 맞춤형 통신사 요금제 추천 서비스
 
 ## 1. 프로젝트 개요
